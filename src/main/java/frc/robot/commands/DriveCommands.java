@@ -57,6 +57,13 @@ public class DriveCommands {
         .getTranslation();
   }
 
+  public static Command driveAimLocked(Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier, Pose2d pose) {
+    return joystickDriveAtAngle(drive, xSupplier, ySupplier, () -> {
+      Pose2d posDiff = pose.relativeTo(drive.getPose());
+      return Rotation2d.fromRadians(Math.atan(posDiff.getY() / posDiff.getX()));
+    });
+  }
+
   /**
    * Field relative drive command using two joysticks (controlling linear and angular velocities).
    */
