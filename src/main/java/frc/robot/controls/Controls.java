@@ -1,5 +1,7 @@
 package frc.robot.controls;
 
+import badgerutils.commands.CommandUtils;
+import badgerutils.networktables.LoggedNetworkTablesBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.drive.Drive;
@@ -28,22 +30,18 @@ public class Controls {
     operatorController = new CommandXboxController(1);
 
     mappings.put(
-        ControlStates.DEFAULT, new DefaultControllerMapping(driverController, operatorController));
+        ControlStates.DEFAULT, new DefaultControllerMapping(driverController, operatorController, drivetrain));
     mappings.put(
         ControlStates.OTHER, new OtherControllerMapping(driverController, operatorController));
-
-    Consumer<ControlStates> onChange =
+    
+    Consumer<Enum<ControlStates>> onChange =
         (nextState) -> {
+          ControlStates actualState = (ControlStates) nextState;
           mappings.get(currentState).clear();
-          mappings.get(nextState).bind();
-          currentState = nextState;
+          mappings.get(actualState).bind();
+          currentState = actualState;
         };
 
-    // waiting on pull request from badger-utils
-    //        BadgerLog.createSelectorFromEnum(
-    //                "Controls/Controller Mode",
-    //                ControlStates.class,
-    //                ControlStates.DEFAULT,
-    //                value -> mappings.get((ControlStates) value).run());
+      LoggedNetworkTablesBuilder.createSelectorFromEnum("Controls/Controller Mode", ControlStates.class, ControlStates.DEFAULT, onChange);
   }
 }

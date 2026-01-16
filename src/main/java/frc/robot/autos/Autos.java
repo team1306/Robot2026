@@ -1,5 +1,6 @@
 package frc.robot.autos;
 
+import badgerutils.networktables.LoggedNetworkTablesBuilder;
 import badgerutils.triggers.AllianceTriggers;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -16,14 +17,16 @@ import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 public class Autos {
   private final Drive drivetrain;
 
-  private LoggedDashboardChooser<String> autoChooser =
-      new LoggedDashboardChooser<>("Auto/Auto Chooser");
+  // Prefer to construct autos lazily to save limited memory. Required with many auto files
+  private final LoggedDashboardChooser<String> autoChooser;
 
-  private LoggedNetworkNumber autoWaitTime =
-      new LoggedNetworkNumber("Autos/Auto Wait Time Seconds");
+  private final LoggedNetworkNumber autoWaitTime =
+      new LoggedNetworkNumber("Auto/Auto Wait Seconds");
 
   public Autos(Drive drivetrain) {
     this.drivetrain = drivetrain;
+    
+    autoChooser = new LoggedDashboardChooser<>("Auto/Auto Chooser");
 
     autoChooser.addDefaultOption("None", "");
 

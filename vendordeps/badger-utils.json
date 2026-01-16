@@ -3,7 +3,7 @@
     {
       "groupId": "com.github.team1306",
       "artifactId": "badger-utils",
-      "version": "2026.1.1"
+      "version": "2026.2"
     }
   ],
   "fileName": "badger-utils.json",
@@ -15,7 +15,7 @@
     "https://jitpack.io"
   ],
   "cppDependencies": [],
-  "version": "2026.1.1",
+  "version": "2026.2",
   "uuid": "98c58c53-7a46-49a6-869e-e08f9b7e7f9e",
   "requires": []
 }
