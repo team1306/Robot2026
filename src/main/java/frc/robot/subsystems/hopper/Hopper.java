@@ -10,4 +10,9 @@ public class Hopper extends SubsystemBase {
     public Hopper(HopperIO hopperIO) {
         this.hopperIO = hopperIO;
     }
+    
+    @Override
+    public void periodic(){
+        hopperIO.updateInputs(inputs);
+    }
 }

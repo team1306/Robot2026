@@ -10,4 +10,9 @@ public class Intake extends SubsystemBase {
     public Intake(IntakeIO intakeIO) {
         this.intakeIO = intakeIO;
     }
+
+    @Override
+    public void periodic(){
+        intakeIO.updateInputs(inputs);
+    }
 }
