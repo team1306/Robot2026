@@ -27,7 +27,7 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  
+
   private final Controls controls;
   private final Autos autos;
 
@@ -66,12 +66,12 @@ public class RobotContainer {
                 new ModuleIO() {});
         break;
     }
-    
+
     controls = new Controls(drive);
     autos = new Autos(drive);
   }
-  
-  public Command getAutonomousCommand(){
+
+  public Command getAutonomousCommand() {
     return autos.createAutoCommand();
   }
 }

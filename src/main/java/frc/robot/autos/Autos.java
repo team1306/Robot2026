@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.controls.Controls;
 import frc.robot.subsystems.drive.Drive;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
@@ -21,12 +22,13 @@ public class Autos {
   private final LoggedDashboardChooser<String> autoChooser;
 
   private final LoggedNetworkNumber autoWaitTime =
-      new LoggedNetworkNumber("Auto/Auto Wait Seconds");
+      new LoggedNetworkNumber("Autos/Auto Wait Seconds");
 
   public Autos(Drive drivetrain) {
     this.drivetrain = drivetrain;
-    
-    autoChooser = new LoggedDashboardChooser<>("Auto/Auto Chooser");
+    autoWaitTime.set(0);
+
+    autoChooser = new LoggedDashboardChooser<>("Autos/Auto Chooser");
 
     autoChooser.addDefaultOption("None", "");
 
@@ -34,10 +36,10 @@ public class Autos {
       autoChooser.addOption(auto, auto);
     }
 
-    // waiting on badgerutils
-    //        BadgerLog.createAutoResettingButton("Autos/Reset Odometry",
-    // CommandScheduler.getInstance().getDefaultButtonLoop())
-    //                .onTrue(new InstantCommand(this::resetAutoOdometry).ignoringDisable(true));
+    Controls.addPersistentTrigger(
+        () ->
+            LoggedNetworkTablesBuilder.createLoggedAutoResettingButton("Autos/Reset Odometry")
+                .onTrue(new InstantCommand(this::resetAutoOdometry).ignoringDisable(true)));
 
     bindNamedCommands();
   }
