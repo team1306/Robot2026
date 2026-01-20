@@ -1,4 +1,4 @@
-package frc.robot.autos;
+package frc.robot;
 
 import badgerutils.networktables.LoggedNetworkTablesBuilder;
 import badgerutils.triggers.AllianceTriggers;
@@ -44,7 +44,7 @@ public class Autos {
     bindNamedCommands();
   }
 
-  public Command createAutoCommand() {
+  public Command createCommandFromSelectedAuto() {
     if (autoChooser.get().isEmpty()) {
       return new InstantCommand();
     }

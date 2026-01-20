@@ -8,7 +8,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.autos.Autos;
 import frc.robot.controls.Controls;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
@@ -72,6 +71,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return autos.createAutoCommand();
+    return autos.createCommandFromSelectedAuto();
   }
 }
