@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.controls.Controls;
 import frc.robot.subsystems.drive.Drive;
+import java.util.List;
+import java.util.Optional;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
@@ -19,10 +21,12 @@ public class Autos {
   private final Drive drivetrain;
 
   // Prefer to construct autos lazily to save limited memory. Required with many auto files
-  private final LoggedDashboardChooser<String> autoChooser;
+  private final LoggedDashboardChooser<Auto> autoChooser;
 
   private final LoggedNetworkNumber autoWaitTime =
       new LoggedNetworkNumber("Autos/Auto Wait Seconds");
+
+  private static final List<String> autoNames = AutoBuilder.getAllAutoNames();
 
   public Autos(Drive drivetrain) {
     this.drivetrain = drivetrain;
@@ -30,10 +34,10 @@ public class Autos {
 
     autoChooser = new LoggedDashboardChooser<>("Autos/Auto Chooser");
 
-    autoChooser.addDefaultOption("None", "");
+    autoChooser.addDefaultOption("None", new Auto("Empty", new InstantCommand()));
 
-    for (String auto : AutoBuilder.getAllAutoNames()) {
-      autoChooser.addOption(auto, auto);
+    for (String auto : autoNames) {
+      autoChooser.addOption(auto, new Auto(auto, auto));
     }
 
     Controls.addPersistentTrigger(
@@ -45,17 +49,16 @@ public class Autos {
   }
 
   public Command createCommandFromSelectedAuto() {
-    if (autoChooser.get().isEmpty()) {
-      return new InstantCommand();
-    }
-
-    return new WaitCommand(autoWaitTime.get()).andThen(new PathPlannerAuto(autoChooser.get()));
+    Auto auto = autoChooser.get();
+    return new WaitCommand(autoWaitTime.get()).andThen(auto.getCommand()).withName(auto.getName());
   }
 
   private void resetAutoOdometry() {
-    if (!DriverStation.isDisabled() || autoChooser.get().isEmpty()) return;
+    Optional<PathPlannerAuto> autoOptional = autoChooser.get().getAuto();
 
-    Pose2d startingPosition = new PathPlannerAuto(autoChooser.get()).getStartingPose();
+    if (!DriverStation.isDisabled() || autoOptional.isEmpty()) return;
+
+    Pose2d startingPosition = autoOptional.get().getStartingPose();
 
     drivetrain.setPose(
         AllianceTriggers.isBlueAlliance()
@@ -65,5 +68,43 @@ public class Autos {
 
   private void bindNamedCommands() {
     //        NamedCommands.registerCommand();
+  }
+
+  public static final class Auto {
+    private final String autoName;
+    private final String name;
+    private final Command command;
+
+    public Auto(String name, String autoName) {
+      this.command = new InstantCommand();
+      this.name = name;
+      this.autoName = autoName;
+    }
+
+    public Auto(String name, Command command) {
+      this.command = command;
+      this.name = name;
+      this.autoName = null;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public Optional<PathPlannerAuto> getAuto() {
+      if (autoName == null) return Optional.empty();
+      if (!autoNames.contains(autoName)) return Optional.empty();
+
+      return Optional.of(new PathPlannerAuto(autoName));
+    }
+
+    public Command getCommand() {
+      if (autoName != null) {
+        return new PathPlannerAuto(autoName);
+      } else if (command != null) {
+        return command;
+      }
+      return new InstantCommand();
+    }
   }
 }
