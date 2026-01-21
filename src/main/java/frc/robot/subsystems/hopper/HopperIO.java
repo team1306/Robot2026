@@ -5,8 +5,6 @@ import org.littletonrobotics.junction.AutoLog;
 public interface HopperIO {
   @AutoLog
   public static class HopperIOInputs {
-    public boolean isHopperOpen = false;
-
     public boolean isHopperSensorConnected = false;
     public boolean isHopperMotorConnected = false;
   }
