@@ -90,31 +90,31 @@ public class RobotContainer {
             new VisionIOPhotonVision(
                 "frontLeft",
                 new Transform3d(
-                    -0.307325,
-                    -0.307325,
-                    0.215781,
-                    new Rotation3d(0, Units.degreesToRadians(-45), Units.degreesToRadians(-135)))),
-            new VisionIOPhotonVision(
-                "frontRight",
-                new Transform3d(
-                    -0.307325,
+                    0.307325,
                     0.307325,
                     0.215781,
-                    new Rotation3d(0, Units.degreesToRadians(-45), Units.degreesToRadians(135)))),
+                    new Rotation3d(0, Units.degreesToRadians(-45), Units.degreesToRadians(45)))),
             new VisionIOPhotonVision(
-                "backLeft",
+                "frontRight",
                 new Transform3d(
                     0.307325,
                     -0.307325,
                     0.215781,
                     new Rotation3d(0, Units.degreesToRadians(-45), Units.degreesToRadians(-45)))),
             new VisionIOPhotonVision(
-                "backRight",
+                "backLeft",
                 new Transform3d(
-                    0.307325,
+                    -0.307325,
                     0.307325,
                     0.215781,
-                    new Rotation3d(0, Units.degreesToRadians(-45), Units.degreesToRadians(45)))));
+                    new Rotation3d(0, Units.degreesToRadians(-45), Units.degreesToRadians(135)))),
+            new VisionIOPhotonVision(
+                "backRight",
+                new Transform3d(
+                    -0.307325,
+                    -0.307325,
+                    0.215781,
+                    new Rotation3d(0, Units.degreesToRadians(-45), Units.degreesToRadians(-135)))));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
