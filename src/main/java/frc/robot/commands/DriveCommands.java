@@ -66,7 +66,7 @@ public class DriveCommands {
         () -> {
           return Rotation2d.fromRadians(
               Math.atan2(
-                  pose.getX() - drive.getPose().getX(), pose.getY() - drive.getPose().getY()));
+                  pose.getY() - drive.getPose().getY(), pose.getX() - drive.getPose().getX()));
         });
   }
 

@@ -21,7 +21,7 @@ public final class Constants {
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
   public static class Locations {
-    public static Pose2d HUB_POSE = new Pose2d(0, 0, Rotation2d.kZero);
+    public static Pose2d HUB_POSE = new Pose2d(4.621, 4.029, Rotation2d.kZero);
   }
 
   public static enum Mode {
