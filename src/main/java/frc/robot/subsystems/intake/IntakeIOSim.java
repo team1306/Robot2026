@@ -8,5 +8,5 @@ public class IntakeIOSim implements IntakeIO {
   public void updateInputs(IntakeIOInputs inputs) {}
 
   @Override
-  public void set(double speed) {}
+  public void set(IntakeState state) {}
 }
