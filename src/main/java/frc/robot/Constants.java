@@ -7,8 +7,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import com.pathplanner.lib.util.FlippingUtil;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -19,6 +20,18 @@ import edu.wpi.first.wpilibj.RobotBase;
 public final class Constants {
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+
+  public static class Locations {
+    public static final Translation3d blueHub = new Translation3d(4.6, 4.034, 1.477);
+    public static final Translation3d redHub;
+
+    static {
+      Translation2d redHubPosition = FlippingUtil.flipFieldPosition(blueHub.toTranslation2d());
+      redHub =
+          new Translation3d(
+              redHubPosition.getMeasureX(), redHubPosition.getMeasureY(), blueHub.getMeasureZ());
+    }
+  }
 
   public static enum Mode {
     /** Running on a real robot. */
