@@ -30,9 +30,13 @@ import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 public class DriveCommands {
   private static final double DEADBAND = 0.1;
-  private static final double ANGLE_KP = 5.0;
+  @AutoLogOutput
+  private static final double ANGLE_KP = 10.0;
+  @AutoLogOutput
   private static final double ANGLE_KD = 0.4;
   private static final double ANGLE_MAX_VELOCITY = 8.0;
   private static final double ANGLE_MAX_ACCELERATION = 20.0;
@@ -64,9 +68,13 @@ public class DriveCommands {
         xSupplier,
         ySupplier,
         () -> {
-          return Rotation2d.fromRadians(
-              Math.atan2(
-                  pose.getY() - drive.getPose().getY(), pose.getX() - drive.getPose().getX()));
+          Pose2d diff =
+              new Pose2d(
+                  pose.getX() - drive.getPose().getX(),
+                  pose.getY() - drive.getPose().getY(),
+                  pose.getRotation().minus(drive.getPose().getRotation()));
+          double angle = Math.atan2(diff.getY(), diff.getX());
+          return Rotation2d.fromRadians(angle);
         });
   }
 
