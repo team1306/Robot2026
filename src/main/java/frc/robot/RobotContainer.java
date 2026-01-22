@@ -179,16 +179,6 @@ public class RobotContainer {
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
 
-    // Aim at hub
-    controller
-        .leftTrigger(0.8)
-        .whileTrue(
-            DriveCommands.driveAimLocked(
-                drive,
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
-                FlippingUtil.flipFieldPose(Constants.Locations.HUB_POSE)));
-
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
