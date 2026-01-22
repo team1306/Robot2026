@@ -1,9 +1,14 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.numbers.N2;
+import frc.robot.commands.AutoAimCommand;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.ModuleIO;
@@ -49,7 +54,7 @@ public class AutoAimTest {
 
     return new AutoAimDrive(gyroIO, fl, fr, bl, br);
   }
-  /*
+  
     @Test
     void validateResultantVector() {
       AutoAimDrive testDrive = createTestDrive();
