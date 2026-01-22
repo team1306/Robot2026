@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 
 public class ShooterCommands {
 
-  private static final ShooterSetpoint[] SETPOINTS =
+  public static final ShooterSetpoint[] SETPOINTS =
       Arrays.stream(
               new ShooterSetpoint[] {
                 new ShooterSetpoint(Meters.of(0), RotationsPerSecond.of(0)),
