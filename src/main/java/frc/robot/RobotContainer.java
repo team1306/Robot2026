@@ -25,9 +25,9 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
-import frc.robot.subsystems.hopper.Hopper;
-import frc.robot.subsystems.hopper.HopperIO;
-import frc.robot.subsystems.hopper.HopperIOReal;
+import frc.robot.subsystems.hopper.Indexer;
+import frc.robot.subsystems.hopper.IndexerIO;
+import frc.robot.subsystems.hopper.IndexerIOReal;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -164,12 +164,6 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
                     drive)
                 .ignoringDisable(true));
-    HopperIO io = new HopperIOReal();
-    Hopper hopper = new Hopper(io);
-    controller
-        .x()
-        .toggleOnTrue(new InstantCommand(() -> hopper.changeSpeed(1)))
-        .toggleOnFalse(new InstantCommand(() -> hopper.changeSpeed(0)));
   }
 
   /**
