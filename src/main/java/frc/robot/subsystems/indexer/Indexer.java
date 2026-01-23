@@ -1,6 +1,8 @@
-package frc.robot.subsystems.hopper;
+package frc.robot.subsystems.indexer;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.hopper.IndexerIOInputsAutoLogged;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Indexer extends SubsystemBase {
