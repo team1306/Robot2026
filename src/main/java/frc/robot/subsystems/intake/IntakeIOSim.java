@@ -7,5 +7,5 @@ public class IntakeIOSim implements IntakeIO {
   public void updateInputs(IntakeIOInputs inputs) {}
 
   @Override
-  public void set(IntakeState state) {}
+  public void set(double power) {}
 }

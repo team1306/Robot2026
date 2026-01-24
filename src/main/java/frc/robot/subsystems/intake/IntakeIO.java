@@ -7,9 +7,11 @@ public interface IntakeIO {
   public static class IntakeIOInputs {
     public boolean isLeftMotorConnected = false;
     public boolean isRightMotorConnected = false;
+    public double leftRPM = 0;
+    public double dutyCycle = 0;
   }
 
   public default void updateInputs(IntakeIOInputs inputs) {}
 
-  public default void set(IntakeState state) {}
+  public default void set(double power) {}
 }
