@@ -8,6 +8,7 @@ import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 
 public class ShooterIOReal implements ShooterIO {
@@ -30,6 +31,11 @@ public class ShooterIOReal implements ShooterIO {
   
   private final VoltageOut voltageRequest;
   private final VelocityTorqueCurrentFOC velocityRequest;
+
+  private final StatusSignal<Temperature> leftTopMotorTemperature;
+  private final StatusSignal<Temperature> leftBottomMotorTemperature;
+  private final StatusSignal<Temperature> rightTopMotorTemperature;
+  private final StatusSignal<Temperature> rightBottomMotorTemperature;
 
   public ShooterIOReal() {
     leftTopMotor = new TalonFX(ShooterConstants.leftTopMotorId);
@@ -66,6 +72,12 @@ public class ShooterIOReal implements ShooterIO {
     leftBottomMotorVelocity = leftBottomMotor.getVelocity();
     rightTopMotorVelocity = rightTopMotor.getVelocity();
     rightBottomMotorVelocity = rightBottomMotor.getVelocity();
+
+    leftTopMotorTemperature = leftTopMotor.getDeviceTemp();
+    leftBottomMotorTemperature = leftBottomMotor.getDeviceTemp();
+    rightTopMotorTemperature = rightTopMotor.getDeviceTemp();
+    rightBottomMotorTemperature = rightBottomMotor.getDeviceTemp();
+
   }
 
   @Override
@@ -89,6 +101,11 @@ public class ShooterIOReal implements ShooterIO {
     inputs.shooterLeftBottomMotorSpeed = leftBottomMotorVelocity.getValue();
     inputs.shooterRightTopMotorSpeed = rightTopMotorVelocity.getValue();
     inputs.shooterRightBottomMotorSpeed = rightBottomMotorVelocity.getValue();
+
+    inputs.shooterLeftTopTemperature = leftTopMotorTemperature.getValue();
+    inputs.shooterLeftBottomTemperature = leftBottomMotorTemperature.getValue();
+    inputs.shooterRightTopTemperature = rightTopMotorTemperature.getValue();
+    inputs.shooterRightBottomTemperature = rightBottomMotorTemperature.getValue();
   }
 
   @Override
