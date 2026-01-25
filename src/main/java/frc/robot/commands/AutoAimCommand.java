@@ -54,22 +54,25 @@ public class AutoAimCommand extends ParallelCommandGroup {
     return targetVector.plus(velocityVector);
   }
 
-  private static final double shooterAngleRadians = Math.toRadians(65);
   private static final int iterations = 1;
 
-  public static void iterateOnVelocity(Vector<N2> velocityVector, Vector<N2> targetVector) {
+  public static Vector<N2> iterateOnVelocity(Vector<N2> velocityVector, Vector<N2> targetVector) {
       double time = ShooterCommands.interpolateSetpoints(ShooterCommands.SETPOINTS, Meters.of(targetVector.norm())).time().in(Seconds);
 
-      Vector<N2> newTarget = velocityVector.times(time).plus(targetVector);
-      double newDistance = newTarget.norm();
-
+      Vector<N2> previousError = VecBuilder.fill(0, 0);
+      Vector<N2> endPosition = VecBuilder.fill(0, 0);
       for(int i = 0; i < iterations; ++i) {
+          Vector<N2> newTarget = velocityVector.times(time).plus(targetVector).plus(previousError);
+          double newDistance = newTarget.norm();
+
           ShooterCommands.ShooterSetpoint newPoint = ShooterCommands.interpolateSetpoints(ShooterCommands.SETPOINTS, Meters.of(newDistance));
           double newTime = newPoint.time().in(Seconds);
-          double exitVelocity = 0; //todo find exit velocity
+          double exitVelocity = newDistance / newTime;
           Vector<N2> realVelocity = newTarget.unit().times(exitVelocity);
-          Vector<N2> endPosition = realVelocity.plus(velocityVector).times(newTime);
-          Vector<N2> error = endPosition.minus(targetVector);
+          endPosition = realVelocity.plus(velocityVector).times(newTime);
+          previousError = endPosition.minus(targetVector);
       }
+
+      return endPosition;
   }
 }
