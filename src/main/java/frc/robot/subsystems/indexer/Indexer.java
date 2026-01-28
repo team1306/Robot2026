@@ -34,20 +34,20 @@ public class Indexer extends SubsystemBase {
   }
 
   @AutoLogOutput
-  public Command instantRunPowerCommand(Indexer indexer, double power){
+  public Command instantRunPowerCommand(double power){
     return (Commands.runOnce(() -> {
-      indexer.setPower(power);
+      indexerIO.setPower(power);
     }));
   }
 
   @AutoLogOutput
-  public Command startEndRunPowerCommand(Indexer indexer, double power){
+  public Command startEndRunPowerCommand(double power){
     return (Commands.startEnd(
     () -> {
-      indexer.setPower(power);
+      indexerIO.setPower(power);
     },
     () -> {
-      indexer.setPower(0);
+      indexerIO.setPower(0);
     }));
   }
 }
