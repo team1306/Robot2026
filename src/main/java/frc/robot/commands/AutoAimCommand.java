@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.shooter.Shooter;
 
 public class AutoAimCommand extends Command {
 
@@ -19,11 +18,12 @@ public class AutoAimCommand extends Command {
 
   @Override
   public void initialize() {
-      target = AllianceTriggers.isBlueAlliance() ? Constants.Locations.blueHub : Constants.Locations.redHub;
+    target =
+        AllianceTriggers.isBlueAlliance()
+            ? Constants.Locations.blueHub
+            : Constants.Locations.redHub;
   }
 
   @Override
-  public void execute() {
-
-  }
+  public void execute() {}
 }

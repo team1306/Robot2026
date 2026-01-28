@@ -18,17 +18,17 @@ public class ShooterIOReal implements ShooterIO {
 
   private final TalonFX rightTopMotor;
   private final TalonFX rightBottomMotor;
-  
+
   private final StatusSignal<Voltage> leftTopMotorAppliedVoltage;
   private final StatusSignal<Voltage> leftBottomMotorAppliedVoltage;
   private final StatusSignal<Voltage> rightTopMotorAppliedVoltage;
   private final StatusSignal<Voltage> rightBottomMotorAppliedVoltage;
-  
+
   private final StatusSignal<AngularVelocity> leftTopMotorVelocity;
   private final StatusSignal<AngularVelocity> leftBottomMotorVelocity;
   private final StatusSignal<AngularVelocity> rightTopMotorVelocity;
   private final StatusSignal<AngularVelocity> rightBottomMotorVelocity;
-  
+
   private final VoltageOut voltageRequest;
   private final VelocityTorqueCurrentFOC velocityRequest;
 
@@ -77,21 +77,24 @@ public class ShooterIOReal implements ShooterIO {
     leftBottomMotorTemperature = leftBottomMotor.getDeviceTemp();
     rightTopMotorTemperature = rightTopMotor.getDeviceTemp();
     rightBottomMotorTemperature = rightBottomMotor.getDeviceTemp();
-
   }
 
   @Override
   public void updateInputs(ShooterIOInputs inputs) {
-    var leftTopShooterStatus = BaseStatusSignal.refreshAll(leftTopMotorAppliedVoltage, leftTopMotorVelocity);
-    var leftBottomShooterStatus = BaseStatusSignal.refreshAll(leftBottomMotorAppliedVoltage, leftBottomMotorVelocity);
-    var rightTopShooterStatus = BaseStatusSignal.refreshAll(rightTopMotorAppliedVoltage, rightTopMotorVelocity);
-    var rightBottomShooterStatus = BaseStatusSignal.refreshAll(rightBottomMotorAppliedVoltage, rightBottomMotorVelocity);
+    var leftTopShooterStatus =
+        BaseStatusSignal.refreshAll(leftTopMotorAppliedVoltage, leftTopMotorVelocity);
+    var leftBottomShooterStatus =
+        BaseStatusSignal.refreshAll(leftBottomMotorAppliedVoltage, leftBottomMotorVelocity);
+    var rightTopShooterStatus =
+        BaseStatusSignal.refreshAll(rightTopMotorAppliedVoltage, rightTopMotorVelocity);
+    var rightBottomShooterStatus =
+        BaseStatusSignal.refreshAll(rightBottomMotorAppliedVoltage, rightBottomMotorVelocity);
 
     inputs.isShooterLeftTopMotorConnected = leftTopShooterStatus.isOK();
     inputs.isShooterLeftBottomMotorConnected = leftBottomShooterStatus.isOK();
     inputs.isShooterRightTopMotorConnected = rightTopShooterStatus.isOK();
     inputs.isShooterRightBottomMotorConnected = rightBottomShooterStatus.isOK();
-    
+
     inputs.shooterLeftTopMotorAppliedVoltage = leftTopMotorAppliedVoltage.getValue();
     inputs.shooterLeftBottomMotorAppliedVoltage = leftBottomMotorAppliedVoltage.getValue();
     inputs.shooterRightTopMotorAppliedVoltage = rightTopMotorAppliedVoltage.getValue();
