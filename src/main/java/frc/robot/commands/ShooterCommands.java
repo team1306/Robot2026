@@ -5,8 +5,11 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.Interpolation;
 import java.util.Arrays;
@@ -14,6 +17,10 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public class ShooterCommands {
+
+  public static Command shootForTime(Shooter shooter, Supplier<Distance> distanceSupplier, Time time) {
+    return new ParallelDeadlineGroup(new WaitCommand(time), getShootSpeedDistanceRelativeCommand(shooter, distanceSupplier));
+  }
 
   private static final ShooterSetpoint[] SETPOINTS =
       Arrays.stream(
