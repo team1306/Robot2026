@@ -14,6 +14,7 @@ import org.littletonrobotics.junction.AutoLog;
 public interface VisionIO {
   @AutoLog
   public static class VisionIOInputs {
+    public String cameraName = "";
     public boolean connected = false;
     public TargetObservation latestTargetObservation =
         new TargetObservation(Rotation2d.kZero, Rotation2d.kZero);
@@ -34,8 +35,6 @@ public interface VisionIO {
       PoseObservationType type) {}
 
   public static enum PoseObservationType {
-    MEGATAG_1,
-    MEGATAG_2,
     PHOTONVISION
   }
 

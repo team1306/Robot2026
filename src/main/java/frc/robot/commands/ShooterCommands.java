@@ -18,8 +18,10 @@ import java.util.function.Supplier;
 
 public class ShooterCommands {
 
-  public static Command shootForTime(Shooter shooter, Supplier<Distance> distanceSupplier, Time time) {
-    return new ParallelDeadlineGroup(new WaitCommand(time), getShootSpeedDistanceRelativeCommand(shooter, distanceSupplier));
+  public static Command shootForTime(
+      Shooter shooter, Supplier<Distance> distanceSupplier, Time time) {
+    return new ParallelDeadlineGroup(
+        new WaitCommand(time), getShootSpeedDistanceRelativeCommand(shooter, distanceSupplier));
   }
 
   private static final ShooterSetpoint[] SETPOINTS =
