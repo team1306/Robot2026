@@ -13,6 +13,18 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.indexer.IndexerIO;
+import frc.robot.subsystems.indexer.IndexerIOReal;
+import frc.robot.subsystems.indexer.IndexerIOSim;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOReal;
+import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterIO;
+import frc.robot.subsystems.shooter.ShooterIOReal;
+import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 
@@ -26,6 +38,9 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private final Vision vision;
+  private final Intake intake;
+  private final Indexer indexer;
+  private final Shooter shooter;
 
   private final Controls controls;
   private final Autos autos;
@@ -41,6 +56,9 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
+        intake = new Intake(new IntakeIOReal());
+        indexer = new Indexer(new IndexerIOReal());
+        shooter = new Shooter(new ShooterIOReal());
         break;
 
       case SIM:
@@ -52,6 +70,9 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+        intake = new Intake(new IntakeIOSim());
+        indexer = new Indexer(new IndexerIOSim());
+        shooter = new Shooter(new ShooterIOSim());
         break;
 
       default:
@@ -63,6 +84,9 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        intake = new Intake(new IntakeIO() {});
+        indexer = new Indexer(new IndexerIO() {});
+        shooter = new Shooter(new ShooterIO() {});
         break;
     }
 
