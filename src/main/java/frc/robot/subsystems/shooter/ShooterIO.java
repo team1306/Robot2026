@@ -39,4 +39,5 @@ public interface ShooterIO {
   public default void setVoltage(Voltage voltage) {}
 
   public default void setVelocity(AngularVelocity velocity) {}
+  public default void setDutyCycle(double dutyCycle) {}
 }

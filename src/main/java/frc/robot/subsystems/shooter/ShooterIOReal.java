@@ -4,12 +4,14 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.DutyCycle;
 
 public class ShooterIOReal implements ShooterIO {
 
@@ -125,5 +127,14 @@ public class ShooterIOReal implements ShooterIO {
     leftBottomMotor.setControl(velocityRequest.withVelocity(velocity));
     rightTopMotor.setControl(velocityRequest.withVelocity(velocity));
     rightBottomMotor.setControl(velocityRequest.withVelocity(velocity));
+  }
+
+  @Override
+  public void setDutyCycle(double dutyCycle) {
+    DutyCycleOut control = new DutyCycleOut(dutyCycle).withEnableFOC(true);
+    leftTopMotor.setControl(control);
+    leftBottomMotor.setControl(control);
+    rightTopMotor.setControl(control);
+    rightBottomMotor.setControl(control);
   }
 }
