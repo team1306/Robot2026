@@ -25,7 +25,9 @@ import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
+import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -89,7 +91,7 @@ public class RobotContainer {
         break;
     }
 
-    controls = new Controls(drive, intake);
+    controls = new Controls(drive, intake, shooter);
     autos = new Autos(drive);
 
     vision = initializeVision();
@@ -97,8 +99,9 @@ public class RobotContainer {
 
   private Vision initializeVision() {
     drive.setVisionStdDevs(VecBuilder.fill(1, 1, 1));
-
-    return new Vision(
+    switch (Constants.currentMode){
+      case REAL:
+      return new Vision(
         drive::addVisionMeasurement,
         new VisionIOPhotonVision(
             "frontLeft",
@@ -128,6 +131,52 @@ public class RobotContainer {
                 -0.307325,
                 0.215781,
                 new Rotation3d(0, Units.degreesToRadians(-45), Units.degreesToRadians(-135)))));
+      case SIM:
+      return new Vision(
+        drive::addVisionMeasurement,
+        new VisionIOPhotonVisionSim(
+            "frontLeft",
+            new Transform3d(
+                0.307325,
+                0.307325,
+                0.215781,
+                new Rotation3d(0, Units.degreesToRadians(-45), Units.degreesToRadians(45))),
+                () -> drive.getPose()),
+        new VisionIOPhotonVisionSim(
+            "frontRight",
+            new Transform3d(
+                0.307325,
+                -0.307325,
+                0.215781,
+                new Rotation3d(0, Units.degreesToRadians(-45), Units.degreesToRadians(-45))),
+                () -> drive.getPose()),
+        new VisionIOPhotonVisionSim(
+            "backLeft",
+            new Transform3d(
+                -0.307325,
+                0.307325,
+                0.215781,
+                new Rotation3d(0, Units.degreesToRadians(-45), Units.degreesToRadians(135)))
+                , () -> drive.getPose()),
+        new VisionIOPhotonVisionSim(
+            "backRight",
+            new Transform3d(
+                -0.307325,
+                -0.307325,
+                0.215781,
+                new Rotation3d(0, Units.degreesToRadians(-45), Units.degreesToRadians(-135)))
+                  , () -> drive.getPose()));
+          
+      default:
+       return new Vision(
+           drive::addVisionMeasurement,
+           new VisionIO() {},
+           new VisionIO() {},
+           new VisionIO() {},
+           new VisionIO() {});
+      
+    }
+    
   }
 
   public Command getAutonomousCommand() {
