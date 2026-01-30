@@ -3,12 +3,12 @@ package frc.robot.subsystems.fueldetection;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
-public class FuelDetector extends SubsystemBase {
+public class FuelDetection extends SubsystemBase {
 
   private final FuelDetectionInputsAutoLogged inputs = new FuelDetectionInputsAutoLogged();
   private final FuelDetectionIO io;
 
-  public FuelDetector(FuelDetectionIO io) {
+  public FuelDetection(FuelDetectionIO io) {
     this.io = io;
   }
 
