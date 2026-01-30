@@ -17,19 +17,19 @@ public class FuelDetectionReal implements FuelDetectionIO {
     inputs.isConnected = camera.isConnected();
 
     List<PhotonPipelineResult> results = camera.getAllUnreadResults();
-    
-    if(!results.isEmpty()) {
+
+    if (!results.isEmpty()) {
       PhotonPipelineResult result = results.get(results.size() - 1);
       if (result.hasTargets()) {
         List<PhotonTrackedTarget> targets = result.getTargets();
         PhotonTrackedTarget bestTarget = result.getBestTarget();
 
         inputs.bestTarget =
-                new ObjectTarget(bestTarget.getYaw(), bestTarget.getPitch(), bestTarget.getArea());
+            new ObjectTarget(bestTarget.getYaw(), bestTarget.getPitch(), bestTarget.getArea());
         inputs.targets =
-                targets.stream()
-                        .map((value) -> new ObjectTarget(value.yaw, value.pitch, value.area))
-                        .toArray(ObjectTarget[]::new);
+            targets.stream()
+                .map((value) -> new ObjectTarget(value.yaw, value.pitch, value.area))
+                .toArray(ObjectTarget[]::new);
       } else {
         inputs.bestTarget = new ObjectTarget(0, 0, -1);
       }
