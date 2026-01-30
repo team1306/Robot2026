@@ -7,41 +7,55 @@
 
 package frc.robot.subsystems.vision;
 
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Radians;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 
 public class VisionConstants {
-  // AprilTag layout
-  public static AprilTagFieldLayout aprilTagLayout =
-      AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+    // AprilTag layout
+    public static final AprilTagFieldLayout APRIL_TAG_LAYOUT =
+        AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
 
-  // Camera names, must match names configured on coprocessor
-  public static String camera0Name = "camera_0";
-  public static String camera1Name = "camera_1";
+    // Camera names, must match names configured on coprocessor
+    public static final String LEFT_CAMERA_NAME = "";
+    public static final String BACK_LEFT_CAMERA_NAME = "";
+    public static final String BACK_RIGHT_CAMERA_NAME = "";
+    public static final String RIGHT_CAMERA_NAME = "";
 
-  // Robot to camera transforms
-  // (Not used by Limelight, configure in web UI instead)
-  public static Transform3d robotToCamera0 =
-      new Transform3d(0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, 0.0));
-  public static Transform3d robotToCamera1 =
-      new Transform3d(-0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, Math.PI));
+    // Robot to camera transforms
+    // (Not used by Limelight, configure in web UI instead)
+    public static final Transform3d LEFT_CAMERA_POSITION =
+        new Transform3d(0.2, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0));
+    public static final Transform3d BACK_LEFT_CAMERA_POSITION =
+        new Transform3d(0.2, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0));
+    public static final Transform3d BACK_RIGHT_CAMERA_POSITION =
+        new Transform3d(0.2, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0));
+    public static final Transform3d RIGHT_CAMERA_POSITION =
+        new Transform3d(0.2, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0));
+    
 
-  // Basic filtering thresholds
-  public static double maxAmbiguity = 0.3;
-  public static double maxZError = 0.75;
+    // Basic filtering thresholds
+    public static final double MAX_AMBIGUITY = 0.3;
+    public static final double MAX_Z_ERROR = 0.75;
 
-  // Standard deviation baselines, for 1 meter distance and 1 tag
-  // (Adjusted automatically based on distance and # of tags)
-  public static double linearStdDevBaseline = 0.02; // Meters
-  public static double angularStdDevBaseline = 0.06; // Radians
+    // Standard deviation baselines, for 1 meter distance and 1 tag
+    // (Adjusted automatically based on distance and # of tags)
+    public static final Distance LINEAR_STDDEV_BASELINE = Meters.of(0.02); // Meters
+    public static final Angle ANGULAR_STDDEV_BASELINE = Radians.of(0.06); // Radians
 
-  // Standard deviation multipliers for each camera
-  // (Adjust to trust some cameras more than others)
-  public static double[] cameraStdDevFactors =
-      new double[] {
-        1.0, // Camera 0
-        1.0 // Camera 1
-      };
+    // Standard deviation multipliers for each camera
+    // (Adjust to trust some cameras more than others)
+    public static final double[] CAMERA_STDDEV_FACTORS =
+        new double[] {
+            1.0, // left
+            1.0, // back-left
+            1.0, // back-right
+            1.0  // right
+        };
 }
