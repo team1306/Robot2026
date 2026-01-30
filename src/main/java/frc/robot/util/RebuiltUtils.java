@@ -1,7 +1,10 @@
 package frc.robot.util;
 
+import badgerutils.triggers.AllianceTriggers;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.subsystems.drive.Drive;
+
 import java.util.Optional;
 
 public class RebuiltUtils {
@@ -11,41 +14,30 @@ public class RebuiltUtils {
   public static boolean isHubActive() {
     // Holy if statment
     String gameData = DriverStation.getGameSpecificMessage();
-    Optional<Alliance> alliance = DriverStation.getAlliance();
-    Double time = DriverStation.getMatchTime();
-
-    if (gameData.length() > 0 && !DriverStation.isAutonomous() && alliance.isPresent()) {
-      Boolean isShiftEven = getAllianceShift() % 2 == 0;
+    boolean isRedAlliance = AllianceTriggers.isRedAlliance();
+    if (!gameData.isEmpty() && !DriverStation.isAutonomous()) {
+      boolean isShiftEven = getAllianceShift() % 2 == 0;
       switch (gameData.charAt(0)) {
         case 'B':
-          if (alliance.get() == Alliance.Red) {
-            return !isShiftEven;
-          }
-          if (alliance.get() == Alliance.Blue) {
-            return isShiftEven;
-          }
+            return isRedAlliance == !isShiftEven;
         case 'R':
-          if (alliance.get() == Alliance.Red) {
-            return isShiftEven;
-          }
-          if (alliance.get() == Alliance.Blue) {
-            return !isShiftEven;
-          }
-        default:
-          // This is corrupt data
-          break;
+            return isRedAlliance == isShiftEven;
       }
     }
-    return false;
+    return true;
   }
   /**
    * @return The current alliance shift, if in AUTO, TRANSITION SHIFT or END GAME, returns 0
    */
-  public static Integer getAllianceShift() {
-    Double time = DriverStation.getMatchTime();
+  public static int getAllianceShift() {
+    double time = DriverStation.getMatchTime();
     if (DriverStation.isAutonomous()) {
       return 0;
     }
+    if(!DriverStation.isFMSAttached()){
+        return 0;
+    }
+
     if (time >= 130) {
       return 0;
     } // Transition Shift
@@ -60,8 +52,7 @@ public class RebuiltUtils {
     } else if (time <= 30) {
       return 0;
     } // End Game
-    else {
-      return null;
-    }
+
+    return 0;
   }
 }
