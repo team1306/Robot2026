@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.util.AngleUtils;
+import frc.robot.util.LocationUtils;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -68,7 +68,7 @@ public class DriveCommands {
         drive,
         xSupplier,
         ySupplier,
-        () -> AngleUtils.getDirectionToPosition(drive.getPose().getTranslation(), pose.get()));
+        () -> LocationUtils.getDirectionToLocation(drive.getPose().getTranslation(), pose.get()));
   }
 
   /**

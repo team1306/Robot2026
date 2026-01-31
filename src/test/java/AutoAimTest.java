@@ -11,7 +11,7 @@ import frc.robot.commands.AutoAimCommand;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.ModuleIO;
-import frc.robot.util.AngleUtils;
+import frc.robot.util.LocationUtils;
 import org.junit.jupiter.api.Test;
 
 public class AutoAimTest {
@@ -77,16 +77,16 @@ public class AutoAimTest {
   @Test
   void validateAngle() {
     Rotation2d angle =
-        AngleUtils.getDirectionToPosition(new Translation2d(0, 0), new Translation2d(1, 1));
+        LocationUtils.getDirectionToLocation(new Translation2d(0, 0), new Translation2d(1, 1));
     assertEquals(45, angle.getDegrees());
 
-    angle = AngleUtils.getDirectionToPosition(new Translation2d(0, 0), new Translation2d(-1, 1));
+    angle = LocationUtils.getDirectionToLocation(new Translation2d(0, 0), new Translation2d(-1, 1));
     assertEquals(135, angle.getDegrees());
 
-    angle = AngleUtils.getDirectionToPosition(new Translation2d(0, 0), new Translation2d(1, -1));
+    angle = LocationUtils.getDirectionToLocation(new Translation2d(0, 0), new Translation2d(1, -1));
     assertEquals(-45, angle.getDegrees());
 
-    angle = AngleUtils.getDirectionToPosition(new Translation2d(0, 0), new Translation2d(-1, -1));
+    angle = LocationUtils.getDirectionToLocation(new Translation2d(0, 0), new Translation2d(-1, -1));
     assertEquals(-135, angle.getDegrees());
   }
 }
