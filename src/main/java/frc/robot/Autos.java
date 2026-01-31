@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.controls.Controls;
 import frc.robot.subsystems.drive.Drive;
@@ -86,10 +87,20 @@ public class Autos {
   }
 
   private void bindNamedCommands() {
-    NamedCommands.registerCommand("shoot8", new ParallelCommandGroup(
-      ShooterCommands.getShootSpeedDistanceRelativeCommand(shooter, null),
-      new WaitUntilCommand(() -> true).andThen((indexer.getIndexerSpeedCommand(() -> 1).withDeadline(new WaitCommand(STARTING_FUEL_SHOOT_DURATION))))
+    NamedCommands.registerCommand("shoot-8", new ParallelCommandGroup(
+      ShooterCommands.getShootSpeedDistanceRelativeCommand(shooter, null), //TODO: make distance to hub util
+      new WaitUntilCommand(() -> true/*TODO: when shooter is at speed (make method) */).andThen((indexer.getIndexerSpeedCommand(() -> 1).withDeadline(new WaitCommand(STARTING_FUEL_SHOOT_DURATION))))
     ));
+
+    NamedCommands.registerCommand("intake", IntakeCommands.setIntakePower(intake, 1));
+
+    NamedCommands.registerCommand("stop-intake", IntakeCommands.setIntakePower(intake, 0));
+
+    NamedCommands.registerCommand("spool-shooter", ShooterCommands.getShootSpeedDistanceRelativeCommand(shooter, null)); //TODO: distance to hub
+
+    NamedCommands.registerCommand("deploy-intake", IntakeCommands.setLatchPosition(intake, null)); //TODO: correct latch position
+
+    NamedCommands.registerCommand("shoot-until-done", indexer.getIndexerSpeedCommand(() -> 1));
   }
 
   public static final class Auto {

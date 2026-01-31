@@ -110,6 +110,18 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "intake",
+      "waypointRelativePos": 1.85,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "stop-intake",
+      "waypointRelativePos": 4.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
       "name": "spool-shooter",
       "waypointRelativePos": 4.004962779156297,
       "endWaypointRelativePos": null,
