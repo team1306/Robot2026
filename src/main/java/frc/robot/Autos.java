@@ -88,19 +88,19 @@ public class Autos {
 
   private void bindNamedCommands() {
     NamedCommands.registerCommand("shoot-8", new ParallelCommandGroup(
-      ShooterCommands.getShootSpeedDistanceRelativeCommand(shooter, null), //TODO: make distance to hub util
-      new WaitUntilCommand(() -> true/*TODO: when shooter is at speed (make method) */).andThen((indexer.getIndexerSpeedCommand(() -> 1).withDeadline(new WaitCommand(STARTING_FUEL_SHOOT_DURATION))))
+      ShooterCommands.shootAtDistanceCommand(shooter, null), //TODO: make distance to hub util
+      new WaitUntilCommand(() -> true/*TODO: when shooter is at speed (make method) */).andThen((indexer.indexUntilCancelledCommand(() -> 1).withDeadline(new WaitCommand(STARTING_FUEL_SHOOT_DURATION))))
     ));
 
-    NamedCommands.registerCommand("intake", IntakeCommands.setIntakePower(intake, 1));
+    NamedCommands.registerCommand("intake", IntakeCommands.intakeAtPower(intake, 1));
 
-    NamedCommands.registerCommand("stop-intake", IntakeCommands.setIntakePower(intake, 0));
+    NamedCommands.registerCommand("stop-intake", IntakeCommands.intakeAtPower(intake, 0));
 
-    NamedCommands.registerCommand("spool-shooter", ShooterCommands.getShootSpeedDistanceRelativeCommand(shooter, null)); //TODO: distance to hub
+    NamedCommands.registerCommand("spool-shooter", ShooterCommands.shootAtDistanceCommand(shooter, null)); //TODO: distance to hub
 
-    NamedCommands.registerCommand("deploy-intake", IntakeCommands.setLatchPosition(intake, null)); //TODO: correct latch position
+    NamedCommands.registerCommand("deploy-intake", IntakeCommands.positionDeployerCommand(intake, null)); //TODO: correct latch position
 
-    NamedCommands.registerCommand("shoot-until-done", indexer.getIndexerSpeedCommand(() -> 1));
+    NamedCommands.registerCommand("shoot-until-done", indexer.indexUntilCancelledCommand(() -> 1));
   }
 
   public static final class Auto {

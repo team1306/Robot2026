@@ -24,7 +24,7 @@ public class TestingControllerMapping extends ControllerMapping {
   @Override
   public void bind() {
     drive.setDefaultCommand(
-        DriveCommands.joystickDrive(
+        DriveCommands.joystickDriveCommand(
             drive,
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
@@ -43,11 +43,10 @@ public class TestingControllerMapping extends ControllerMapping {
     driverController
         .leftTrigger(0.5)
         .whileTrue(
-            DriveCommands.driveAimLocked(
+            DriveCommands.driveAimLockedCommand(
                 drive,
                 () -> -driverController.getLeftY(),
                 () -> -driverController.getLeftX(),
-                () ->
                     AllianceTriggers.isBlueAlliance()
                         ? Constants.Locations.blueHub.toTranslation2d()
                         : Constants.Locations.redHub.toTranslation2d()));
