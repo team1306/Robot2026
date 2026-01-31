@@ -91,7 +91,7 @@ public class RobotContainer {
         break;
     }
 
-    controls = new Controls(drive, intake, shooter);
+    controls = new Controls(drive, intake);
     autos = new Autos(drive);
 
     vision = initializeVision();
