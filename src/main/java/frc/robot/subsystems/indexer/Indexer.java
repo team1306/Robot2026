@@ -25,7 +25,7 @@ public class Indexer extends SubsystemBase {
     indexerIO.setPower(power);
   }
 
-  public Command getIndexerSpeedCommand(DoubleSupplier speed) {
+  public Command indexUntilCancelledCommand(DoubleSupplier speed) {
     return (Commands.startEnd(() -> setPower(speed.getAsDouble()), () -> setPower(0)));
   }
 }

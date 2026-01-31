@@ -59,29 +59,28 @@ public class ShooterCommands {
     return RotationsPerSecond.of(lerpedValue);
   }
 
-  public static Command shootSpeedCommand(Shooter shooter, AngularVelocity velocity) {
+  public static Command shootAtSpeedCommand(Shooter shooter, AngularVelocity velocity) {
     return Commands.startEnd(
         () -> shooter.setVelocity(velocity),
         () -> shooter.setVelocity(RotationsPerSecond.of(0)),
         shooter);
   }
 
-  public static Command shootSpeedCommand(Shooter shooter, Supplier<AngularVelocity> velocity) {
+  public static Command shootAtSpeedCommand(Shooter shooter, Supplier<AngularVelocity> velocity) {
     return Commands.runEnd(
         () -> shooter.setVelocity(velocity.get()),
         () -> shooter.setVelocity(RotationsPerSecond.of(0)),
         shooter);
   }
 
-  public static Command shootSpeedDistanceRelativeCommand(
-      Shooter shooter, Supplier<Distance> distance) {
-    return shootSpeedCommand(shooter, () -> interpolateSetpoints(SETPOINTS, distance.get()));
+  public static Command shootAtDistanceCommand(Shooter shooter, Supplier<Distance> distance) {
+    return shootAtSpeedCommand(shooter, () -> interpolateSetpoints(SETPOINTS, distance.get()));
   }
 
   public static Command shootForTimeCommand(
       Shooter shooter, Supplier<Distance> distanceSupplier, Time time) {
     return new ParallelDeadlineGroup(
-        new WaitCommand(time), shootSpeedDistanceRelativeCommand(shooter, distanceSupplier));
+        new WaitCommand(time), shootAtDistanceCommand(shooter, distanceSupplier));
   }
 
   public record ShooterSetpoint(Distance distance, AngularVelocity velocity)
