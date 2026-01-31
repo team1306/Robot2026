@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import static edu.wpi.first.units.Units.Meters;
-
 import badgerutils.triggers.AllianceTriggers;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
@@ -15,6 +13,8 @@ import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.Shooter;
 import java.util.function.DoubleSupplier;
+
+import static edu.wpi.first.units.Units.*;
 
 public class AutoAimCommand extends ParallelCommandGroup {
 
@@ -52,5 +52,27 @@ public class AutoAimCommand extends ParallelCommandGroup {
             .times(0.02);
 
     return targetVector.plus(velocityVector);
+  }
+
+  private static final int iterations = 1;
+
+  public static Vector<N2> iterateOnVelocity(Vector<N2> velocityVector, Vector<N2> targetVector) {
+      double time = ShooterCommands.interpolateSetpoints(ShooterCommands.SETPOINTS, Meters.of(targetVector.norm())).time().in(Seconds);
+
+      Vector<N2> previousError = VecBuilder.fill(0, 0);
+      Vector<N2> endPosition = VecBuilder.fill(0, 0);
+      for(int i = 0; i < iterations; ++i) {
+          Vector<N2> newTarget = velocityVector.times(time).plus(targetVector).plus(previousError);
+          double newDistance = newTarget.norm();
+
+          ShooterCommands.ShooterSetpoint newPoint = ShooterCommands.interpolateSetpoints(ShooterCommands.SETPOINTS, Meters.of(newDistance));
+          double newTime = newPoint.time().in(Seconds);
+          double exitVelocity = newDistance / newTime;
+          Vector<N2> realVelocity = newTarget.unit().times(exitVelocity);
+          endPosition = realVelocity.plus(velocityVector).times(newTime);
+          previousError = endPosition.minus(targetVector);
+      }
+
+      return endPosition;
   }
 }
