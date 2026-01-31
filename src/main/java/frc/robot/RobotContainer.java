@@ -71,8 +71,8 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
-        intake = new Intake(new IntakeIOSim());
-        indexer = new Indexer(new IndexerIOSim());
+        intake = new Intake(new IntakeIOReal());
+        indexer = new Indexer(new IndexerIOReal());
         shooter = new Shooter(new ShooterIOReal());
         break;
 
