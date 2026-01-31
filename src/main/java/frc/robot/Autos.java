@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.commands.DriveCommands;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.controls.Controls;
@@ -88,6 +89,7 @@ public class Autos {
 
   private void bindNamedCommands() {
     NamedCommands.registerCommand("shoot-8", new ParallelCommandGroup(
+      DriveCommands.driveAimLockedCommand(drivetrain, () -> 0, () -> 0, FlippingUtil.flipFieldPosition(Constants.Locations.blueHub.toTranslation2d())),
       ShooterCommands.shootAtDistanceCommand(shooter, null), //TODO: make distance to hub util
       new WaitUntilCommand(() -> true/*TODO: when shooter is at speed (make method) */).andThen((indexer.indexUntilCancelledCommand(() -> 1).withDeadline(new WaitCommand(STARTING_FUEL_SHOOT_DURATION))))
     ));
@@ -100,7 +102,11 @@ public class Autos {
 
     NamedCommands.registerCommand("deploy-intake", IntakeCommands.positionDeployerCommand(intake, null)); //TODO: correct latch position
 
-    NamedCommands.registerCommand("shoot-until-done", indexer.indexUntilCancelledCommand(() -> 1));
+    NamedCommands.registerCommand("shoot-until-done", new ParallelCommandGroup(
+      DriveCommands.driveAimLockedCommand(drivetrain, () -> 0, () -> 0, FlippingUtil.flipFieldPosition(Constants.Locations.blueHub.toTranslation2d())),
+      indexer.indexUntilCancelledCommand(() -> 1))
+    );
+    
   }
 
   public static final class Auto {
