@@ -4,8 +4,7 @@ import badgerutils.networktables.LoggedNetworkTablesBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.shooter.Shooter;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,8 +18,6 @@ public class Controls {
   private final CommandXboxController operatorController;
 
   // ============================== SUBSYSTEMS ====================================
-  private final Drive drivetrain;
-  private final Intake intake;
 
   private final EnumMap<ControlStates, ControllerMapping> mappings =
       new EnumMap<>(ControlStates.class);
@@ -29,23 +26,11 @@ public class Controls {
 
   private static final Set<Supplier<Trigger>> persistentTriggers = new HashSet<>();
 
-  public Controls(Drive drivetrain, Intake intake) {
-    this.drivetrain = drivetrain;
-    this.intake = intake;
+  public Controls(Shooter shooter) {
 
     DriverStation.silenceJoystickConnectionWarning(true);
     driverController = new CommandXboxController(0);
     operatorController = new CommandXboxController(1);
-
-    mappings.put(
-        ControlStates.COMPETITION,
-        new CompetitionControllerMapping(driverController, operatorController, drivetrain, intake));
-    mappings.put(
-        ControlStates.TEST_ONLY_REMOVE_ME,
-        new RemoveMeControllerMapping(driverController, operatorController));
-    mappings.put(
-        ControlStates.SYSID,
-        new SysIdControllerMapping(driverController, operatorController, drivetrain));
 
     Consumer<Enum<ControlStates>> onChange =
         (nextState) -> {
