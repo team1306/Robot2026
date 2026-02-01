@@ -8,9 +8,9 @@ public class ShooterConstants {
 
   public static final double kV = 0;
 
-  public static final int leftTopMotorId = 0;
-  public static final int leftBottomMotorId = 0;
+  public static final int leftTopMotorId = 13;
+  public static final int leftBottomMotorId = 14;
 
-  public static final int rightTopMotorId = 0;
-  public static final int rightBottomMotorId = 0;
+  public static final int rightTopMotorId = 15;
+  public static final int rightBottomMotorId = 16;
 }
