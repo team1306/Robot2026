@@ -62,14 +62,14 @@ public class ShooterCommands {
   public static Command shootAtSpeedCommand(Shooter shooter, AngularVelocity velocity) {
     return Commands.startEnd(
         () -> shooter.setVelocity(velocity),
-        () -> shooter.setVelocity(RotationsPerSecond.of(0)),
+            shooter::setIdle,
         shooter);
   }
 
   public static Command shootAtSpeedCommand(Shooter shooter, Supplier<AngularVelocity> velocity) {
     return Commands.runEnd(
         () -> shooter.setVelocity(velocity.get()),
-        () -> shooter.setVelocity(RotationsPerSecond.of(0)),
+        shooter::setIdle,
         shooter);
   }
 

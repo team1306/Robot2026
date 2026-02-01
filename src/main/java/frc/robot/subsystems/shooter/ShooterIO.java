@@ -16,11 +16,13 @@ public interface ShooterIO {
     public AngularVelocity shooterLeftBottomMotorSpeed = RotationsPerSecond.of(0);
     public AngularVelocity shooterRightTopMotorSpeed = RotationsPerSecond.of(0);
     public AngularVelocity shooterRightBottomMotorSpeed = RotationsPerSecond.of(0);
+    public AngularVelocity encoderSpeed = RotationsPerSecond.of(0);
 
     public boolean isShooterLeftTopMotorConnected = false;
     public boolean isShooterLeftBottomMotorConnected = false;
     public boolean isShooterRightTopMotorConnected = false;
     public boolean isShooterRightBottomMotorConnected = false;
+    public boolean isEncoderConnected = false;
 
     public Current shooterLeftTopMotorSupplyCurrent = Amps.of(0);
     public Current shooterLeftBottomMotorSupplyCurrent = Amps.of(0);
@@ -31,9 +33,17 @@ public interface ShooterIO {
     public Temperature shooterRightBottomTemperature = Celsius.of(0);
     public Temperature shooterLeftTopTemperature = Celsius.of(0);
     public Temperature shooterLeftBottomTemperature = Celsius.of(0);
+    
+    public double shooterLeftTopClosedLoopError = 0;
+    public double shooterLeftBottomClosedLoopError = 0;
+    public double shooterRightTopClosedLoopError = 0;
+    public double shooterRightBottomClosedLoopError = 0;
+
   }
 
   default void updateInputs(ShooterIOInputs inputs) {}
 
   default void setVelocity(AngularVelocity velocity) {}
+  
+  default void setIdle(){}
 }
