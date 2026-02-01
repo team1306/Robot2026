@@ -23,13 +23,13 @@ public class IntakeIOReal implements IntakeIO {
   private final StatusSignal<Current> rightCurrentSignal;
 
   public IntakeIOReal() {
-    leftMotor = new TalonFX(IntakeConstants.intakeLeftMotorId);
-    rightMotor = new TalonFX(IntakeConstants.intakeRightMotorId);
+    leftMotor = new TalonFX(IntakeConstants.INTAKE_LEFT_MOTOR_ID);
+    rightMotor = new TalonFX(IntakeConstants.INTAKE_RIGHT_MOTOR_ID);
 
     leftCurrentSignal = leftMotor.getSupplyCurrent();
     rightCurrentSignal = rightMotor.getSupplyCurrent();
 
-    latchMotor = new TalonFX(IntakeConstants.latchMotorId);
+    latchMotor = new TalonFX(IntakeConstants.LATCH_MOTOR_ID);
     latchCurrentSignal = latchMotor.getSupplyCurrent();
     latchPositionRequest = new PositionTorqueCurrentFOC(Degrees.of(0));
 
@@ -49,19 +49,19 @@ public class IntakeIOReal implements IntakeIO {
     inputs.latchTemp = latchMotor.getDeviceTemp().getValue();
 
     BaseStatusSignal.refreshAll(leftCurrentSignal, rightCurrentSignal, latchCurrentSignal);
-    inputs.leftCurrent = leftCurrentSignal.getValue();
-    inputs.rightCurrent = rightCurrentSignal.getValue();
+    inputs.leftSupplyCurrent = leftCurrentSignal.getValue();
+    inputs.rightSupplyCurrent = rightCurrentSignal.getValue();
     inputs.latchCurrent = latchCurrentSignal.getValue();
   }
 
   @Override
-  public void set(double power) {
-    leftMotor.setControl(dutyCycle.withOutput(power));
-    rightMotor.setControl(dutyCycle.withOutput(power));
+  public void set(double dutyCycle) {
+    leftMotor.setControl(this.dutyCycle.withOutput(dutyCycle));
+    rightMotor.setControl(this.dutyCycle.withOutput(dutyCycle));
   }
 
   @Override
-  public void setLatchPosition(Angle angle) {
+  public void setDeployerPosition(Angle angle) {
     latchMotor.setControl(latchPositionRequest.withPosition(angle));
   }
 }
