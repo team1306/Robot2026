@@ -9,7 +9,7 @@ public class FuelDetectionReal implements FuelDetectionIO {
   private final PhotonCamera camera;
 
   public FuelDetectionReal() {
-    camera = new PhotonCamera(FuelDetectionConstants.fuelDetectionCameraName);
+    camera = new PhotonCamera(FuelDetectionConstants.FUEL_DETECTION_CAMERA_NAME);
   }
 
   @Override
