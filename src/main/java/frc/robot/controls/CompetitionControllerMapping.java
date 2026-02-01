@@ -44,8 +44,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 .ignoringDisable(true));
     driverController
         .leftTrigger(0.5)
-        .onTrue(Commands.runOnce(() -> intake.set(1)))
-        .onFalse(Commands.runOnce(() -> intake.set(0)));
+        .onTrue(Commands.runOnce(() -> intake.setPower(1)))
+        .onFalse(Commands.runOnce(() -> intake.setPower(0)));
   }
 
   @Override

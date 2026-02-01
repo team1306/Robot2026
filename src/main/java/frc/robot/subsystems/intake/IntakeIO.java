@@ -23,8 +23,8 @@ public interface IntakeIO {
     public Temperature leftTemp = Celsius.of(0);
     public Temperature rightTemp = Celsius.of(0);
     public Temperature latchTemp = Celsius.of(0);
-    public Current leftCurrent = Amps.of(0);
-    public Current rightCurrent = Amps.of(0);
+    public Current leftSupplyCurrent = Amps.of(0);
+    public Current rightSupplyCurrent = Amps.of(0);
     public Current latchCurrent = Amps.of(0);
   }
 
@@ -32,5 +32,5 @@ public interface IntakeIO {
 
   public default void set(double power) {}
 
-  public default void setLatchPosition(Angle angle) {}
+  public default void setDeployerPosition(Angle angle) {}
 }
