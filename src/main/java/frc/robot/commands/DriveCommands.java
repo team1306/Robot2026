@@ -25,16 +25,26 @@ import java.util.function.Supplier;
 
 public class DriveCommands {
   private static final double DEADBAND = 0.1;
-  private static final double ANGLE_KP = 5.0;
-  private static final double ANGLE_KD = 0.4;
-  private static final double ANGLE_MAX_VELOCITY = 8.0;
-  private static final double ANGLE_MAX_ACCELERATION = 20.0;
+  private static final double ANGLE_KP = 35.0;
+  private static final double ANGLE_KI = 0.25;
+  private static final double ANGLE_KD = 0.5;
+  private static final double ANGLE_MAX_VELOCITY = 100.0;
+  private static final double ANGLE_MAX_ACCELERATION = 100.0;
   private static final double FF_START_DELAY = 2.0; // Secs
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
   private DriveCommands() {}
+
+  public static boolean isAimedAtHub(Drive drive, Translation2d hubPose, double angleToleranceRad) {
+    Rotation2d targetAngle =
+        Rotation2d.fromRadians(
+            Math.atan2(
+                hubPose.getY() - drive.getPose().getY(), hubPose.getX() - drive.getPose().getX()));
+    double angleError = drive.getRotation().minus(targetAngle).getRadians();
+    return Math.abs(angleError) < angleToleranceRad;
+  }
 
   private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
     // Apply deadband
@@ -51,7 +61,7 @@ public class DriveCommands {
   }
 
   public static Command driveAimLocked(
-      Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier, Pose2d pose) {
+      Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier, Translation2d pose) {
     return joystickDriveAtAngle(
         drive,
         xSupplier,
@@ -59,7 +69,7 @@ public class DriveCommands {
         () -> {
           return Rotation2d.fromRadians(
               Math.atan2(
-                  pose.getX() - drive.getPose().getX(), pose.getY() - drive.getPose().getY()));
+                  pose.getY() - drive.getPose().getY(), pose.getX() - drive.getPose().getX()));
         });
   }
 
@@ -117,7 +127,7 @@ public class DriveCommands {
     ProfiledPIDController angleController =
         new ProfiledPIDController(
             ANGLE_KP,
-            0.0,
+            ANGLE_KI,
             ANGLE_KD,
             new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
     angleController.enableContinuousInput(-Math.PI, Math.PI);
