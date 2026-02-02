@@ -11,12 +11,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import java.util.function.BooleanSupplier;
@@ -26,17 +28,18 @@ public class CompetitionControllerMapping extends ControllerMapping {
   private final Drive drive;
   private final Intake intake;
   private final Shooter shooter;
-
+    private final Indexer indexer;
   public CompetitionControllerMapping(
       CommandXboxController driverController,
       CommandXboxController operatorController,
       Drive drive,
       Intake intake,
-      Shooter shooter) {
+      Shooter shooter, Indexer indexer) {
     super(driverController, operatorController);
     this.drive = drive;
     this.intake = intake;
     this.shooter = shooter;
+    this.indexer = indexer;
   }
 
   @Override
@@ -92,11 +95,11 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .onTrue(Commands.runOnce(() -> intake.setDutyCycle(1)))
         .onFalse(Commands.runOnce(() -> intake.setDutyCycle(0)));
     operatorController
-        .leftTrigger()
-        .whileTrue(new InstantCommand(() -> shooter.setVelocity(RotationsPerSecond.of(5))));
+        .rightTrigger().and(safeShoot(operatorController.leftStick().getAsBoolean())).onTrue(indexer.indexUntilCancelledCommand(() -> 1));
+
     operatorController
-        .rightTrigger()
-        .and(safeShoot(operatorController.leftStick().getAsBoolean()))
+        .leftTrigger()
+       
         .onTrue(
             new InstantCommand(
                 () ->
@@ -110,7 +113,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                             : () ->
                                 Meters.of(
                                     Constants.Locations.blueHub.getDistance(
-                                        new Pose3d(drive.getPose()).getTranslation())))));
+                                        new Pose3d(drive.getPose()).getTranslation()))))).onFalse(new InstantCommand(()->shooter.setIdle()));
     operatorController
         .leftTrigger(0.5)
         .onTrue(new InstantCommand(() -> operatorController.setRumble(RumbleType.kLeftRumble, 1)))
