@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.shooter.Shooter;
 
 public class CompetitionControllerMapping extends ControllerMapping {
 
@@ -18,7 +19,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
       CommandXboxController driverController,
       CommandXboxController operatorController,
       Drive drive,
-      Intake intake) {
+      Intake intake,
+      Shooter shooter) {
     super(driverController, operatorController);
     this.drive = drive;
     this.intake = intake;
