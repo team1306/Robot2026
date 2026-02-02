@@ -37,15 +37,6 @@ public class DriveCommands {
 
   private DriveCommands() {}
 
-  public static boolean isAimedAtHub(Drive drive, Translation2d hubPose, double angleToleranceRad) {
-    Rotation2d targetAngle =
-        Rotation2d.fromRadians(
-            Math.atan2(
-                hubPose.getY() - drive.getPose().getY(), hubPose.getX() - drive.getPose().getX()));
-    double angleError = drive.getRotation().minus(targetAngle).getRadians();
-    return Math.abs(angleError) < angleToleranceRad;
-  }
-
   private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
     // Apply deadband
     double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), DEADBAND);

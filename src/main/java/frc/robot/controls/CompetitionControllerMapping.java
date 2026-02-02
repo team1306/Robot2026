@@ -19,6 +19,7 @@ import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
+import java.util.function.BooleanSupplier;
 
 public class CompetitionControllerMapping extends ControllerMapping {
 
@@ -43,12 +44,11 @@ public class CompetitionControllerMapping extends ControllerMapping {
     Trigger aimedAtHubTrigger =
         new Trigger(
             () ->
-                DriveCommands.isAimedAtHub(
+                drive.isLocked(
                     drive,
                     AllianceTriggers.isRedAlliance()
                         ? Constants.Locations.redHub.toTranslation2d()
-                        : Constants.Locations.blueHub.toTranslation2d(),
-                    0.1));
+                        : Constants.Locations.blueHub.toTranslation2d()));
 
     aimedAtHubTrigger
         .and(driverController.rightBumper())
@@ -96,6 +96,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .whileTrue(new InstantCommand(() -> shooter.setVelocity(RotationsPerSecond.of(5))));
     operatorController
         .rightTrigger()
+        .and(safeShoot(operatorController.leftStick().getAsBoolean()))
         .onTrue(
             new InstantCommand(
                 () ->
@@ -126,5 +127,18 @@ public class CompetitionControllerMapping extends ControllerMapping {
   public void clear() {
     super.clear();
     CommandUtils.removeAndCancelDefaultCommand(drive);
+  }
+
+  // INTRODUCING: SafeShoot™
+  private BooleanSupplier safeShoot(boolean bypass) {
+    return () ->
+        bypass
+            ? true
+            : shooter.isAtRequestedSpeed()
+                && drive.isLocked(
+                    drive,
+                    AllianceTriggers.isRedAlliance()
+                        ? Constants.Locations.redHub.toTranslation2d()
+                        : Constants.Locations.blueHub.toTranslation2d());
   }
 }
