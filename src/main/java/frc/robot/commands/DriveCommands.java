@@ -61,7 +61,7 @@ public class DriveCommands {
   }
 
   public static Command driveAimLockedCommand(
-      Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier, Pose2d pose) {
+      Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier, Translation2d pose) {
     return joystickDriveAtAngleCommand(
         drive,
         xSupplier,

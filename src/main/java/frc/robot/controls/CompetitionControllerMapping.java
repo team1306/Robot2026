@@ -70,7 +70,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
     driverController
         .rightBumper()
         .whileTrue(
-            DriveCommands.driveAimLocked(
+            DriveCommands.driveAimLockedCommand(
                 drive,
                 () -> -driverController.getLeftY(),
                 () -> -driverController.getLeftX(),
@@ -89,8 +89,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 .ignoringDisable(true));
     driverController
         .leftTrigger(0.5)
-        .onTrue(Commands.runOnce(() -> intake.set(1)))
-        .onFalse(Commands.runOnce(() -> intake.set(0)));
+        .onTrue(Commands.runOnce(() -> intake.setDutyCycle(1)))
+        .onFalse(Commands.runOnce(() -> intake.setDutyCycle(0)));
     operatorController
         .leftTrigger()
         .whileTrue(new InstantCommand(() -> shooter.setVelocity(RotationsPerSecond.of(5))));
@@ -99,7 +99,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .onTrue(
             new InstantCommand(
                 () ->
-                    ShooterCommands.shootSpeedDistanceRelativeCommand(
+                    ShooterCommands.shootAtDistanceCommand(
                         shooter,
                         AllianceTriggers.isRedAlliance()
                             ? () ->
