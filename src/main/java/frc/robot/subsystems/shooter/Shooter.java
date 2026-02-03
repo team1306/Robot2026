@@ -29,4 +29,8 @@ public class Shooter extends SubsystemBase {
     shooterIO.setVoltage(voltage);
     Logger.recordOutput("Shooter/Voltage Setpoint", voltage);
   }
+
+  public boolean isAtSpeed() {
+    return shooterIO.isAtSpeed();
+  }
 }

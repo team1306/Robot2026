@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -125,5 +127,10 @@ public class ShooterIOReal implements ShooterIO {
     leftBottomMotor.setControl(velocityRequest.withVelocity(velocity));
     rightTopMotor.setControl(velocityRequest.withVelocity(velocity));
     rightBottomMotor.setControl(velocityRequest.withVelocity(velocity));
+  }
+
+  @Override
+  public boolean isAtSpeed()  {
+    return leftTopMotor.getClosedLoopError().getValue() < ShooterConstants.PID_TOLERANCE.in(RotationsPerSecond);
   }
 }
