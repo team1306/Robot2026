@@ -49,7 +49,8 @@ public class Intake extends SubsystemBase {
   }
 
   public Command intakeUntilInterruptedCommand(double dutyCycleWhileOn) {
-    return Commands.startEnd(() -> this.setDutyCycle(dutyCycleWhileOn), () -> this.setDutyCycle(0), this);
+    return Commands.startEnd(
+        () -> this.setDutyCycle(dutyCycleWhileOn), () -> this.setDutyCycle(0), this);
   }
 
   public Command intakeUntilInterruptedCommand() {
