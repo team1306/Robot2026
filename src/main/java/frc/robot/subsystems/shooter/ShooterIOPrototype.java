@@ -33,9 +33,9 @@ public class ShooterIOPrototype implements ShooterIO {
   private final StatusSignal<Temperature> rightTopMotorTemperature;
 
   public ShooterIOPrototype() {
-    leftTopMotor = new TalonFX(ShooterConstants.leftTopMotorId);
+    leftTopMotor = new TalonFX(ShooterConstants.leftTopMotorId, ShooterConstants.CAN_BUS);
 
-    rightTopMotor = new TalonFX(ShooterConstants.rightTopMotorId);
+    rightTopMotor = new TalonFX(ShooterConstants.rightTopMotorId, ShooterConstants.CAN_BUS);
 
     TalonFXConfiguration shooterMotorConfig = new TalonFXConfiguration();
 
@@ -47,7 +47,11 @@ public class ShooterIOPrototype implements ShooterIO {
 
     shooterMotorConfig.Slot0 = pidConfigs;
 
-    leftTopMotor.getConfigurator().apply(shooterMotorConfig);
+    leftTopMotor
+        .getConfigurator()
+        .apply(
+            shooterMotorConfig.withMotorOutput(
+                new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive)));
 
     rightTopMotor
         .getConfigurator()
@@ -104,7 +108,7 @@ public class ShooterIOPrototype implements ShooterIO {
 
   @Override
   public void setDutyCycle(double dutyCycle) {
-    DutyCycleOut control = new DutyCycleOut(dutyCycle).withEnableFOC(true);
+    DutyCycleOut control = new DutyCycleOut(dutyCycle);
     leftTopMotor.setControl(control);
     rightTopMotor.setControl(control);
   }

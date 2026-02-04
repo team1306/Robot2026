@@ -32,6 +32,18 @@ public class Controls {
     driverController = new CommandXboxController(0);
     operatorController = new CommandXboxController(1);
 
+    mappings.put(
+        ControlStates.COMPETITION,
+        new CompetitionControllerMapping(driverController, operatorController));
+    mappings.put(
+        ControlStates.TEST_ONLY_REMOVE_ME,
+        new RemoveMeControllerMapping(driverController, operatorController));
+    mappings.put(
+        ControlStates.SYSID, new SysIdControllerMapping(driverController, operatorController));
+    mappings.put(
+        ControlStates.TESTING,
+        new TestingControllerMapping(driverController, operatorController, shooter));
+
     Consumer<Enum<ControlStates>> onChange =
         (nextState) -> {
           ControlStates actualState = (ControlStates) nextState;

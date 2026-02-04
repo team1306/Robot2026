@@ -1,11 +1,9 @@
 package frc.robot.subsystems.shooter;
 
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.ShooterCommands;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
@@ -14,21 +12,22 @@ public class Shooter extends SubsystemBase {
   public final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
   public final ShooterIO shooterIO;
 
-  public LoggedNetworkNumber velocityFromDashboard =
+  public double target;
+
+  public LoggedNetworkNumber dutyCycleFromDashboard =
       new LoggedNetworkNumber("Shooter/targetVelocity", 0);
 
   public Shooter(ShooterIO shooterIO) {
     this.shooterIO = shooterIO;
 
-    setDefaultCommand(
-        ShooterCommands.getShootSpeedCommand(
-            this, () -> RotationsPerSecond.of(velocityFromDashboard.getAsDouble())));
+    setDefaultCommand(new RunCommand(() -> setDutyCycle(target), this));
   }
 
   @Override
   public void periodic() {
     shooterIO.updateInputs(inputs);
     Logger.processInputs("Shooter", inputs);
+    target = dutyCycleFromDashboard.get();
   }
 
   public void setVelocity(AngularVelocity velocity) {

@@ -1,6 +1,5 @@
 package frc.robot.controls;
 
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.shooter.Shooter;
 
@@ -19,7 +18,7 @@ public class TestingControllerMapping extends ControllerMapping {
   @Override
   public void bind() {
 
-    shooter.setDefaultCommand(
-        new RunCommand(() -> shooter.setDutyCycle(driverController.getLeftY()), shooter));
+    // shooter.setDefaultCommand(
+    //     new RunCommand(() -> shooter.setDutyCycle(driverController.getLeftY()), shooter));
   }
 }
