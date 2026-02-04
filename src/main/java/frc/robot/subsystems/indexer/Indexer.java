@@ -29,4 +29,8 @@ public class Indexer extends SubsystemBase {
   public Command indexUntilCancelledCommand(DoubleSupplier speed) {
     return (Commands.runEnd(() -> setDutyCycle(speed.getAsDouble()), () -> setDutyCycle(0), this));
   }
+
+  public Command indexUntilCancelledCommand(double speed) {
+    return (Commands.startEnd(() -> setDutyCycle(speed), () -> setDutyCycle(0), this));
+  }
 }
