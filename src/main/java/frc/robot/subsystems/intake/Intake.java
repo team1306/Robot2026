@@ -54,6 +54,6 @@ public class Intake extends SubsystemBase {
   }
 
   public Command intakeUntilInterruptedCommand() {
-    return this.intakeAtDutyCycleCommand(1);
+    return this.intakeUntilInterruptedCommand(1);
   }
 }
