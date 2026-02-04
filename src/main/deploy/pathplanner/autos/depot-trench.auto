@@ -7,7 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Bump testing"
+            "pathName": "depot-trench"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot-until-done"
           }
         }
       ]
