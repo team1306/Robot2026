@@ -6,6 +6,7 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.measure.Angle;
+import frc.robot.Constants;
 
 public class IntakeIOReal implements IntakeIO {
   private final TalonFX leftMotor;
@@ -16,9 +17,9 @@ public class IntakeIOReal implements IntakeIO {
   private final PositionTorqueCurrentFOC deployerPositionRequest;
 
   public IntakeIOReal() {
-    leftMotor = new TalonFX(IntakeConstants.INTAKE_LEFT_MOTOR_ID);
-    rightMotor = new TalonFX(IntakeConstants.INTAKE_RIGHT_MOTOR_ID);
-    deployerMotor = new TalonFX(IntakeConstants.DEPLOYER_MOTOR_ID);
+    leftMotor = new TalonFX(Constants.CanIds.INTAKE_LEFT_MOTOR_ID);
+    rightMotor = new TalonFX(Constants.CanIds.INTAKE_RIGHT_MOTOR_ID);
+    deployerMotor = new TalonFX(Constants.CanIds.DEPLOYER_MOTOR_ID);
 
     leftMotor.getConfigurator().apply(IntakeConstants.CW_INTAKE_MOTOR_CONFIGS);
     rightMotor.getConfigurator().apply(IntakeConstants.CCW_INTAKE_MOTOR_CONFIGS);

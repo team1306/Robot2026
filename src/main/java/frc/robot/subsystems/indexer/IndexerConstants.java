@@ -7,9 +7,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class IndexerConstants {
-  public static final int INDEXER_LEFT_MOTOR_ID = -1;
-  public static final int INDEXER_RIGHT_MOTOR_ID = -1;
-
   // CONFIGS
   public static final TalonFXConfiguration CW_INDEXER_MOTOR_CONFIGS =
       new TalonFXConfiguration()

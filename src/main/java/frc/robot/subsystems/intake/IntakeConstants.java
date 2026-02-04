@@ -13,10 +13,6 @@ public class IntakeConstants {
   public static final double KI = 0;
   public static final double KD = 0;
 
-  public static final int INTAKE_LEFT_MOTOR_ID = 0;
-  public static final int INTAKE_RIGHT_MOTOR_ID = 0;
-  public static final int DEPLOYER_MOTOR_ID = 0;
-
   // CONFIG
   public static final TalonFXConfiguration CW_INTAKE_MOTOR_CONFIGS =
       new TalonFXConfiguration()

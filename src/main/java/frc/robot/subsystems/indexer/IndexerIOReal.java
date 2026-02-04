@@ -3,14 +3,16 @@ package frc.robot.subsystems.indexer;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import frc.robot.Constants;
+
 public class IndexerIOReal implements IndexerIO {
 
   private final TalonFX leftIndexerMotor;
   private final TalonFX rightIndexerMotor;
 
   public IndexerIOReal() {
-    leftIndexerMotor = new TalonFX(IndexerConstants.INDEXER_LEFT_MOTOR_ID);
-    rightIndexerMotor = new TalonFX(IndexerConstants.INDEXER_RIGHT_MOTOR_ID);
+    leftIndexerMotor = new TalonFX(Constants.CanIds.INDEXER_LEFT_MOTOR_ID);
+    rightIndexerMotor = new TalonFX(Constants.CanIds.INDEXER_RIGHT_MOTOR_ID);
 
     leftIndexerMotor.getConfigurator().apply(IndexerConstants.CW_INDEXER_MOTOR_CONFIGS);
     rightIndexerMotor.getConfigurator().apply(IndexerConstants.CCW_INDEXER_MOTOR_CONFIGS);

@@ -6,9 +6,11 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
+import frc.robot.Constants;
 
 public class ShooterIOReal implements ShooterIO {
 
@@ -50,13 +52,13 @@ public class ShooterIOReal implements ShooterIO {
     neutralRequest = new NeutralOut();
 
     // CAN Device Initialization
-    leftTopMotor = new TalonFX(ShooterConstants.LEFT_TOP_MOTOR_ID);
-    leftBottomMotor = new TalonFX(ShooterConstants.LEFT_BOTTOM_MOTOR_ID);
+    leftTopMotor = new TalonFX(Constants.CanIds.SHOOTER_LEFT_TOP_MOTOR_ID);
+    leftBottomMotor = new TalonFX(Constants.CanIds.SHOOTER_LEFT_BOTTOM_MOTOR_ID);
 
-    rightTopMotor = new TalonFX(ShooterConstants.RIGHT_TOP_MOTOR_ID);
-    rightBottomMotor = new TalonFX(ShooterConstants.RIGHT_BOTTOM_MOTOR_ID);
+    rightTopMotor = new TalonFX(Constants.CanIds.SHOOTER_RIGHT_TOP_MOTOR_ID);
+    rightBottomMotor = new TalonFX(Constants.CanIds.SHOOTER_RIGHT_BOTTOM_MOTOR_ID);
 
-    encoder = new CANcoder(ShooterConstants.ENCODER_ID);
+    encoder = new CANcoder(Constants.CanIds.SHOOTER_ENCODER_ID);
     encoderVelocity = encoder.getVelocity();
 
     // Apply configurations
