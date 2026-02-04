@@ -1,12 +1,9 @@
 package frc.robot.subsystems.shooter;
 
-import static edu.wpi.first.units.Units.RPM;
-
 import badgerutils.motor.MotorConfigUtils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.signals.GravityTypeValue;
-import edu.wpi.first.units.measure.AngularVelocity;
 
 public class ShooterConstants {
 
