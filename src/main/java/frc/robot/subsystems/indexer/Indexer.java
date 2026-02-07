@@ -26,10 +26,12 @@ public class Indexer extends SubsystemBase {
     Logger.recordOutput("Indexer/Requested Duty Cycle", dutyCycle);
   }
 
+  // works in sim
   public Command indexUntilCancelledCommand(DoubleSupplier speed) {
     return (Commands.runEnd(() -> setDutyCycle(speed.getAsDouble()), () -> setDutyCycle(0), this));
   }
 
+  // works in sim
   public Command indexUntilCancelledCommand(double speed) {
     return (Commands.startEnd(() -> setDutyCycle(speed), () -> setDutyCycle(0), this));
   }

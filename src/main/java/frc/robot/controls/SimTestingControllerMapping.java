@@ -15,6 +15,8 @@ public class SimTestingControllerMapping extends ControllerMapping {
 
   private final Drive drive;
   private final Intake intake;
+  private final Shooter shooter;
+  private final Indexer indexer;
 
   public SimTestingControllerMapping(
       CommandXboxController driverController,
@@ -26,6 +28,8 @@ public class SimTestingControllerMapping extends ControllerMapping {
     super(driverController, operatorController);
     this.drive = drive;
     this.intake = intake;
+    this.indexer = indexer;
+    this.shooter = shooter;
   }
 
   @Override
@@ -47,8 +51,21 @@ public class SimTestingControllerMapping extends ControllerMapping {
                     drive)
                 .ignoringDisable(true));
 
-    // INTAKE TESTS
+    indexerTesting();
+  }
 
+  private void indexerTesting() {
+    // A button: while held, indexer duty cycle is 0.5; when released, indexer duty cycle is 0
+    driverController.a().whileTrue(indexer.indexUntilCancelledCommand(0.5));
+
+    // B button: while held, indexer duty cycle is set by the left trigger; when released, indexer
+    // duty cycle is 0
+    driverController
+        .b()
+        .whileTrue(indexer.indexUntilCancelledCommand(() -> driverController.getLeftTriggerAxis()));
+  }
+
+  private void intakeTesting() {
     // A button: while held, intake duty cycle is 1 (running); when released, intake duty cycle is 0
     // (off).
     driverController.a().whileTrue(intake.intakeUntilInterruptedCommand());
