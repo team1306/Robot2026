@@ -35,10 +35,12 @@ public class TunerConstants {
       new Slot0Configs().withKP(2).withKI(0).withKD(0).withKS(0.292).withKV(0.115).withKA(0.003);
   // The closed-loop output type to use for the steer motors;
   // This affects the PID/FF gains for the steer motors
-  private static final ClosedLoopOutputType kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
+  private static final ClosedLoopOutputType kSteerClosedLoopOutput =
+      ClosedLoopOutputType.TorqueCurrentFOC;
   // The closed-loop output type to use for the drive motors;
   // This affects the PID/FF gains for the drive motors
-  private static final ClosedLoopOutputType kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
+  private static final ClosedLoopOutputType kDriveClosedLoopOutput =
+      ClosedLoopOutputType.TorqueCurrentFOC;
 
   // The type of motor used for the drive motor
   private static final DriveMotorArrangement kDriveMotorType =
@@ -82,9 +84,7 @@ public class TunerConstants {
 
   // Theoretical free speed (m/s) at 12 V applied output;
   // This needs to be tuned to your individual robot
-  public static final LinearVelocity kSpeedAt12Volts =
-      MetersPerSecond.of(
-          8 /*5.12*/); // actual speed is about 5 but the pid doesn't like to go all the way there
+  public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(5.203);
   public static final LinearVelocity kMaxTurningSpeed = MetersPerSecond.of(3);
 
   // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
