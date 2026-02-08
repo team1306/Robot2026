@@ -85,7 +85,7 @@ public class TunerConstants {
   public static final LinearVelocity kSpeedAt12Volts =
       MetersPerSecond.of(
           8 /*5.12*/); // actual speed is about 5 but the pid doesn't like to go all the way there
-  public static final LinearVelocity kTurningSpeedAt12Volts = MetersPerSecond.of(3);
+  public static final LinearVelocity kMaxTurningSpeed = MetersPerSecond.of(3);
 
   // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
   // This may need to be tuned to your individual robot
