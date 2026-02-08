@@ -24,7 +24,6 @@ public class SysIdControllerMapping extends ControllerMapping {
     driverController.y().whileTrue(drive.sysIdQuasistatic(Direction.kReverse));
   }
 
-
   @Override
   public void clear() {
     super.clear();
