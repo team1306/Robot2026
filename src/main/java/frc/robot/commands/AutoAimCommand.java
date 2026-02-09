@@ -22,14 +22,14 @@ public class AutoAimCommand extends ParallelCommandGroup {
       Drive drive, Shooter shooter, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
 
     Command lockedAngleCommand =
-        DriveCommands.driveAimLocked(
+        DriveCommands.driveAimLockedCommand(
             drive,
             xSupplier,
             ySupplier,
             () -> new Translation2d(getResultantVector(drive, getHubTranslation())));
 
     Command shooterSpeedCommand =
-        ShooterCommands.getShootSpeedDistanceRelativeCommand(
+        ShooterCommands.shootAtDistanceCommand(
             shooter, () -> Meters.of(getResultantVector(drive, getHubTranslation()).norm()));
 
     addCommands(lockedAngleCommand, shooterSpeedCommand);
