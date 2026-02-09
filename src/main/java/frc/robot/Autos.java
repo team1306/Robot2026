@@ -15,11 +15,11 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.controls.Controls;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.intake.DeployerPosition;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 
@@ -91,16 +91,16 @@ public class Autos {
     NamedCommands.registerCommand("shoot-8", new ParallelCommandGroup(
       DriveCommands.driveAimLockedCommand(drivetrain, () -> 0, () -> 0, FlippingUtil.flipFieldPosition(Constants.Locations.blueHub.toTranslation2d())),
       ShooterCommands.shootAtDistanceCommand(shooter, null), //TODO: make distance to hub util
-      new WaitUntilCommand(() -> true/*TODO: when shooter is at speed (make method) */).andThen((indexer.indexUntilCancelledCommand(() -> 1).withDeadline(new WaitCommand(STARTING_FUEL_SHOOT_DURATION))))
+      new WaitUntilCommand(shooter.isAtRequestedSpeed()).andThen((indexer.indexUntilCancelledCommand(() -> 1).withDeadline(new WaitCommand(STARTING_FUEL_SHOOT_DURATION))))
     ));
 
-    NamedCommands.registerCommand("intake", IntakeCommands.intakeAtPower(intake, 1));
+    NamedCommands.registerCommand("intake", intake.intakeAtDutyCycleCommand(1));
 
-    NamedCommands.registerCommand("stop-intake", IntakeCommands.intakeAtPower(intake, 0));
+    NamedCommands.registerCommand("stop-intake", intake.intakeAtDutyCycleCommand(0));
 
     NamedCommands.registerCommand("spool-shooter", ShooterCommands.shootAtDistanceCommand(shooter, null)); //TODO: distance to hub
 
-    NamedCommands.registerCommand("deploy-intake", IntakeCommands.positionDeployerCommand(intake, null)); //TODO: correct latch position
+    NamedCommands.registerCommand("deploy-intake", intake.positionDeployerCommand(DeployerPosition.EXTENDED));
 
     NamedCommands.registerCommand("shoot-until-done", new ParallelCommandGroup(
       DriveCommands.driveAimLockedCommand(drivetrain, () -> 0, () -> 0, FlippingUtil.flipFieldPosition(Constants.Locations.blueHub.toTranslation2d())),
