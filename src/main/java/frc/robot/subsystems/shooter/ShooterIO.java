@@ -1,28 +1,48 @@
 package frc.robot.subsystems.shooter;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Celsius;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Temperature;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ShooterIO {
   @AutoLog
-  public static class ShooterIOInputs {
-    public AngularVelocity shooterTopMotorSpeed = RotationsPerSecond.of(0);
-    public AngularVelocity shooterBottomMotorSpeed = RotationsPerSecond.of(0);
+  class ShooterIOInputs {
+    public AngularVelocity shooterLeftTopMotorSpeed = RotationsPerSecond.of(0);
+    public AngularVelocity shooterLeftBottomMotorSpeed = RotationsPerSecond.of(0);
+    public AngularVelocity shooterRightTopMotorSpeed = RotationsPerSecond.of(0);
+    public AngularVelocity shooterRightBottomMotorSpeed = RotationsPerSecond.of(0);
+    public AngularVelocity encoderSpeed = RotationsPerSecond.of(0);
 
-    public boolean isShooterTopMotorConnected = false;
-    public boolean isShooterBottomMotorConnected = false;
+    public boolean isShooterLeftTopMotorConnected = false;
+    public boolean isShooterLeftBottomMotorConnected = false;
+    public boolean isShooterRightTopMotorConnected = false;
+    public boolean isShooterRightBottomMotorConnected = false;
+    public boolean isEncoderConnected = false;
 
-    public Voltage shooterTopMotorAppliedVoltage = Volts.of(0);
-    public Voltage shooterBottomMotorAppliedVoltage = Volts.of(0);
+    public Current shooterLeftTopMotorSupplyCurrent = Amps.of(0);
+    public Current shooterLeftBottomMotorSupplyCurrent = Amps.of(0);
+    public Current shooterRightTopMotorSupplyCurrent = Amps.of(0);
+    public Current shooterRightBottomMotorSupplyCurrent = Amps.of(0);
+
+    public Temperature shooterRightTopTemperature = Celsius.of(0);
+    public Temperature shooterRightBottomTemperature = Celsius.of(0);
+    public Temperature shooterLeftTopTemperature = Celsius.of(0);
+    public Temperature shooterLeftBottomTemperature = Celsius.of(0);
+
+    public double shooterLeftTopClosedLoopError = 0;
+    public double shooterLeftBottomClosedLoopError = 0;
+    public double shooterRightTopClosedLoopError = 0;
+    public double shooterRightBottomClosedLoopError = 0;
   }
 
-  public default void updateInputs(ShooterIOInputs inputs) {}
+  default void updateInputs(ShooterIOInputs inputs) {}
 
-  public default void setVoltage(Voltage voltage) {}
+  default void setVelocity(AngularVelocity velocity) {}
 
-  public default void setVelocity(AngularVelocity velocity) {}
+  default void setIdle() {}
 }

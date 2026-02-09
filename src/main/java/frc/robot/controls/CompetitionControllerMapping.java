@@ -9,26 +9,29 @@ import frc.robot.commands.AutoAimCommand;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.intake.Intake;
 
 public class CompetitionControllerMapping extends ControllerMapping {
 
   private final Drive drive;
   private final Shooter shooter;
+  private final Intake intake;
 
   public CompetitionControllerMapping(
       CommandXboxController driverController,
       CommandXboxController operatorController,
       Drive drive,
-      Shooter shooter) {
+      Intake intake, Shooter shooter) {
     super(driverController, operatorController);
     this.drive = drive;
+    this.intake = intake;
     this.shooter = shooter;
   }
 
   @Override
   public void bind() {
     drive.setDefaultCommand(
-        DriveCommands.joystickDrive(
+        DriveCommands.joystickDriveCommand(
             drive,
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
@@ -52,6 +55,10 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 shooter,
                 () -> -driverController.getLeftY(),
                 () -> -driverController.getLeftX()));
+    driverController
+        .leftTrigger(0.5)
+        .onTrue(Commands.runOnce(() -> intake.setDutyCycle(1)))
+        .onFalse(Commands.runOnce(() -> intake.setDutyCycle(0)));
   }
 
   @Override

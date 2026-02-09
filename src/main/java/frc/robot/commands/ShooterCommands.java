@@ -9,6 +9,8 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.Interpolation;
 import java.util.Arrays;
@@ -45,7 +47,7 @@ public class ShooterCommands {
     ShooterSetpoint firstSetpoint = firstSetpointOptional.get();
     ShooterSetpoint secondSetpoint = secondSetpointOptional.get();
 
-    double time =
+    double t =
         Interpolation.inverseLerp(
             firstSetpoint.distance.in(Meters),
             secondSetpoint.distance.in(Meters),
@@ -54,27 +56,31 @@ public class ShooterCommands {
         Interpolation.lerp(
             firstSetpoint.velocity.in(RotationsPerSecond),
             secondSetpoint.velocity.in(RotationsPerSecond),
-            time);
+            t);
 
     double lerpedTime =
-        Interpolation.lerp(firstSetpoint.time.in(Seconds), secondSetpoint.time.in(Seconds), time);
+        Interpolation.lerp(firstSetpoint.time.in(Seconds), secondSetpoint.time.in(Seconds), t);
 
     return new ShooterSetpoint(
         distance, RotationsPerSecond.of(lerpedVelocity), Seconds.of(lerpedTime));
   }
 
-  public static Command getShootSpeedCommand(Shooter shooter, AngularVelocity velocity) {
-    return Commands.run(() -> shooter.setVelocity(velocity), shooter);
+  public static Command shootAtSpeedCommand(Shooter shooter, AngularVelocity velocity) {
+    return Commands.startEnd(() -> shooter.setVelocity(velocity), shooter::setIdle, shooter);
   }
 
-  public static Command getShootSpeedCommand(Shooter shooter, Supplier<AngularVelocity> velocity) {
-    return Commands.run(() -> shooter.setVelocity(velocity.get()), shooter);
+  public static Command shootAtSpeedCommand(Shooter shooter, Supplier<AngularVelocity> velocity) {
+    return Commands.runEnd(() -> shooter.setVelocity(velocity.get()), shooter::setIdle, shooter);
   }
 
-  public static Command getShootSpeedDistanceRelativeCommand(
-      Shooter shooter, Supplier<Distance> distance) {
-    return getShootSpeedCommand(
-        shooter, () -> interpolateSetpoints(SETPOINTS, distance.get()).velocity);
+  public static Command shootAtDistanceCommand(Shooter shooter, Supplier<Distance> distance) {
+    return shootAtSpeedCommand(shooter, () -> interpolateSetpoints(SETPOINTS, distance.get()).velocity);
+  }
+
+  public static Command shootForTimeCommand(
+      Shooter shooter, Supplier<Distance> distanceSupplier, Time time) {
+    return new ParallelDeadlineGroup(
+        new WaitCommand(time), shootAtDistanceCommand(shooter, distanceSupplier));
   }
 
   public record ShooterSetpoint(Distance distance, AngularVelocity velocity, Time time)

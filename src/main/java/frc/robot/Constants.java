@@ -1,10 +1,3 @@
-// Copyright (c) 2021-2026 Littleton Robotics
-// http://github.com/Mechanical-Advantage
-//
-// Use of this source code is governed by a BSD
-// license that can be found in the LICENSE file
-// at the root directory of this project.
-
 package frc.robot;
 
 import com.pathplanner.lib.util.FlippingUtil;
@@ -31,6 +24,25 @@ public final class Constants {
           new Translation3d(
               redHubPosition.getMeasureX(), redHubPosition.getMeasureY(), blueHub.getMeasureZ());
     }
+  }
+
+  public static class CanIds {
+    // shooter
+    public static final int SHOOTER_LEFT_TOP_MOTOR_ID = 13;
+    public static final int SHOOTER_LEFT_BOTTOM_MOTOR_ID = 14;
+    public static final int SHOOTER_RIGHT_TOP_MOTOR_ID = 15;
+    public static final int SHOOTER_RIGHT_BOTTOM_MOTOR_ID = 16;
+
+    public static final int SHOOTER_ENCODER_ID = 19;
+
+    // indexer
+    public static final int INDEXER_LEFT_MOTOR_ID = 21;
+    public static final int INDEXER_RIGHT_MOTOR_ID = 22;
+
+    // intake
+    public static final int INTAKE_LEFT_MOTOR_ID = 23;
+    public static final int INTAKE_RIGHT_MOTOR_ID = 24;
+    public static final int DEPLOYER_MOTOR_ID = 25;
   }
 
   public static enum Mode {

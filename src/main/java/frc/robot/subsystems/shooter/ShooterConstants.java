@@ -1,40 +1,50 @@
 package frc.robot.subsystems.shooter;
 
-public interface ShooterConstants {
+import badgerutils.motor.MotorConfigUtils;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import frc.robot.Constants;
 
-  double kP = 0;
-  double kI = 0;
-  double kD = 0;
+public class ShooterConstants {
 
-  double kV = 0;
+  public static final double KP = 0;
+  public static final double KI = 0;
+  public static final double KD = 0;
 
-  class LeftShooterConstants implements ShooterConstants {
+  public static final double KV = 0;
+  public static final double ROTOR_TO_SENSOR_RATIO = 1;
 
-    @Override
-    public int getTopMotorId() {
-      return 0;
-    }
+  public static final double SUPPLY_CURRENT_LIMIT = 60;
 
-    @Override
-    public int getBottomMotorId() {
-      return 0;
-    }
-  }
+  public static final double ERROR_THRESHOLD = 25;
 
-  class RightShooterConstants implements ShooterConstants {
+  // CONFIGS
+  public static final TalonFXConfiguration CW_SHOOTER_MOTOR_CONFIGS =
+      new TalonFXConfiguration()
+          .withSlot0(
+              MotorConfigUtils.createPidConfig(
+                  KP, KI, KD, 0, KV, 0, 0, GravityTypeValue.Elevator_Static))
+          .withFeedback(
+              new FeedbackConfigs()
+                  .withFeedbackRemoteSensorID(Constants.CanIds.SHOOTER_ENCODER_ID)
+                  .withFeedbackSensorSource(FeedbackSensorSourceValue.SyncCANcoder)
+                  .withRotorToSensorRatio(ROTOR_TO_SENSOR_RATIO))
+          .withCurrentLimits(
+              new CurrentLimitsConfigs()
+                  .withStatorCurrentLimitEnable(false)
+                  .withSupplyCurrentLimit(SUPPLY_CURRENT_LIMIT)
+                  .withSupplyCurrentLimitEnable(true))
+          .withMotorOutput(
+              MotorConfigUtils.createMotorOutputConfig(
+                  InvertedValue.Clockwise_Positive, NeutralModeValue.Coast));
 
-    @Override
-    public int getTopMotorId() {
-      return 0;
-    }
-
-    @Override
-    public int getBottomMotorId() {
-      return 0;
-    }
-  }
-
-  int getTopMotorId();
-
-  int getBottomMotorId();
+  public static final TalonFXConfiguration CCW_SHOOTER_MOTOR_CONFIGS =
+      CW_SHOOTER_MOTOR_CONFIGS.withMotorOutput(
+          MotorConfigUtils.createMotorOutputConfig(
+              InvertedValue.CounterClockwise_Positive, NeutralModeValue.Coast));
 }
