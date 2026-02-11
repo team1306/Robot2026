@@ -2,7 +2,6 @@ package frc.robot.util;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 public class LoggedNetworkNumberPlus extends LoggedNetworkNumber {
@@ -12,6 +11,7 @@ public class LoggedNetworkNumberPlus extends LoggedNetworkNumber {
   public LoggedNetworkNumberPlus(String key, double defaultValue) {
     super(key, defaultValue);
   }
+
   public LoggedNetworkNumberPlus(String key) {
     super(key);
   }
@@ -20,10 +20,12 @@ public class LoggedNetworkNumberPlus extends LoggedNetworkNumber {
     listeners.add(listener);
   }
 
-  @Override public void periodic() {
+  @Override
+  public void periodic() {
     super.periodic();
 
-    if (listeners.size() == 0) return; //If nobody is listening, we don't care about checking the value
+    if (listeners.size() == 0)
+      return; // If nobody is listening, we don't care about checking the value
 
     if (lastValue != get()) {
       for (Runnable listener : listeners) {
