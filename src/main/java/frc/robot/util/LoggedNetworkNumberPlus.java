@@ -21,14 +21,15 @@ public class LoggedNetworkNumberPlus extends LoggedNetworkNumber {
   }
 
   @Override public void periodic() {
-    if (listeners.size() == 0)
+    super.periodic();
+
+    if (listeners.size() == 0) return; //If nobody is listening, we don't care about checking the value
+
     if (lastValue != get()) {
       for (Runnable listener : listeners) {
         listener.run();
       }
     }
     lastValue = get();
-
-    super.periodic();
   }
 }
