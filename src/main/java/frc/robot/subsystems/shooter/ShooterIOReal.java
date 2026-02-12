@@ -68,10 +68,10 @@ public class ShooterIOReal implements ShooterIO {
   private final NeutralOut neutralRequest;
 
   public ShooterIOReal() {
-    KP_SUPPLIER.addListener(() -> updatePIDFromTunables());
-    KI_SUPPLIER.addListener(() -> updatePIDFromTunables());
-    KD_SUPPLIER.addListener(() -> updatePIDFromTunables());
-    KV_SUPPLIER.addListener(() -> updatePIDFromTunables());
+    KP_SUPPLIER.addSubscriber(value -> updatePIDFromTunables());
+    KI_SUPPLIER.addSubscriber(value -> updatePIDFromTunables());
+    KD_SUPPLIER.addSubscriber(value -> updatePIDFromTunables());
+    KV_SUPPLIER.addSubscriber(value -> updatePIDFromTunables());
 
     // Request Initialization
     velocityRequest = new VelocityTorqueCurrentFOC(0);
