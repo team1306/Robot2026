@@ -30,7 +30,7 @@ public class Shooter extends SubsystemBase {
     shooterIO.setIdle();
     Logger.recordOutput("Shooter/Velocity Setpoint", 0);
   }
- 
+
   public double getAvgClosedLoopError() {
     boolean[] connectedMotors =
         new boolean[] {

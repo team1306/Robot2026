@@ -65,7 +65,7 @@ public class SimTestingControllerMapping extends ControllerMapping {
         .a()
         .whileTrue(
             ShooterCommands.shootAtDistanceCommand(
-                shooter, () -> Meters.of(driverController.getLeftTriggerAxis() + 1))); //1-2 meters
+                shooter, () -> Meters.of(driverController.getLeftTriggerAxis() + 1))); // 1-2 meters
 
     // B button: while held shooter rpm goes to 20 rps for 2 seconds
     driverController
