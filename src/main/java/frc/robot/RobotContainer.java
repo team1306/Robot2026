@@ -7,6 +7,7 @@ import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIO;
+import frc.robot.subsystems.indexer.IndexerIOReal;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.shooter.Shooter;
@@ -48,7 +49,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         intake = new Intake(new IntakeIO() {});
-        indexer = new Indexer(new IndexerIO() {});
+        indexer = new Indexer(new IndexerIOReal());
         shooter = new Shooter(new ShooterIOReal());
         vision =
             new Vision(
@@ -69,7 +70,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         intake = new Intake(new IntakeIO() {});
-        indexer = new Indexer(new IndexerIO() {});
+        indexer = new Indexer(new IndexerIOReal());
         shooter = new Shooter(new ShooterIOReal());
         vision =
             new Vision(
