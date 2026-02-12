@@ -138,6 +138,14 @@ public class DriveCommands {
                   angleController.calculate(
                       drive.getRotation().getRadians(), rotationSupplier.get().getRadians());
 
+              // If not moving and at desired angle
+              if (linearVelocity.getX() == 0
+                  && linearVelocity.getY() == 0
+                  && angleController.atSetpoint()) {
+                drive.stopWithX();
+                return;
+              }
+
               // Convert to field relative speeds & send command
               ChassisSpeeds speeds =
                   new ChassisSpeeds(
