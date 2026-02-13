@@ -2,6 +2,8 @@ package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
@@ -20,14 +22,14 @@ public class ShooterCommands {
   private static final ShooterSetpoint[] SETPOINTS =
       Arrays.stream(
               new ShooterSetpoint[] {
-                new ShooterSetpoint(Meters.of(0), RotationsPerSecond.of(0)),
-                new ShooterSetpoint(Meters.of(5), RotationsPerSecond.of(5)),
-                new ShooterSetpoint(Meters.of(10), RotationsPerSecond.of(10)),
+                new ShooterSetpoint(Meters.of(0), RotationsPerSecond.of(0), Seconds.of(0)),
+                new ShooterSetpoint(Meters.of(5), RotationsPerSecond.of(5), Seconds.of(0.5)),
+                new ShooterSetpoint(Meters.of(10), RotationsPerSecond.of(10), Seconds.of(1)),
               })
           .sorted()
           .toArray(ShooterSetpoint[]::new);
 
-  public static AngularVelocity interpolateSetpoints(
+  public static AngularVelocity interpolateSetpointsForDistance(
       ShooterSetpoint[] setpoints, Distance distance) {
     Optional<ShooterSetpoint> firstSetpointOptional =
         Arrays.stream(setpoints)
@@ -68,7 +70,7 @@ public class ShooterCommands {
   }
 
   public static Command shootAtDistanceCommand(Shooter shooter, Supplier<Distance> distance) {
-    return shootAtSpeedCommand(shooter, () -> interpolateSetpoints(SETPOINTS, distance.get()));
+    return shootAtSpeedCommand(shooter, () -> interpolateSetpointsForDistance(SETPOINTS, distance.get()));
   }
 
   public static Command shootForTimeCommand(
@@ -77,7 +79,7 @@ public class ShooterCommands {
         new WaitCommand(time), shootAtDistanceCommand(shooter, distanceSupplier));
   }
 
-  public record ShooterSetpoint(Distance distance, AngularVelocity velocity)
+  public record ShooterSetpoint(Distance distance, AngularVelocity velocity, Time time)
       implements Comparable<ShooterSetpoint> {
     @Override
     public int compareTo(ShooterSetpoint o) {
