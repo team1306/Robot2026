@@ -13,8 +13,7 @@ public class LocationUtils {
     return difference.getAngle();
   }
 
-  public static Distance getDistanceToLocation(
-    Translation2d position1, Translation2d position2) {
-      return Meters.of(position1.getDistance(position2));
+  public static Distance getDistanceToLocation(Translation2d position1, Translation2d position2) {
+    return Meters.of(position1.getDistance(position2));
   }
 }
