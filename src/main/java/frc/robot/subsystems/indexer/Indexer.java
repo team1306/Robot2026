@@ -1,5 +1,6 @@
 package frc.robot.subsystems.indexer;
 
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,5 +33,9 @@ public class Indexer extends SubsystemBase {
 
   public Command indexUntilCancelledCommand(double speed) {
     return (Commands.startEnd(() -> setDutyCycle(speed), () -> setDutyCycle(0), this));
+  }
+
+  public Command indexForTime(Time time, double speed) {
+    return indexUntilCancelledCommand(speed).withDeadline(Commands.waitTime(time));
   }
 }
