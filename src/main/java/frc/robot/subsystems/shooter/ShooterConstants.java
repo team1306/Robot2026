@@ -16,7 +16,7 @@ public class ShooterConstants {
   public static final double KD = 0;
 
   public static final double KV = 0;
-  public static final double ROTOR_TO_SENSOR_RATIO = 1;
+  public static final double ROTOR_TO_SENSOR_RATIO = 24/36;
 
   public static final double SUPPLY_CURRENT_LIMIT = 60;
 
