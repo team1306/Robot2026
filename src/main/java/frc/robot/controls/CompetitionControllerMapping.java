@@ -1,10 +1,12 @@
 package frc.robot.controls;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import badgerutils.commands.CommandUtils;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -107,11 +109,18 @@ public class CompetitionControllerMapping extends ControllerMapping {
     // Overides
 
     operatorController.leftBumper().onTrue(new InstantCommand(() -> shooter.setVelocity(RotationsPerSecond.of(0)) )); // brake
+    operatorController.leftBumper().onTrue(indexer.indexUntilCancelledCommand(1));
 
+    
     operatorController.povUp().onTrue(new InstantCommand(() -> shooter.speedOveride.plus(RotationsPerSecond.of(10))));
     operatorController.povDown().onTrue(new InstantCommand(() -> shooter.speedOveride.minus(RotationsPerSecond.of(10))));
 
+    operatorController.povLeft().onTrue(new InstantCommand(() -> intake.deployOveride.plus(Degrees.of(10))));
+    operatorController.povRight().onTrue(new InstantCommand(() -> intake.deployOveride.minus(Degrees.of(10))));
 
+    operatorController.y().onTrue(new InstantCommand(() -> shooter.setVelocity(RotationsPerSecond.of(-20)))).onFalse(new InstantCommand(() ->shooter.setIdle()));
+    operatorController.b().onTrue(new InstantCommand(() -> indexer.setDutyCycle(-1))).onFalse(new InstantCommand(() -> indexer.setDutyCycle(0)));
+    operatorController.a().onTrue(new InstantCommand(() -> intake.setDutyCycle(-1))).onFalse(new InstantCommand(() -> intake.setDutyCycle(0)));
   }
 
   @Override
