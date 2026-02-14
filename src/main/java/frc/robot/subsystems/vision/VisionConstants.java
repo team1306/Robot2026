@@ -1,10 +1,3 @@
-// Copyright (c) 2021-2026 Littleton Robotics
-// http://github.com/Mechanical-Advantage
-//
-// Use of this source code is governed by a BSD
-// license that can be found in the LICENSE file
-// at the root directory of this project.
-
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -18,10 +11,10 @@ public class VisionConstants {
       AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
 
   // Camera names, must match names configured on coprocessor
-  public static final String LEFT_CAMERA_NAME = "";
-  public static final String BACK_LEFT_CAMERA_NAME = "";
-  public static final String BACK_RIGHT_CAMERA_NAME = "";
-  public static final String RIGHT_CAMERA_NAME = "";
+  public static final String LEFT_CAMERA_NAME = "left";
+  public static final String BACK_LEFT_CAMERA_NAME = "backleft";
+  public static final String BACK_RIGHT_CAMERA_NAME = "backright";
+  public static final String RIGHT_CAMERA_NAME = "right";
 
   // Robot to camera transforms
   // (Not used by Limelight, configure in web UI instead)

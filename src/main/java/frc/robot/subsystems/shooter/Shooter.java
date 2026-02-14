@@ -65,11 +65,11 @@ public class Shooter extends SubsystemBase {
    *
    * @return a new boolean supplier
    */
-  public boolean isAtRequestedSpeed() {
-    return getAvgClosedLoopError() < ShooterConstants.ERROR_THRESHOLD;
+  public BooleanSupplier isAtRequestedSpeed() {
+    return () -> getAvgClosedLoopError() < ShooterConstants.ERROR_THRESHOLD;
   }
 
   public Trigger isAtRequestedSpeedTrigger() {
-    return new Trigger(() -> isAtRequestedSpeed());
+    return new Trigger(isAtRequestedSpeed());
   }
 }

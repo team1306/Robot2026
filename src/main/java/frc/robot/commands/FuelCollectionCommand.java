@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -49,28 +48,21 @@ public class FuelCollectionCommand extends Command {
       return;
     }
 
+    AngularVelocity angularVelocity;
     if (isRealTarget) {
       lastTargetSeenTime = Timer.getFPGATimestamp();
       target = bestTarget;
 
       double value = pidController.calculate(target.yaw());
-      driveWithAngularVelocity(DegreesPerSecond.of(value));
+      angularVelocity = DegreesPerSecond.of(value);
     } else {
       double yaw = target.yaw() + drive.getPose().getRotation().getDegrees();
 
       double value = pidController.calculate(yaw);
-      driveWithAngularVelocity(DegreesPerSecond.of(value));
+      angularVelocity = DegreesPerSecond.of(value);
     }
 
-    driveWithForwardVelocity(forwardSpeed);
-  }
-
-  private void driveWithAngularVelocity(AngularVelocity velocity) {
-    drive.runVelocity(new ChassisSpeeds(MetersPerSecond.of(0), MetersPerSecond.of(0), velocity));
-  }
-
-  private void driveWithForwardVelocity(LinearVelocity velocity) {
-    drive.runVelocity(new ChassisSpeeds(velocity, MetersPerSecond.of(0), RotationsPerSecond.of(0)));
+    drive.runVelocity(new ChassisSpeeds(forwardSpeed, MetersPerSecond.of(0), angularVelocity));
   }
 
   @Override
