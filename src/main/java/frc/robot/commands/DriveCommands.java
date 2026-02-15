@@ -228,6 +228,53 @@ public class DriveCommands {
                     })));
   }
 
+  @SuppressWarnings("DuplicatedCode")
+  public static Command robotRelativeAngularVelocityCommand(
+      Drive drive,
+      DoubleSupplier xSupplier,
+      DoubleSupplier ySupplier,
+      DoubleSupplier omegaSupplier) {
+    return Commands.runEnd(
+        () -> {
+          Translation2d linearVelocity =
+              getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+
+          double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
+
+          omega = Math.copySign(omega * omega, omega);
+
+          // Convert to field relative speeds & send command
+          ChassisSpeeds speeds =
+              new ChassisSpeeds(
+                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                  omega * drive.getMaxAngularSpeedRadPerSec());
+
+          drive.runVelocity(speeds);
+        },
+        drive::stop,
+        drive);
+  }
+
+  public static Command faceForwardCommand(
+      Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
+    return new DriveAtAngleCommand(
+        drive,
+        xSupplier,
+        ySupplier,
+        () -> {
+          double x = xSupplier.getAsDouble();
+          double y = ySupplier.getAsDouble();
+          if (Math.abs(x) < DEADBAND) {
+            x = 0;
+          }
+          if (Math.abs(y) < DEADBAND) {
+            y = 0;
+          }
+          return Rotation2d.fromRadians(Math.atan2(y, x) + Math.PI);
+        });
+  }
+
   private static class WheelRadiusCharacterizationState {
     double[] positions = new double[4];
     Rotation2d lastAngle = Rotation2d.kZero;
