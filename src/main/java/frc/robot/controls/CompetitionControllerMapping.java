@@ -6,16 +6,16 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import badgerutils.commands.CommandUtils;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.FuelCollectionCommand;
+import frc.robot.commands.SafeShootCommand;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.fueldetection.FuelDetection;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
@@ -28,6 +28,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
   private final Intake intake;
   private final Shooter shooter;
   private final Indexer indexer;
+  private final FuelDetection fuelDetection;
 
   public CompetitionControllerMapping(
       CommandXboxController driverController,
@@ -35,12 +36,14 @@ public class CompetitionControllerMapping extends ControllerMapping {
       Drive drive,
       Intake intake,
       Shooter shooter,
-      Indexer indexer) {
+      Indexer indexer,
+      FuelDetection fuelDetection) {
     super(driverController, operatorController);
     this.drive = drive;
     this.intake = intake;
     this.shooter = shooter;
     this.indexer = indexer;
+    this.fuelDetection = fuelDetection;
   }
 
   @Override
@@ -53,15 +56,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
             () -> -driverController.getRightX()));
 
     driverController
-        .leftTrigger(0.5)
-        .whileTrue(
-            DriveCommands.driveAimLockedCommand(
-                drive,
-                () -> -driverController.getLeftY(),
-                () -> -driverController.getLeftX(),
-                () -> Constants.Locations.blueHub.toTranslation2d()));
-
-    driverController
         .start()
         .onTrue(
             Commands.runOnce(
@@ -70,12 +64,50 @@ public class CompetitionControllerMapping extends ControllerMapping {
                             new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
                     drive)
                 .ignoringDisable(true));
+
     driverController
         .leftTrigger(0.5)
         .onTrue(Commands.runOnce(() -> intake.setDutyCycle(1)))
         .onFalse(Commands.runOnce(() -> intake.setDutyCycle(0)));
 
+    driverController.b().whileTrue(new FuelCollectionCommand(drive, fuelDetection));
 
+    driverController
+        .x()
+        .whileTrue(
+            DriveCommands.robotRelativeAngularVelocityCommand(
+                drive,
+                () -> -driverController.getLeftY(),
+                () -> -driverController.getLeftX(),
+                () -> -driverController.getRightX()));
+
+    driverController
+        .y()
+        .whileTrue(
+            DriveCommands.faceForwardCommand(
+                drive, () -> -driverController.getLeftY(), () -> -driverController.getLeftX()));
+
+    driverController
+        .rightBumper()
+        .whileTrue(
+            new SafeShootCommand(
+                drive,
+                shooter,
+                indexer,
+                () -> -driverController.getLeftY(),
+                () -> -driverController.getLeftX(),
+                () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d()));
+
+    driverController
+        .leftBumper()
+        .whileTrue(
+            new SafeShootCommand(
+                drive,
+                shooter,
+                indexer,
+                () -> -driverController.getLeftY(),
+                () -> -driverController.getLeftX(),
+                () -> RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())));
 
     // P2 -- ME!!!
 
@@ -105,22 +137,40 @@ public class CompetitionControllerMapping extends ControllerMapping {
                             operatorController.setRumble(
                                 RumbleType.kBothRumble, operatorController.getLeftTriggerAxis()))))
         .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
-    
+
     // Overides
 
-    operatorController.leftBumper().onTrue(new InstantCommand(() -> shooter.setVelocity(RotationsPerSecond.of(0)) )); // brake
+    operatorController
+        .leftBumper()
+        .onTrue(new InstantCommand(() -> shooter.setVelocity(RotationsPerSecond.of(0)))); // brake
     operatorController.leftBumper().onTrue(indexer.indexUntilCancelledCommand(1));
 
-    
-    operatorController.povUp().onTrue(new InstantCommand(() -> shooter.speedOveride.plus(RotationsPerSecond.of(10))));
-    operatorController.povDown().onTrue(new InstantCommand(() -> shooter.speedOveride.minus(RotationsPerSecond.of(10))));
+    operatorController
+        .povUp()
+        .onTrue(new InstantCommand(() -> shooter.speedOveride.plus(RotationsPerSecond.of(10))));
+    operatorController
+        .povDown()
+        .onTrue(new InstantCommand(() -> shooter.speedOveride.minus(RotationsPerSecond.of(10))));
 
-    operatorController.povLeft().onTrue(new InstantCommand(() -> intake.deployOveride.plus(Degrees.of(10))));
-    operatorController.povRight().onTrue(new InstantCommand(() -> intake.deployOveride.minus(Degrees.of(10))));
+    operatorController
+        .povLeft()
+        .onTrue(new InstantCommand(() -> intake.deployOveride.plus(Degrees.of(10))));
+    operatorController
+        .povRight()
+        .onTrue(new InstantCommand(() -> intake.deployOveride.minus(Degrees.of(10))));
 
-    operatorController.y().onTrue(new InstantCommand(() -> shooter.setVelocity(RotationsPerSecond.of(-20)))).onFalse(new InstantCommand(() ->shooter.setIdle()));
-    operatorController.b().onTrue(new InstantCommand(() -> indexer.setDutyCycle(-1))).onFalse(new InstantCommand(() -> indexer.setDutyCycle(0)));
-    operatorController.a().onTrue(new InstantCommand(() -> intake.setDutyCycle(-1))).onFalse(new InstantCommand(() -> intake.setDutyCycle(0)));
+    operatorController
+        .y()
+        .onTrue(new InstantCommand(() -> shooter.setVelocity(RotationsPerSecond.of(-20))))
+        .onFalse(new InstantCommand(() -> shooter.setIdle()));
+    operatorController
+        .b()
+        .onTrue(new InstantCommand(() -> indexer.setDutyCycle(-1)))
+        .onFalse(new InstantCommand(() -> indexer.setDutyCycle(0)));
+    operatorController
+        .a()
+        .onTrue(new InstantCommand(() -> intake.setDutyCycle(-1)))
+        .onFalse(new InstantCommand(() -> intake.setDutyCycle(0)));
   }
 
   @Override
