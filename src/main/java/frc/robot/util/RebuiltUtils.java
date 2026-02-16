@@ -9,6 +9,10 @@ import frc.robot.Constants.Locations;
 import java.util.function.Supplier;
 
 public class RebuiltUtils {
+
+  public static boolean isInAllianceZone(Translation2d position) {
+    return position.getY() <= 4.02844 || position.getY() >= 6.540480 - 4.02844;
+  }
   /**
    * @return The current HUB state on robots alliance
    */

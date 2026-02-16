@@ -108,7 +108,19 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 () -> -driverController.getLeftY(),
                 () -> -driverController.getLeftX(),
                 () -> RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())));
-
+    driverController
+        .rightTrigger()
+        .whileTrue(
+            new SafeShootCommand(
+                drive,
+                shooter,
+                indexer,
+                () -> -driverController.getLeftY(),
+                () -> -driverController.getLeftX(),
+                () ->
+                    RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
+                        ? RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())
+                        : RebuiltUtils.getCurrentHubLocation().toTranslation2d()));
     // P2 -- ME!!!
 
     operatorController
@@ -143,7 +155,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
     operatorController
         .leftBumper()
         .onTrue(new InstantCommand(() -> shooter.setVelocity(RotationsPerSecond.of(0)))); // brake
-    operatorController.leftBumper().onTrue(indexer.indexUntilCancelledCommand(1));
+   
 
     operatorController
         .povUp()
