@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.intake.DeployerPosition;
 import frc.robot.subsystems.intake.Intake;
 
 public class CompetitionControllerMapping extends ControllerMapping {
@@ -52,10 +53,19 @@ public class CompetitionControllerMapping extends ControllerMapping {
                             new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
                     drive)
                 .ignoringDisable(true));
-    driverController
-        .leftTrigger(0.5)
-        .onTrue(Commands.runOnce(() -> intake.setDutyCycle(1)))
-        .onFalse(Commands.runOnce(() -> intake.setDutyCycle(0)));
+
+
+    // A button: while held, intake duty cycle is 1 (running); when released, intake duty cycle is 0
+    // (off).
+    driverController.a().whileTrue(intake.intakeUntilInterruptedCommand());
+
+    // B button: while held, intake duty cycle is 0.5 (running slower); when released, intake duty
+    // cycle is 0 (off).
+    driverController.b().whileTrue(intake.intakeUntilInterruptedCommand(0.5));
+
+    driverController.x().onTrue(intake.positionDeployerCommand(DeployerPosition.EXTENDED));
+
+    driverController.y().onTrue(intake.positionDeployerCommand(DeployerPosition.RETRACTED));
   }
 
   @Override
