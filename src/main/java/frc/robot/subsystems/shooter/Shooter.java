@@ -31,7 +31,7 @@ public class Shooter extends SubsystemBase {
 
   public void setIdle() {
     shooterIO.setIdle();
-    Logger.recordOutput("Shooter/Velocity Setpoint", 0);
+    Logger.recordOutput("Shooter/Velocity Setpoint", 0.0);
   }
 
   public double getAvgClosedLoopError() {
