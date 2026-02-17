@@ -37,8 +37,8 @@ public class Indexer extends SubsystemBase {
   }
 
   public Command jumbleIndexer(DoubleSupplier speed) {
-    return (Commands.startEnd(
-        () -> setDutyCycle(Math.sin(RobotController.getFPGATime()) * speed.getAsDouble()),
+    return (Commands.runEnd(
+        () -> setDutyCycle(Math.sin(RobotController.getFPGATime() * 0.1) * speed.getAsDouble()),
         () -> setDutyCycle(0),
         this));
   }
