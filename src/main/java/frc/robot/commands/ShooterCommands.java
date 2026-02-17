@@ -23,11 +23,11 @@ public class ShooterCommands {
       Arrays.stream(
               new ShooterSetpoint[] {
                 new ShooterSetpoint(Meters.of(0), RotationsPerSecond.of(0), Seconds.of(0)),
-                new ShooterSetpoint(Meters.of(1), RotationsPerSecond.of(10), Seconds.of(0.5)),
-                new ShooterSetpoint(Meters.of(2), RotationsPerSecond.of(20), Seconds.of(1)),
-                new ShooterSetpoint(Meters.of(3), RotationsPerSecond.of(30), Seconds.of(1.5)),
-                new ShooterSetpoint(Meters.of(4), RotationsPerSecond.of(40), Seconds.of(2)),
-                new ShooterSetpoint(Meters.of(5), RotationsPerSecond.of(50), Seconds.of(2.5)),
+                new ShooterSetpoint(Meters.of(1), RotationsPerSecond.of(10), Seconds.of(0.15)),
+                new ShooterSetpoint(Meters.of(2), RotationsPerSecond.of(20), Seconds.of(0.30)),
+                new ShooterSetpoint(Meters.of(3), RotationsPerSecond.of(30), Seconds.of(0.45)),
+                new ShooterSetpoint(Meters.of(4), RotationsPerSecond.of(40), Seconds.of(0.70)),
+                new ShooterSetpoint(Meters.of(5), RotationsPerSecond.of(50), Seconds.of(0.85)),
               })
           .sorted()
           .toArray(ShooterSetpoint[]::new);

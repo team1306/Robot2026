@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.Seconds;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -43,19 +44,21 @@ public class ShootOnTheMoveCommand extends ParallelCommandGroup {
   private Translation2d calculateLeadTarget(Drive drive) {
     Translation2d robotPos = drive.getPose().getTranslation();
     Translation2d targetPos = Constants.Locations.blueHub.toTranslation2d();
-    Translation2d velocityVec =
-        new Translation2d(
-            drive.getChassisSpeeds().vxMetersPerSecond, drive.getChassisSpeeds().vyMetersPerSecond);
 
-    // Initial estimate
+    ChassisSpeeds fieldSpeeds =
+        ChassisSpeeds.fromRobotRelativeSpeeds(drive.getChassisSpeeds(), drive.getRotation());
+    Translation2d velocityVec =
+        new Translation2d(fieldSpeeds.vxMetersPerSecond, fieldSpeeds.vyMetersPerSecond);
+
     Distance distance = LocationUtils.getDistanceToLocation(robotPos, targetPos);
     Time timeOfFlight =
         ShooterCommands.interpolateSetpoints(ShooterCommands.SETPOINTS, distance).time();
-
     Translation2d aimPoint = new Translation2d();
-    // Iterate 3 times
+
     for (int i = 0; i < 20; i++) {
+
       Translation2d motionOffset = velocityVec.times(timeOfFlight.in(Seconds));
+
       aimPoint = targetPos.minus(motionOffset);
 
       Distance newDistance = LocationUtils.getDistanceToLocation(aimPoint, robotPos);
@@ -63,8 +66,8 @@ public class ShootOnTheMoveCommand extends ParallelCommandGroup {
           ShooterCommands.interpolateSetpoints(ShooterCommands.SETPOINTS, newDistance).time();
     }
 
-    Logger.recordOutput(
-        "ShootOnTheMove/Target", new Pose2d(aimPoint.getX(), aimPoint.getY(), Rotation2d.kZero));
+    Logger.recordOutput("ShootOnTheMove/Target", new Pose2d(aimPoint, Rotation2d.kZero));
+
     return aimPoint;
   }
 }
