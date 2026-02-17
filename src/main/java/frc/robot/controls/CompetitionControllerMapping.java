@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.FaceforwardCommand;
 import frc.robot.commands.FuelCollectionCommand;
 import frc.robot.commands.SafeShootCommand;
 import frc.robot.commands.ShooterCommands;
@@ -65,10 +66,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     drive)
                 .ignoringDisable(true));
 
-    driverController
-        .leftTrigger(0.5)
-        .onTrue(Commands.runOnce(() -> intake.setDutyCycle(1)))
-        .onFalse(Commands.runOnce(() -> intake.setDutyCycle(0)));
+    driverController.leftTrigger(0.5).whileTrue(intake.intakeUntilInterruptedCommand(1));
 
     driverController.b().whileTrue(new FuelCollectionCommand(drive, fuelDetection));
 
@@ -84,7 +82,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
     driverController
         .y()
         .whileTrue(
-            DriveCommands.faceForwardCommand(
+            new FaceforwardCommand(
                 drive, () -> -driverController.getLeftY(), () -> -driverController.getLeftX()));
 
     driverController
@@ -108,19 +106,22 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 () -> -driverController.getLeftY(),
                 () -> -driverController.getLeftX(),
                 () -> RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())));
-    driverController
-        .rightTrigger()
-        .whileTrue(
-            new SafeShootCommand(
-                drive,
-                shooter,
-                indexer,
-                () -> -driverController.getLeftY(),
-                () -> -driverController.getLeftX(),
-                () ->
-                    RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
-                        ? RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())
-                        : RebuiltUtils.getCurrentHubLocation().toTranslation2d()));
+
+    // don't make modifications to the control scheme unless P1 wants it
+    //    driverController
+    //        .rightTrigger()
+    //        .whileTrue(
+    //            new SafeShootCommand(
+    //                drive,
+    //                shooter,
+    //                indexer,
+    //                () -> -driverController.getLeftY(),
+    //                () -> -driverController.getLeftX(),
+    //                () ->
+    //                    RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
+    //                        ?
+    // RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())
+    //                        : RebuiltUtils.getCurrentHubLocation().toTranslation2d()));
     // P2 -- ME!!!
 
     operatorController
@@ -155,7 +156,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
     operatorController
         .leftBumper()
         .onTrue(new InstantCommand(() -> shooter.setVelocity(RotationsPerSecond.of(0)))); // brake
-   
 
     operatorController
         .povUp()

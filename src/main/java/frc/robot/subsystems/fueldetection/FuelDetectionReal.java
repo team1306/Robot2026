@@ -1,5 +1,6 @@
 package frc.robot.subsystems.fueldetection;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import java.util.List;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -8,6 +9,8 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public class FuelDetectionReal implements FuelDetectionIO {
   private final PhotonCamera camera;
 
+  private boolean warningReported = false;
+
   public FuelDetectionReal() {
     camera = new PhotonCamera(FuelDetectionConstants.FUEL_DETECTION_CAMERA_NAME);
   }
@@ -15,6 +18,17 @@ public class FuelDetectionReal implements FuelDetectionIO {
   @Override
   public void updateInputs(FuelDetectionInputs inputs) {
     inputs.isConnected = camera.isConnected();
+
+    if (!camera.isConnected()) {
+      inputs.bestTarget = new ObjectTarget(0, 0, -1);
+      inputs.targets = new ObjectTarget[0];
+
+      if (!warningReported)
+        DriverStation.reportWarning("Fuel Detection Camera Not Connected", false);
+      warningReported = true;
+      return;
+    }
+    warningReported = false;
 
     List<PhotonPipelineResult> results = camera.getAllUnreadResults();
 
