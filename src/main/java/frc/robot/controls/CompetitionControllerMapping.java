@@ -6,7 +6,9 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import badgerutils.commands.CommandUtils;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -22,6 +24,8 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.LocationUtils;
 import frc.robot.util.RebuiltUtils;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 public class CompetitionControllerMapping extends ControllerMapping {
 
@@ -49,6 +53,14 @@ public class CompetitionControllerMapping extends ControllerMapping {
 
   @Override
   public void bind() {
+    Command loggedTargetCommand =
+        Commands.run(
+            () ->
+                Logger.recordOutput(
+                    "Controls/Target",
+                    RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
+                        ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
+                        : RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())));
     drive.setDefaultCommand(
         DriveCommands.joystickDriveCommand(
             drive,
@@ -107,20 +119,19 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 () -> -driverController.getLeftX(),
                 () -> RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())));
 
-    //    driverController
-    //        .rightTrigger()
-    //        .whileTrue(
-    //            new SafeShootCommand(
-    //                drive,
-    //                shooter,
-    //                indexer,
-    //                () -> -driverController.getLeftY(),
-    //                () -> -driverController.getLeftX(),
-    //                () ->
-    //                    RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
-    //                        ?
-    // RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())
-    //                        : RebuiltUtils.getCurrentHubLocation().toTranslation2d()));
+    driverController
+        .rightTrigger()
+        .whileTrue(
+            new SafeShootCommand(
+                drive,
+                shooter,
+                indexer,
+                () -> -driverController.getLeftY(),
+                () -> -driverController.getLeftX(),
+                () ->
+                    RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
+                        ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
+                        : RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())).alongWith(loggedTargetCommand));
     // P2 -- ME!!!
 
     operatorController
@@ -182,11 +193,14 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .a()
         .onTrue(new InstantCommand(() -> intake.setDutyCycle(-1)))
         .onFalse(new InstantCommand(() -> intake.setDutyCycle(0)));
-  }
 
+
+  }
   @Override
   public void clear() {
     super.clear();
     CommandUtils.removeAndCancelDefaultCommand(drive);
   }
+
+
 }
