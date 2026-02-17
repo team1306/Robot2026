@@ -107,7 +107,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 () -> -driverController.getLeftX(),
                 () -> RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())));
 
-    // don't make modifications to the control scheme unless P1 wants it
     //    driverController
     //        .rightTrigger()
     //        .whileTrue(
