@@ -23,7 +23,7 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 public class DriveCommands {
-  private static final double DEADBAND = 0.1;
+  public static final double DEADBAND = 0.1;
   private static final double FF_START_DELAY = 2.0; // Secs
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
@@ -236,9 +236,6 @@ public class DriveCommands {
       DoubleSupplier omegaSupplier) {
     return Commands.runEnd(
         () -> {
-          Translation2d linearVelocity =
-              getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
-
           double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
 
           omega = Math.copySign(omega * omega, omega);
@@ -246,33 +243,14 @@ public class DriveCommands {
           // Convert to field relative speeds & send command
           ChassisSpeeds speeds =
               new ChassisSpeeds(
-                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                  xSupplier.getAsDouble() * drive.getMaxLinearSpeedMetersPerSec(),
+                  ySupplier.getAsDouble() * drive.getMaxLinearSpeedMetersPerSec(),
                   omega * drive.getMaxAngularSpeedRadPerSec());
 
           drive.runVelocity(speeds);
         },
         drive::stop,
         drive);
-  }
-
-  public static Command faceForwardCommand(
-      Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
-    return new DriveAtAngleCommand(
-        drive,
-        xSupplier,
-        ySupplier,
-        () -> {
-          double x = xSupplier.getAsDouble();
-          double y = ySupplier.getAsDouble();
-          if (Math.abs(x) < DEADBAND) {
-            x = 0;
-          }
-          if (Math.abs(y) < DEADBAND) {
-            y = 0;
-          }
-          return Rotation2d.fromRadians(Math.atan2(y, x) + Math.PI);
-        });
   }
 
   private static class WheelRadiusCharacterizationState {
