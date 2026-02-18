@@ -21,7 +21,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
 public class DriveCommands {
   private static final double DEADBAND = 0.1;
@@ -237,7 +236,7 @@ public class DriveCommands {
 
   public static Command faceForwardCommand(
       Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
-    return joystickDriveAtAngleCommand(
+    return new DriveAtAngleCommand(
         drive,
         xSupplier,
         ySupplier,
