@@ -11,12 +11,12 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Constants;
 
 public class ShooterConstants {
-  public static final double KP = 0;
+  public static final double KP = 10;
   public static final double KI = 0;
   public static final double KD = 0;
 
   public static final double KV = 0;
-  public static final double ROTOR_TO_SENSOR_RATIO = 24/36;
+  public static final double ROTOR_TO_SENSOR_RATIO = .6667; // 24 / 36;
 
   public static final double SUPPLY_CURRENT_LIMIT = 60;
 

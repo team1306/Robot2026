@@ -15,6 +15,7 @@ import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
+import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 
@@ -72,7 +73,7 @@ public class RobotContainer {
                 new ModuleIO() {});
         intake = new Intake(new IntakeIOReal());
         indexer = new Indexer(new IndexerIOReal());
-        shooter = new Shooter(new ShooterIOReal());
+        shooter = new Shooter(new ShooterIOSim());
         vision =
             new Vision(
                 drive::addVisionMeasurement,
