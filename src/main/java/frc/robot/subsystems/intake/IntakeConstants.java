@@ -33,7 +33,7 @@ public class IntakeConstants {
       new TalonFXConfiguration()
           .withMotorOutput(
               MotorConfigUtils.createMotorOutputConfig(
-                  InvertedValue.Clockwise_Positive, NeutralModeValue.Brake))
+                  InvertedValue.Clockwise_Positive, NeutralModeValue.Coast))
           .withCurrentLimits(
               new CurrentLimitsConfigs()
                   .withStatorCurrentLimitEnable(false)

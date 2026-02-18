@@ -54,7 +54,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     drive)
                 .ignoringDisable(true));
 
-
     // A button: while held, intake duty cycle is 1 (running); when released, intake duty cycle is 0
     // (off).
     driverController.a().whileTrue(intake.intakeUntilInterruptedCommand());
@@ -64,8 +63,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
     driverController.b().whileTrue(intake.intakeUntilInterruptedCommand(0.5));
 
     driverController.x().onTrue(intake.positionDeployerCommand(DeployerPosition.EXTENDED));
-
-    driverController.y().onTrue(intake.positionDeployerCommand(DeployerPosition.RETRACTED));
   }
 
   @Override
