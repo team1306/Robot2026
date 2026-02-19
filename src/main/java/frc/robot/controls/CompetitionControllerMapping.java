@@ -4,7 +4,6 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import badgerutils.commands.CommandUtils;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.drive.Drive;
@@ -29,7 +28,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
       CommandXboxController driverController,
       CommandXboxController operatorController,
       Drive drive,
-      Intake intake, Indexer indexer,
+      Intake intake,
+      Indexer indexer,
       Shooter shooter) {
     super(driverController, operatorController);
     this.drive = drive;
@@ -46,11 +46,10 @@ public class CompetitionControllerMapping extends ControllerMapping {
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
-
-    driverController.b().whileTrue(indexer.indexUntilCancelledCommand(0.5));
+    driverController.a().whileTrue(indexer.indexUntilCancelledCommand(0.5));
 
     driverController
-        .a()
+        .rightBumper()
         .whileTrue(
             ShooterCommands.shootAtSpeedCommand(
                 shooter, () -> RotationsPerSecond.of(targetSpeed.get())));

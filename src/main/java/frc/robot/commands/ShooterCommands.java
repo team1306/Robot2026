@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
@@ -20,10 +21,11 @@ public class ShooterCommands {
   private static final ShooterSetpoint[] SETPOINTS =
       Arrays.stream(
               new ShooterSetpoint[] {
-                new ShooterSetpoint(Meters.of(0), RotationsPerSecond.of(0)),
-                new ShooterSetpoint(Meters.of(1), RotationsPerSecond.of(4)),
-                new ShooterSetpoint(Meters.of(2), RotationsPerSecond.of(8)),
-                new ShooterSetpoint(Meters.of(3), RotationsPerSecond.of(12)),
+                new ShooterSetpoint(Feet.of(7.5), RotationsPerSecond.of(41)),
+                new ShooterSetpoint(Feet.of(9), RotationsPerSecond.of(42)),
+                new ShooterSetpoint(Feet.of(12), RotationsPerSecond.of(48)),
+                new ShooterSetpoint(Feet.of(15), RotationsPerSecond.of(53.5)),
+                new ShooterSetpoint(Feet.of(18), RotationsPerSecond.of(59.75)),
               })
           .sorted()
           .toArray(ShooterSetpoint[]::new);
