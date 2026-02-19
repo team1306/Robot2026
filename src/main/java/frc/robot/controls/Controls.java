@@ -53,6 +53,11 @@ public class Controls {
     Consumer<Enum<ControlStates>> onChange =
         (nextState) -> {
           ControlStates actualState = (ControlStates) nextState;
+          if (!mappings.containsKey(actualState)) {
+            System.out.println("Invalid State: " + actualState);
+            return;
+          }
+
           mappings.get(currentState).clear();
           mappings.get(actualState).bind();
 
