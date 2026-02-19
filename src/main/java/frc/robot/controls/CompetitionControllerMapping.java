@@ -1,7 +1,5 @@
 package frc.robot.controls;
 
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-
 import badgerutils.commands.CommandUtils;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.ShooterCommands;
