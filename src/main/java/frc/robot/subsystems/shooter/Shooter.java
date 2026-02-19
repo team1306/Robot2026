@@ -5,13 +5,19 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.util.LoggedNetworkNumberPlus;
+
 import java.util.function.BooleanSupplier;
+
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
 
   public final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
   public final ShooterIO shooterIO;
+
+  
 
   public Shooter(ShooterIO shooterIO) {
     this.shooterIO = shooterIO;
