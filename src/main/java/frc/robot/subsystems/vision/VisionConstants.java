@@ -1,5 +1,8 @@
 package frc.robot.subsystems.vision;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Inches;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -11,21 +14,36 @@ public class VisionConstants {
       AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
 
   // Camera names, must match names configured on coprocessor
-  public static final String LEFT_CAMERA_NAME = "left";
-  public static final String BACK_LEFT_CAMERA_NAME = "backleft";
-  public static final String BACK_RIGHT_CAMERA_NAME = "backright";
-  public static final String RIGHT_CAMERA_NAME = "right";
+  public static final String LEFT_FRONT_CAMERA_NAME = "leftFront";
+  public static final String LEFT_SIDE_CAMERA_NAME = "leftSide";
+  public static final String RIGHT_FRONT_CAMERA_NAME = "rightFront";
+  public static final String RIGHT_SIDE_CAMERA_NAME = "rightSide";
 
   // Robot to camera transforms
-  // (Not used by Limelight, configure in web UI instead)
-  public static final Transform3d LEFT_CAMERA_POSITION =
-      new Transform3d(0.2, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0));
-  public static final Transform3d BACK_LEFT_CAMERA_POSITION =
-      new Transform3d(0.2, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0));
-  public static final Transform3d BACK_RIGHT_CAMERA_POSITION =
-      new Transform3d(0.2, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0));
-  public static final Transform3d RIGHT_CAMERA_POSITION =
-      new Transform3d(0.2, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0));
+  public static final Transform3d LEFT_FRONT_CAMERA_POSITION =
+      new Transform3d(
+          Inches.of(-12.996737),
+          Inches.of(9.487822),
+          Inches.of(8.415729),
+          new Rotation3d(Degrees.of(0), Degrees.of(-23), Degrees.of(-15)));
+  public static final Transform3d LEFT_SIDE_CAMERA_POSITION =
+      new Transform3d(
+          Inches.of(-14.055642),
+          Inches.of(7.002289),
+          Inches.of(10.677572),
+          new Rotation3d(Degrees.of(0), Degrees.of(-22), Degrees.of(-90)));
+  public static final Transform3d RIGHT_FRONT_CAMERA_POSITION =
+      new Transform3d(
+          Inches.of(12.996737),
+          Inches.of(9.487822),
+          Inches.of(8.415729),
+          new Rotation3d(Degrees.of(0), Degrees.of(-23), Degrees.of(15)));
+  public static final Transform3d RIGHT_SIDE_CAMERA_POSITION =
+      new Transform3d(
+          Inches.of(14.055642),
+          Inches.of(7.002289),
+          Inches.of(10.677572),
+          new Rotation3d(Degrees.of(0), Degrees.of(-22), Degrees.of(90)));
 
   // Basic filtering thresholds
   public static final double MAX_AMBIGUITY = 0.3;

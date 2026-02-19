@@ -63,15 +63,17 @@ public class RobotContainer {
             new Vision(
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVision(
-                    VisionConstants.LEFT_CAMERA_NAME, VisionConstants.LEFT_CAMERA_POSITION),
+                    VisionConstants.LEFT_FRONT_CAMERA_NAME,
+                    VisionConstants.LEFT_FRONT_CAMERA_POSITION),
                 new VisionIOPhotonVision(
-                    VisionConstants.BACK_LEFT_CAMERA_NAME,
-                    VisionConstants.BACK_LEFT_CAMERA_POSITION),
+                    VisionConstants.LEFT_SIDE_CAMERA_NAME,
+                    VisionConstants.LEFT_SIDE_CAMERA_POSITION),
                 new VisionIOPhotonVision(
-                    VisionConstants.BACK_RIGHT_CAMERA_NAME,
-                    VisionConstants.BACK_RIGHT_CAMERA_POSITION),
+                    VisionConstants.RIGHT_FRONT_CAMERA_NAME,
+                    VisionConstants.RIGHT_FRONT_CAMERA_POSITION),
                 new VisionIOPhotonVision(
-                    VisionConstants.RIGHT_CAMERA_NAME, VisionConstants.RIGHT_CAMERA_POSITION));
+                    VisionConstants.RIGHT_SIDE_CAMERA_NAME,
+                    VisionConstants.RIGHT_SIDE_CAMERA_POSITION));
         fuelDetection = new FuelDetection(new FuelDetectionReal());
         break;
 
@@ -91,20 +93,20 @@ public class RobotContainer {
             new Vision(
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVisionSim(
-                    VisionConstants.LEFT_CAMERA_NAME,
-                    VisionConstants.LEFT_CAMERA_POSITION,
+                    VisionConstants.LEFT_FRONT_CAMERA_NAME,
+                    VisionConstants.LEFT_FRONT_CAMERA_POSITION,
                     () -> drive.getPose()),
                 new VisionIOPhotonVisionSim(
-                    VisionConstants.BACK_LEFT_CAMERA_NAME,
-                    VisionConstants.BACK_LEFT_CAMERA_POSITION,
+                    VisionConstants.LEFT_SIDE_CAMERA_NAME,
+                    VisionConstants.LEFT_SIDE_CAMERA_POSITION,
                     () -> drive.getPose()),
                 new VisionIOPhotonVisionSim(
-                    VisionConstants.BACK_RIGHT_CAMERA_NAME,
-                    VisionConstants.BACK_RIGHT_CAMERA_POSITION,
+                    VisionConstants.RIGHT_FRONT_CAMERA_NAME,
+                    VisionConstants.RIGHT_FRONT_CAMERA_POSITION,
                     () -> drive.getPose()),
                 new VisionIOPhotonVisionSim(
-                    VisionConstants.RIGHT_CAMERA_NAME,
-                    VisionConstants.RIGHT_CAMERA_POSITION,
+                    VisionConstants.RIGHT_SIDE_CAMERA_NAME,
+                    VisionConstants.RIGHT_SIDE_CAMERA_POSITION,
                     () -> drive.getPose()));
         fuelDetection = new FuelDetection(new FuelDetectionReal());
         break;

@@ -20,16 +20,7 @@ public interface VisionIO {
 
   /** Represents a robot pose sample used for pose estimation. */
   public static record PoseObservation(
-      double timestamp,
-      Pose3d pose,
-      double ambiguity,
-      int tagCount,
-      double averageTagDistance,
-      PoseObservationType type) {}
-
-  public static enum PoseObservationType {
-    PHOTONVISION
-  }
+      double timestamp, Pose3d pose, double ambiguity, int tagCount, double averageTagDistance) {}
 
   public default void updateInputs(VisionIOInputs inputs) {}
 }
