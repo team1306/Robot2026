@@ -19,6 +19,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOReal;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.vision.Vision;
@@ -44,6 +45,9 @@ public class RobotContainer {
 
   private final Controls controls;
   private final Autos autos;
+
+  // Initializing constants for tuning
+  private final ShooterConstants shooterConstants = new ShooterConstants();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

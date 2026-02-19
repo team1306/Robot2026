@@ -37,7 +37,8 @@ public class FuelCollectionCommand extends Command {
     this.fuelDetection = fuelDetection;
 
     pidController.setSetpoint(0);
-    addRequirements(drive, fuelDetection);
+
+    this.addRequirements(drive, fuelDetection);
   }
 
   @Override

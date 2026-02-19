@@ -1,10 +1,14 @@
 package frc.robot.subsystems.shooter;
 
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import java.util.function.BooleanSupplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -14,8 +18,19 @@ public class Shooter extends SubsystemBase {
   public final ShooterIO shooterIO;
   public AngularVelocity speedOveride = RotationsPerSecond.of(0);
 
+  private final SysIdRoutine sysId;
+
   public Shooter(ShooterIO shooterIO) {
     this.shooterIO = shooterIO;
+
+    sysId =
+        new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null,
+                null,
+                null,
+                (state) -> Logger.recordOutput("Shooter/SysIdState", state.toString())),
+            new SysIdRoutine.Mechanism(this::runCharacterization, null, this));
   }
 
   @Override
@@ -32,6 +47,22 @@ public class Shooter extends SubsystemBase {
   public void setIdle() {
     shooterIO.setIdle();
     Logger.recordOutput("Shooter/Velocity Setpoint", 0.0);
+  }
+
+  public void runCharacterization(Voltage output) {
+    shooterIO.runCharacterization(output);
+  }
+
+  public Command sysIdQuasistaticCommand(SysIdRoutine.Direction direction) {
+    return run(() -> runCharacterization(Volts.of(0)))
+        .withTimeout(1.0)
+        .andThen(sysId.quasistatic(direction));
+  }
+
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    return run(() -> runCharacterization(Volts.of(0)))
+        .withTimeout(1.0)
+        .andThen(sysId.dynamic(direction));
   }
 
   public double getAvgClosedLoopError() {

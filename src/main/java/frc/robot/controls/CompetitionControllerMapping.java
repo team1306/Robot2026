@@ -67,6 +67,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
+    driverController.a().whileTrue(indexer.indexUntilCancelledCommand(0.5));
 
     driverController
         .start()

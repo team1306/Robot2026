@@ -51,7 +51,7 @@ public class DriveAtAngleCommand extends Command {
             new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
     angleController.enableContinuousInput(-Math.PI, Math.PI);
 
-    addRequirements(drive);
+    this.addRequirements(drive);
   }
 
   @Override
