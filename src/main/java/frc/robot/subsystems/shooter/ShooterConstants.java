@@ -11,7 +11,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Constants;
 
 public class ShooterConstants {
-  public static final double KP = 10;
+  public static final double KP = 15;
   public static final double KI = 0;
   public static final double KD = 0;
 
