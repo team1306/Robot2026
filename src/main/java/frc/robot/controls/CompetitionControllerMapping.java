@@ -46,14 +46,14 @@ public class CompetitionControllerMapping extends ControllerMapping {
     // X button: while held, shooter rps goes to 10 rps;
     driverController
         .x()
-        .whileTrue(ShooterCommands.shootAtSpeedCommand(shooter, RotationsPerSecond.of(10)));
+        .whileTrue(ShooterCommands.shootAtSpeedCommand(shooter, RotationsPerSecond.of(1)));
 
     // Y button: while held, shooter rps goes from 0 to 10 rps based on left trigger
     driverController
         .y()
         .whileTrue(
             ShooterCommands.shootAtSpeedCommand(
-                shooter, () -> RotationsPerSecond.of(10 * driverController.getLeftTriggerAxis())));
+                shooter, () -> RotationsPerSecond.of(50 * driverController.getLeftTriggerAxis())));
   }
 
   @Override

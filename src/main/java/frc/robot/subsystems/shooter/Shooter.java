@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -23,7 +25,7 @@ public class Shooter extends SubsystemBase {
 
   public void setVelocity(AngularVelocity velocity) {
     shooterIO.setVelocity(velocity);
-    Logger.recordOutput("Shooter/Velocity Setpoint", velocity);
+    Logger.recordOutput("Shooter/Velocity Setpoint", velocity.in(RotationsPerSecond));
   }
 
   public void setIdle() {
