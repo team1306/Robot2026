@@ -1,10 +1,6 @@
 package frc.robot.controls;
 
-import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Seconds;
-
-import org.littletonrobotics.junction.AutoLogOutput;
 
 import badgerutils.commands.CommandUtils;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -13,6 +9,7 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.LoggedNetworkNumberPlus;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class CompetitionControllerMapping extends ControllerMapping {
 
@@ -38,7 +35,11 @@ public class CompetitionControllerMapping extends ControllerMapping {
 
   @Override
   public void bind() {
-    driverController.a().whileTrue(ShooterCommands.shootAtSpeedCommand(shooter, () -> RotationsPerSecond.of(targetSpeed.get())));
+    driverController
+        .a()
+        .whileTrue(
+            ShooterCommands.shootAtSpeedCommand(
+                shooter, () -> RotationsPerSecond.of(targetSpeed.get())));
   }
 
   @Override
