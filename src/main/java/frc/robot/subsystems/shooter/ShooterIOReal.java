@@ -7,12 +7,14 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Constants;
 import frc.robot.util.LoggedNetworkNumberPlus;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -66,6 +68,7 @@ public class ShooterIOReal implements ShooterIO {
 
   private final VelocityTorqueCurrentFOC velocityRequest;
   private final NeutralOut neutralRequest;
+  private final VoltageOut voltageRequest;
 
   public ShooterIOReal() {
     KP_SUPPLIER.addSubscriber(value -> updatePIDFromTunables());
@@ -76,6 +79,7 @@ public class ShooterIOReal implements ShooterIO {
     // Request Initialization
     velocityRequest = new VelocityTorqueCurrentFOC(0);
     neutralRequest = new NeutralOut();
+    voltageRequest = new VoltageOut(0).withEnableFOC(true);
 
     // CAN Device Initialization
     leftTopMotor = new TalonFX(Constants.CanIds.SHOOTER_LEFT_TOP_MOTOR_ID);
@@ -190,6 +194,14 @@ public class ShooterIOReal implements ShooterIO {
     leftBottomMotor.setControl(neutralRequest);
     rightTopMotor.setControl(neutralRequest);
     rightBottomMotor.setControl(neutralRequest);
+  }
+
+  @Override
+  public void runCharacterization(Voltage voltage) {
+    leftTopMotor.setControl(voltageRequest.withOutput(voltage));
+    leftBottomMotor.setControl(voltageRequest.withOutput(voltage));
+    rightTopMotor.setControl(voltageRequest.withOutput(voltage));
+    rightBottomMotor.setControl(voltageRequest.withOutput(voltage));
   }
 
   public void updatePIDFromTunables() {

@@ -7,6 +7,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
+import edu.wpi.first.units.measure.Voltage;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ShooterIO {
@@ -45,4 +46,7 @@ public interface ShooterIO {
   default void setVelocity(AngularVelocity velocity) {}
 
   default void setIdle() {}
+
+  default void runCharacterization(Voltage voltage) {}
+  ;
 }
