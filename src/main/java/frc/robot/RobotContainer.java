@@ -2,9 +2,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.controls.Controls;
+import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
+import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
+import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIOReal;
@@ -44,13 +47,13 @@ public class RobotContainer {
       case REAL:
         drive =
             new Drive(
-                new GyroIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {});
+                new GyroIOPigeon2(),
+                new ModuleIOTalonFX(TunerConstants.FrontLeft),
+                new ModuleIOTalonFX(TunerConstants.FrontRight),
+                new ModuleIOTalonFX(TunerConstants.BackLeft),
+                new ModuleIOTalonFX(TunerConstants.BackRight));
         intake = new Intake(new IntakeIO() {});
-        indexer = new Indexer(new IndexerIO() {});
+        indexer = new Indexer(new IndexerIOReal());
         shooter = new Shooter(new ShooterIOReal());
         vision =
             new Vision(
@@ -104,7 +107,7 @@ public class RobotContainer {
         break;
     }
 
-    controls = new Controls(drive, intake, shooter);
+    controls = new Controls(drive, intake, indexer, shooter);
     autos = new Autos(drive);
   }
 

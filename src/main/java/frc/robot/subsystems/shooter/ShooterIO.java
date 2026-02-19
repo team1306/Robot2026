@@ -2,8 +2,11 @@ package frc.robot.subsystems.shooter;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.Radian;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
@@ -34,6 +37,16 @@ public interface ShooterIO {
     public Temperature shooterRightBottomTemperature = Celsius.of(0);
     public Temperature shooterLeftTopTemperature = Celsius.of(0);
     public Temperature shooterLeftBottomTemperature = Celsius.of(0);
+
+    public Voltage shooterLeftTopMotorVoltage = Volts.of(0);
+    public Voltage shooterLeftBottomMotorVoltage = Volts.of(0);
+    public Voltage shooterRightTopMotorVoltage = Volts.of(0);
+    public Voltage shooterRightBottomMotorVoltage = Volts.of(0);
+
+    public Angle shooterLeftTopMotorAngle = Radian.of(0);
+    public Angle shooterLeftBottomMotorAngle = Radian.of(0);
+    public Angle shooterRightTopMotorAngle = Radian.of(0);
+    public Angle shooterRightBottomMotorAngle = Radian.of(0);
 
     public double shooterLeftTopClosedLoopError = 0;
     public double shooterLeftBottomClosedLoopError = 0;
