@@ -114,7 +114,7 @@ public class Autos {
                         .getTranslation()
                         .getDistance(RebuiltUtils.getCurrentHubLocation().toTranslation2d()))));
 
-    NamedCommands.registerCommand( //TODO: use new deployer command
+    NamedCommands.registerCommand( // TODO: use new deployer command
         "deploy-intake", intake.positionDeployerCommand(DeployerPosition.EXTENDED));
 
     NamedCommands.registerCommand(
