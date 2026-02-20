@@ -29,7 +29,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
             shooter,
             () -> Meters.of(drive.getPose().getTranslation().getDistance(positionSupplier.get())));
     Command driveAtAngleCommand =
-        DriveCommands.driveAimLockedCommand(drive, xSupplier, ySupplier, positionSupplier);
+        DriveCommands.driveAimLockedCommand(drive, xSupplier, ySupplier, positionSupplier, true);
     Command indexerCommand = indexer.indexUntilCancelledCommand(1);
 
     BooleanSupplier shooterVelocityCondition = shooter.isAtRequestedSpeed();
