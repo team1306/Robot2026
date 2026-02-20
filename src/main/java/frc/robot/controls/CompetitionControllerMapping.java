@@ -182,7 +182,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .povRight()
         .onTrue(new InstantCommand(() -> intake.deployOveride.minus(Degrees.of(10))));
 
-    ShooterCommands.shootAtSpeedCommand(shooter, RotationsPerSecond.of(-20));
     operatorController
         .y()
         .onTrue(ShooterCommands.shootAtSpeedCommand(shooter, () -> RotationsPerSecond.of(-20)))
