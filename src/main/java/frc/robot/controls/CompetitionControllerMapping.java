@@ -152,14 +152,15 @@ public class CompetitionControllerMapping extends ControllerMapping {
             ShooterCommands.shootAtDistanceCommand(
                     shooter,
                     () ->
-                        LocationUtils.getDistanceToLocation(
-                            drive.getPose().getTranslation(),
-                            RebuiltUtils.getCurrentHubLocation().toTranslation2d()))
+                        LocationUtils.getDistanceToLocation(RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
+                            ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
+                            : RebuiltUtils.getNearestAllianceCorner(
+                                drive.getPose().getTranslation()), drive.getPose().getTranslation()))
                 .alongWith(
                     new InstantCommand(
                         () ->
                             operatorController.setRumble(
-                                RumbleType.kBothRumble, operatorController.getLeftTriggerAxis()))))
+                                RumbleType.kBothRumble, 1))))
         .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
 
     // Overides
@@ -179,13 +180,11 @@ public class CompetitionControllerMapping extends ControllerMapping {
 
     operatorController.start().onTrue(new InstantCommand(() -> shooter.resetVelocityOverride()));
 
-    operatorController
-        .povLeft()
-        .onTrue(new InstantCommand(() -> intake.deployOveride.plus(Degrees.of(10))));
-    operatorController
-        .povRight()
-        .onTrue(new InstantCommand(() -> intake.deployOveride.minus(Degrees.of(10))));
-
+    // operatorController
+    //     .povLeft()
+    //     .onTrue(new InstantCommand(() -> intake.));
+    // Commented out untill spool command
+   
     operatorController
         .y()
         .onTrue(ShooterCommands.shootAtSpeedCommand(shooter, () -> RotationsPerSecond.of(-20)))

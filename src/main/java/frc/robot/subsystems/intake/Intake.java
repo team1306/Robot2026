@@ -13,7 +13,7 @@ public class Intake extends SubsystemBase {
 
   private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
   private final IntakeIO intakeIO;
-  public Angle deployOveride = Degrees.of(0);
+ 
 
   public Intake(IntakeIO intakeIO) {
     this.intakeIO = intakeIO;
@@ -31,7 +31,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void setDeployerPosition(Angle angle) {
-    intakeIO.setDeployerPosition(angle.plus(deployOveride));
+
     Logger.recordOutput("Intake/Deployer Position Setpoint", angle);
   }
 
