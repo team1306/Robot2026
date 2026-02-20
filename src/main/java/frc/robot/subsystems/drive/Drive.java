@@ -344,6 +344,15 @@ public class Drive extends SubsystemBase {
     return TunerConstants.kMaxTurningSpeed.in(MetersPerSecond) / DRIVE_BASE_RADIUS;
   }
 
+  public boolean isLocked(Drive drive, Translation2d target) {
+    Rotation2d targetAngle =
+        Rotation2d.fromRadians(
+            Math.atan2(
+                target.getY() - drive.getPose().getY(), target.getX() - drive.getPose().getX()));
+    double angleError = drive.getRotation().minus(targetAngle).getRadians();
+    return Math.abs(angleError) < 0.1;
+  }
+
   /** Returns an array of module translations. */
   public static Translation2d[] getModuleTranslations() {
     return new Translation2d[] {

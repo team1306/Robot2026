@@ -9,6 +9,9 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.fueldetection.FuelDetection;
+import frc.robot.subsystems.fueldetection.FuelDetectionIO;
+import frc.robot.subsystems.fueldetection.FuelDetectionReal;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIOReal;
@@ -38,6 +41,7 @@ public class RobotContainer {
   private final Intake intake;
   private final Indexer indexer;
   private final Shooter shooter;
+  private final FuelDetection fuelDetection;
 
   private final Controls controls;
   private final Autos autos;
@@ -72,6 +76,7 @@ public class RobotContainer {
                     VisionConstants.BACK_RIGHT_CAMERA_POSITION),
                 new VisionIOPhotonVision(
                     VisionConstants.RIGHT_CAMERA_NAME, VisionConstants.RIGHT_CAMERA_POSITION));
+        fuelDetection = new FuelDetection(new FuelDetectionReal());
         break;
 
       case SIM:
@@ -105,6 +110,7 @@ public class RobotContainer {
                     VisionConstants.RIGHT_CAMERA_NAME,
                     VisionConstants.RIGHT_CAMERA_POSITION,
                     () -> drive.getPose()));
+        fuelDetection = new FuelDetection(new FuelDetectionReal());
         break;
 
       default:
@@ -126,10 +132,11 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {},
                 new VisionIO() {});
+        fuelDetection = new FuelDetection(new FuelDetectionIO() {});
         break;
     }
 
-    controls = new Controls(drive, intake, indexer, shooter);
+    controls = new Controls(drive, intake, shooter, indexer, fuelDetection);
     autos = new Autos(drive, indexer, intake, shooter);
   }
 

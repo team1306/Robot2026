@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -15,6 +16,7 @@ public class Shooter extends SubsystemBase {
 
   public final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
   public final ShooterIO shooterIO;
+  private AngularVelocity speedOverride = RotationsPerSecond.of(0);
 
   private final SysIdRoutine sysId;
 
@@ -38,13 +40,25 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setVelocity(AngularVelocity velocity) {
-    shooterIO.setVelocity(velocity);
+    double multiplier = Math.signum(velocity.in(RotationsPerSecond));
+
+    shooterIO.setVelocity(velocity.plus(speedOverride.times(multiplier)));
     Logger.recordOutput("Shooter/Velocity Setpoint", velocity);
+  }
+
+  public void changeVelocityOverride(AngularVelocity velocity) {
+    speedOverride = speedOverride.plus(velocity);
+    Logger.recordOutput("Shooter/Velocity Override", velocity);
+  }
+
+  public void resetVelocityOverride(){
+    speedOverride = RotationsPerSecond.of(0);
+    Logger.recordOutput("Shooter/Velocity Override", 0);
   }
 
   public void setIdle() {
     shooterIO.setIdle();
-    Logger.recordOutput("Shooter/Velocity Setpoint", 0);
+    Logger.recordOutput("Shooter/Velocity Setpoint", 0.0);
   }
 
   public void runCharacterization(Voltage output) {

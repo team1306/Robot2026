@@ -57,6 +57,8 @@ public class FuelCollectionCommand extends Command {
 
       double value = pidController.calculate(target.yaw());
       angularVelocity = DegreesPerSecond.of(value);
+    } else if (target == null) {
+      return;
     } else {
       double yaw = target.yaw() + drive.getPose().getRotation().getDegrees();
 

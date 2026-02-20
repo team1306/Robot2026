@@ -1,5 +1,7 @@
 package frc.robot.subsystems.intake;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -11,6 +13,7 @@ public class Intake extends SubsystemBase {
 
   private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
   private final IntakeIO intakeIO;
+  public Angle deployOveride = Degrees.of(0);
 
   public Intake(IntakeIO intakeIO) {
     this.intakeIO = intakeIO;
@@ -28,7 +31,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void setDeployerPosition(Angle angle) {
-    intakeIO.setDeployerPosition(angle);
+    intakeIO.setDeployerPosition(angle.plus(deployOveride));
     Logger.recordOutput("Intake/Deployer Position Setpoint", angle);
   }
 
