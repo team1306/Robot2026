@@ -49,12 +49,15 @@ public class DriveCommands {
       Drive drive,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
-      Supplier<Translation2d> pose) {
+      Supplier<Translation2d> pose,
+      boolean isBackward) {
     return new DriveAtAngleCommand(
         drive,
         xSupplier,
         ySupplier,
-        () -> LocationUtils.getDirectionToLocation(drive.getPose().getTranslation(), pose.get()));
+        () ->
+            LocationUtils.getDirectionToLocation(drive.getPose().getTranslation(), pose.get())
+                .plus(isBackward ? Rotation2d.k180deg : Rotation2d.kZero));
   }
 
   /**
