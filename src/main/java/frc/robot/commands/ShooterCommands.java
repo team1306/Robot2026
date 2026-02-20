@@ -75,7 +75,7 @@ public class ShooterCommands {
     return shootAtSpeedCommand(
         shooter,
         () -> {
-          Logger.recordOutput("Shooter/Distance to Target", distance.get());
+          Logger.recordOutput("Shooter/Distance to Target", distance.get().in(Feet));
           return interpolateSetpoints(SETPOINTS, distance.get());
         });
   }
