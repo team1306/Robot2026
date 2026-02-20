@@ -16,7 +16,7 @@ public class Shooter extends SubsystemBase {
 
   public final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
   public final ShooterIO shooterIO;
-  public AngularVelocity speedOveride = RotationsPerSecond.of(0);
+  private AngularVelocity speedOverride = RotationsPerSecond.of(0);
 
   private final SysIdRoutine sysId;
 
@@ -40,8 +40,15 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setVelocity(AngularVelocity velocity) {
-    shooterIO.setVelocity(velocity.plus(speedOveride));
+    double multiplier = Math.signum(velocity.in(RotationsPerSecond));
+
+    shooterIO.setVelocity(velocity.plus(speedOverride.times(multiplier)));
     Logger.recordOutput("Shooter/Velocity Setpoint", velocity);
+  }
+
+  public void changeVelocityOverride(AngularVelocity velocity) {
+      speedOverride = speedOverride.plus(velocity);
+      Logger.recordOutput("Shooter/Velocity Override", velocity);
   }
 
   public void setIdle() {
