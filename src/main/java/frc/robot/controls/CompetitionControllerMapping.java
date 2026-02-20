@@ -177,10 +177,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .onTrue(
             new InstantCommand(() -> shooter.changeVelocityOverride(RotationsPerSecond.of(-0.5))));
 
-    operatorController
-        .start()
-        .onTrue(
-            new InstantCommand(() -> shooter.resetVelocityOverride()));
+    operatorController.start().onTrue(new InstantCommand(() -> shooter.resetVelocityOverride()));
 
     operatorController
         .povLeft()
