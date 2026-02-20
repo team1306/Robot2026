@@ -20,7 +20,9 @@ public class IndexerConstants {
   // feedback and pid configs don't matter because we aren't using them
 
   public static final TalonFXConfiguration CCW_INDEXER_MOTOR_CONFIGS =
-      CW_INDEXER_MOTOR_CONFIGS.withMotorOutput(
-          MotorConfigUtils.createMotorOutputConfig(
-              InvertedValue.CounterClockwise_Positive, NeutralModeValue.Brake));
+      CW_INDEXER_MOTOR_CONFIGS
+          .clone()
+          .withMotorOutput(
+              MotorConfigUtils.createMotorOutputConfig(
+                  InvertedValue.CounterClockwise_Positive, NeutralModeValue.Brake));
 }
