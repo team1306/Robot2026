@@ -170,10 +170,17 @@ public class CompetitionControllerMapping extends ControllerMapping {
 
     operatorController
         .povUp()
-        .onTrue(new InstantCommand(() -> shooter.changeVelocityOverride(RotationsPerSecond.of(0.5))));
+        .onTrue(
+            new InstantCommand(() -> shooter.changeVelocityOverride(RotationsPerSecond.of(0.5))));
     operatorController
         .povDown()
-        .onTrue(new InstantCommand(() -> shooter.changeVelocityOverride(RotationsPerSecond.of(-0.5))));
+        .onTrue(
+            new InstantCommand(() -> shooter.changeVelocityOverride(RotationsPerSecond.of(-0.5))));
+
+    operatorController
+        .start()
+        .onTrue(
+            new InstantCommand(() -> shooter.resetVelocityOverride()));
 
     operatorController
         .povLeft()
