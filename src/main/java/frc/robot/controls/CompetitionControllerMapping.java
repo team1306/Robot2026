@@ -1,7 +1,5 @@
 package frc.robot.controls;
 
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-
 import badgerutils.commands.CommandUtils;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -9,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
@@ -59,7 +56,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 drive,
                 () -> -driverController.getLeftY(),
                 () -> -driverController.getLeftX(),
-                () -> Constants.Locations.blueHub.toTranslation2d()));
+                () -> Constants.Locations.blueHub.toTranslation2d(),
+                true));
 
     driverController
         .start()
