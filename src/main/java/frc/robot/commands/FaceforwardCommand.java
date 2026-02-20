@@ -35,7 +35,7 @@ public class FaceforwardCommand extends Command {
 
               lastRotation =
                   Rotation2d.fromRadians(
-                      Math.atan2(y, x)); // may need to add PI, depending on orientation
+                      Math.atan2(y, x) + Math.PI); // may need to add PI, depending on orientation
 
               return lastRotation;
             });

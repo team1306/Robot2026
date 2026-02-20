@@ -16,6 +16,7 @@ import frc.robot.util.Interpolation;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class ShooterCommands {
   private static final ShooterSetpoint[] SETPOINTS =
@@ -71,7 +72,12 @@ public class ShooterCommands {
   }
 
   public static Command shootAtDistanceCommand(Shooter shooter, Supplier<Distance> distance) {
-    return shootAtSpeedCommand(shooter, () -> interpolateSetpoints(SETPOINTS, distance.get()));
+    return shootAtSpeedCommand(
+        shooter,
+        () -> {
+          Logger.recordOutput("Shooter/Distance to Target", distance.get());
+          return interpolateSetpoints(SETPOINTS, distance.get());
+        });
   }
 
   public static Command shootForTimeCommand(
