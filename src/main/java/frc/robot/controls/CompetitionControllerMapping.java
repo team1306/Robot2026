@@ -6,7 +6,6 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import badgerutils.commands.CommandUtils;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -24,7 +23,6 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.LocationUtils;
 import frc.robot.util.RebuiltUtils;
-import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class CompetitionControllerMapping extends ControllerMapping {
@@ -124,15 +122,17 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .rightTrigger()
         .whileTrue(
             new SafeShootCommand(
-                drive,
-                shooter,
-                indexer,
-                () -> -driverController.getLeftY(),
-                () -> -driverController.getLeftX(),
-                () ->
-                    RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
-                        ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
-                        : RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())).alongWith(loggedTargetCommand));
+                    drive,
+                    shooter,
+                    indexer,
+                    () -> -driverController.getLeftY(),
+                    () -> -driverController.getLeftX(),
+                    () ->
+                        RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
+                            ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
+                            : RebuiltUtils.getNearestAllianceCorner(
+                                drive.getPose().getTranslation()))
+                .alongWith(loggedTargetCommand));
     // P2 -- ME!!!
 
     operatorController
@@ -194,14 +194,11 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .a()
         .onTrue(new InstantCommand(() -> intake.setDutyCycle(-1)))
         .onFalse(new InstantCommand(() -> intake.setDutyCycle(0)));
-
-
   }
+
   @Override
   public void clear() {
     super.clear();
     CommandUtils.removeAndCancelDefaultCommand(drive);
   }
-
-
 }
