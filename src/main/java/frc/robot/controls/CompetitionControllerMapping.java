@@ -235,5 +235,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
   public void clear() {
     super.clear();
     CommandUtils.removeAndCancelDefaultCommand(drive);
+    CommandUtils.removeAndCancelDefaultCommand(intake);
   }
 }
