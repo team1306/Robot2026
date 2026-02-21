@@ -102,6 +102,8 @@ public class Shooter extends SubsystemBase {
       }
     }
 
+    Logger.recordOutput("Shooter/Setpoint Error", sum / count);
+
     return sum / count;
   }
 

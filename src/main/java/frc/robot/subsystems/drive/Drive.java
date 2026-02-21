@@ -29,11 +29,14 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
+import frc.robot.commands.DriveAtAngleCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.util.LocalADStarAK;
 import java.util.concurrent.locks.Lock;
@@ -42,6 +45,7 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Drive extends SubsystemBase {
+  private Field2d field2d = new Field2d();
   // TunerConstants doesn't include these constants, so they are declared locally
   static final double ODOMETRY_FREQUENCY = TunerConstants.kCANBus.isNetworkFD() ? 250.0 : 100.0;
   public static final double DRIVE_BASE_RADIUS =
@@ -199,6 +203,9 @@ public class Drive extends SubsystemBase {
 
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
+
+    field2d.setRobotPose(getPose());
+    SmartDashboard.putData("Field", field2d);
   }
 
   /**
@@ -344,13 +351,15 @@ public class Drive extends SubsystemBase {
     return TunerConstants.kMaxTurningSpeed.in(MetersPerSecond) / DRIVE_BASE_RADIUS;
   }
 
-  public boolean isLocked(Drive drive, Translation2d target) {
+  public boolean isLocked(Drive drive, Translation2d target, boolean inverted) {
     Rotation2d targetAngle =
         Rotation2d.fromRadians(
-            Math.atan2(
-                target.getY() - drive.getPose().getY(), target.getX() - drive.getPose().getX()));
-    double angleError = drive.getRotation().minus(targetAngle).getRadians();
-    return Math.abs(angleError) < 0.1;
+                Math.atan2(
+                    target.getY() - drive.getPose().getY(), target.getX() - drive.getPose().getX()))
+            .plus(Rotation2d.k180deg);
+    Rotation2d angleError = drive.getRotation().minus(targetAngle);
+    return Math.abs(angleError.getRadians())
+        < DriveAtAngleCommand.ADJUSTMENT_TOLERANCE.getRadians();
   }
 
   /** Returns an array of module translations. */

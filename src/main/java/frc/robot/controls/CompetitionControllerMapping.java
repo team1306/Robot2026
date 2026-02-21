@@ -1,6 +1,5 @@
 package frc.robot.controls;
 
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import badgerutils.commands.CommandUtils;
@@ -59,6 +58,10 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
                         ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
                         : RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())));
+
+    /* ---Default Commands--- */
+
+    // Drive with stick
     drive.setDefaultCommand(
         DriveCommands.joystickDriveCommand(
             drive,
@@ -67,6 +70,12 @@ public class CompetitionControllerMapping extends ControllerMapping {
             () -> -driverController.getRightX()));
     driverController.a().whileTrue(indexer.indexUntilCancelledCommand(0.5));
 
+    // Intake Really Slow
+    intake.setDefaultCommand(intake.intakeAtDutyCycleCommand(0.05));
+
+    /* ---P1--- */
+
+    // Reset Odometry
     driverController
         .start()
         .onTrue(
@@ -77,10 +86,17 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     drive)
                 .ignoringDisable(true));
 
-    driverController.leftTrigger(0.5).whileTrue(intake.intakeUntilInterruptedCommand(1));
+    // Intake
+    driverController
+        .leftTrigger(0.5)
+        .whileTrue(
+            intake.intakeUntilInterruptedCommand(
+                operatorController.getLeftY() < 0.1 ? 0.25 : operatorController.getLeftY()));
 
+    // Fuel Collection
     driverController.b().whileTrue(new FuelCollectionCommand(drive, fuelDetection));
 
+    // Robot Relative Drive
     driverController
         .x()
         .whileTrue(
@@ -90,12 +106,14 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 () -> -driverController.getLeftX(),
                 () -> -driverController.getRightX()));
 
+    // Snake Mode
     driverController
         .y()
         .whileTrue(
             new FaceforwardCommand(
                 drive, () -> -driverController.getLeftY(), () -> -driverController.getLeftX()));
 
+    // Shoot to Hub
     driverController
         .rightBumper()
         .whileTrue(
@@ -103,10 +121,12 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 drive,
                 shooter,
                 indexer,
+                intake,
                 () -> -driverController.getLeftY(),
                 () -> -driverController.getLeftX(),
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d()));
 
+    // Shoot to Corner
     driverController
         .leftBumper()
         .whileTrue(
@@ -114,10 +134,12 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 drive,
                 shooter,
                 indexer,
+                intake,
                 () -> -driverController.getLeftY(),
                 () -> -driverController.getLeftX(),
                 () -> RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())));
 
+    // Shoot to Hub or Corner Depending on Location
     driverController
         .rightTrigger()
         .whileTrue(
@@ -125,6 +147,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     drive,
                     shooter,
                     indexer,
+                    intake,
                     () -> -driverController.getLeftY(),
                     () -> -driverController.getLeftX(),
                     () ->
@@ -133,8 +156,10 @@ public class CompetitionControllerMapping extends ControllerMapping {
                             : RebuiltUtils.getNearestAllianceCorner(
                                 drive.getPose().getTranslation()))
                 .alongWith(loggedTargetCommand));
-    // P2 -- ME!!!
 
+    /* ---P2--- */
+
+    // Jumble Indexer
     operatorController
         .leftTrigger(0.1)
         .whileTrue(
@@ -146,6 +171,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
                             operatorController.setRumble(
                                 RumbleType.kBothRumble, operatorController.getLeftTriggerAxis()))))
         .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
+
+    // Spool Shooter
     operatorController
         .rightTrigger()
         .whileTrue(
@@ -153,50 +180,54 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     shooter,
                     () ->
                         LocationUtils.getDistanceToLocation(
-                            drive.getPose().getTranslation(),
-                            RebuiltUtils.getCurrentHubLocation().toTranslation2d()))
+                            RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
+                                ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
+                                : RebuiltUtils.getNearestAllianceCorner(
+                                    drive.getPose().getTranslation()),
+                            drive.getPose().getTranslation()))
                 .alongWith(
                     new InstantCommand(
-                        () ->
-                            operatorController.setRumble(
-                                RumbleType.kBothRumble, operatorController.getLeftTriggerAxis()))))
+                        () -> operatorController.setRumble(RumbleType.kBothRumble, 0.25))))
         .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
 
     // Overides
 
+    // Brake Shooter
     operatorController
         .leftBumper()
         .onTrue(new InstantCommand(() -> shooter.setVelocity(RotationsPerSecond.of(0)))); // brake
 
+    // Override Shooter by +0.5 RPS
     operatorController
         .povUp()
         .onTrue(
             new InstantCommand(() -> shooter.changeVelocityOverride(RotationsPerSecond.of(0.5))));
+
+    // Override Shooter by -0.5 RPS
     operatorController
         .povDown()
         .onTrue(
             new InstantCommand(() -> shooter.changeVelocityOverride(RotationsPerSecond.of(-0.5))));
 
+    // Reset overrides
     operatorController.start().onTrue(new InstantCommand(() -> shooter.resetVelocityOverride()));
 
-    operatorController
-        .povLeft()
-        .onTrue(new InstantCommand(() -> intake.deployOveride.plus(Degrees.of(10))));
-    operatorController
-        .povRight()
-        .onTrue(new InstantCommand(() -> intake.deployOveride.minus(Degrees.of(10))));
-
+    // Reverse Shooter
     operatorController
         .y()
         .onTrue(ShooterCommands.shootAtSpeedCommand(shooter, () -> RotationsPerSecond.of(-20)))
         .onFalse(new InstantCommand(() -> shooter.setIdle()));
+
+    // Reverse Indexer
     operatorController
         .b()
-        .onTrue(new InstantCommand(() -> indexer.setDutyCycle(-1)))
+        .onTrue(new InstantCommand(() -> indexer.setDutyCycle(-0.25)))
         .onFalse(new InstantCommand(() -> indexer.setDutyCycle(0)));
+
+    // Reverse Intake
     operatorController
         .a()
-        .onTrue(new InstantCommand(() -> intake.setDutyCycle(-1)))
+        .onTrue(new InstantCommand(() -> intake.setDutyCycle(-0.5)))
         .onFalse(new InstantCommand(() -> intake.setDutyCycle(0)));
   }
 
@@ -204,5 +235,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
   public void clear() {
     super.clear();
     CommandUtils.removeAndCancelDefaultCommand(drive);
+    CommandUtils.removeAndCancelDefaultCommand(intake);
   }
 }
