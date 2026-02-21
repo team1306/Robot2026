@@ -14,25 +14,25 @@ public class VisionConstants {
       AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
 
   // Camera names, must match names configured on coprocessor
-  public static final String LEFT_FRONT_CAMERA_NAME = "leftFront";
+  public static final String LEFT_BACK_CAMERA_NAME = "leftBack";
   public static final String LEFT_SIDE_CAMERA_NAME = "leftSide";
-  public static final String RIGHT_FRONT_CAMERA_NAME = "rightFront";
+  public static final String RIGHT_BACK_CAMERA_NAME = "rightBack";
   public static final String RIGHT_SIDE_CAMERA_NAME = "rightSide";
 
   // Robot to camera transforms
-  public static final Transform3d LEFT_FRONT_CAMERA_POSITION =
+  public static final Transform3d LEFT_BACK_CAMERA_POSITION =
       new Transform3d(
-          Inches.of(-12.996737),
-          Inches.of(9.487822),
-          Inches.of(8.415729),
-          new Rotation3d(Degrees.of(0), Degrees.of(-23), Degrees.of(-15)));
+          Inches.of(-13.028588),
+          Inches.of(9.607),
+          Inches.of(8.125806),
+          new Rotation3d(Degrees.of(180), Degrees.of(-23), Degrees.of(-15)));
   public static final Transform3d LEFT_SIDE_CAMERA_POSITION =
       new Transform3d(
-          Inches.of(-14.055642),
+          Inches.of(-13.805643),
           Inches.of(7.002289),
-          Inches.of(10.677572),
+          Inches.of(10.677571),
           new Rotation3d(Degrees.of(0), Degrees.of(-22), Degrees.of(-90)));
-  public static final Transform3d RIGHT_FRONT_CAMERA_POSITION =
+  public static final Transform3d RIGHT_BACK_CAMERA_POSITION =
       new Transform3d(
           Inches.of(12.996737),
           Inches.of(9.487822),
@@ -40,9 +40,9 @@ public class VisionConstants {
           new Rotation3d(Degrees.of(0), Degrees.of(-23), Degrees.of(15)));
   public static final Transform3d RIGHT_SIDE_CAMERA_POSITION =
       new Transform3d(
-          Inches.of(14.055642),
+          Inches.of(13.805643),
           Inches.of(7.002289),
-          Inches.of(10.677572),
+          Inches.of(10.677571),
           new Rotation3d(Degrees.of(0), Degrees.of(-22), Degrees.of(90)));
 
   // Basic filtering thresholds

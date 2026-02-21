@@ -63,14 +63,14 @@ public class RobotContainer {
             new Vision(
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVision(
-                    VisionConstants.LEFT_FRONT_CAMERA_NAME,
-                    VisionConstants.LEFT_FRONT_CAMERA_POSITION),
+                    VisionConstants.LEFT_BACK_CAMERA_NAME,
+                    VisionConstants.LEFT_BACK_CAMERA_POSITION),
                 new VisionIOPhotonVision(
                     VisionConstants.LEFT_SIDE_CAMERA_NAME,
                     VisionConstants.LEFT_SIDE_CAMERA_POSITION),
                 new VisionIOPhotonVision(
-                    VisionConstants.RIGHT_FRONT_CAMERA_NAME,
-                    VisionConstants.RIGHT_FRONT_CAMERA_POSITION),
+                    VisionConstants.RIGHT_BACK_CAMERA_NAME,
+                    VisionConstants.RIGHT_BACK_CAMERA_POSITION),
                 new VisionIOPhotonVision(
                     VisionConstants.RIGHT_SIDE_CAMERA_NAME,
                     VisionConstants.RIGHT_SIDE_CAMERA_POSITION));
@@ -93,16 +93,16 @@ public class RobotContainer {
             new Vision(
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVisionSim(
-                    VisionConstants.LEFT_FRONT_CAMERA_NAME,
-                    VisionConstants.LEFT_FRONT_CAMERA_POSITION,
+                    VisionConstants.LEFT_BACK_CAMERA_NAME,
+                    VisionConstants.LEFT_BACK_CAMERA_POSITION,
                     () -> drive.getPose()),
                 new VisionIOPhotonVisionSim(
                     VisionConstants.LEFT_SIDE_CAMERA_NAME,
                     VisionConstants.LEFT_SIDE_CAMERA_POSITION,
                     () -> drive.getPose()),
                 new VisionIOPhotonVisionSim(
-                    VisionConstants.RIGHT_FRONT_CAMERA_NAME,
-                    VisionConstants.RIGHT_FRONT_CAMERA_POSITION,
+                    VisionConstants.RIGHT_BACK_CAMERA_NAME,
+                    VisionConstants.RIGHT_BACK_CAMERA_POSITION,
                     () -> drive.getPose()),
                 new VisionIOPhotonVisionSim(
                     VisionConstants.RIGHT_SIDE_CAMERA_NAME,
