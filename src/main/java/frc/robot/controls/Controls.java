@@ -21,13 +21,6 @@ public class Controls {
   private final CommandXboxController driverController;
   private final CommandXboxController operatorController;
 
-  // ============================== SUBSYSTEMS ====================================
-  private final Drive drivetrain;
-  private final Intake intake;
-  private final Shooter shooter;
-  private final Indexer indexer;
-  private final FuelDetection fuelDetection;
-
   private final EnumMap<ControlStates, ControllerMapping> mappings =
       new EnumMap<>(ControlStates.class);
 
@@ -41,12 +34,6 @@ public class Controls {
       Shooter shooter,
       Indexer indexer,
       FuelDetection fuelDetection) {
-    this.drivetrain = drivetrain;
-    this.intake = intake;
-    this.shooter = shooter;
-    this.indexer = indexer;
-    this.fuelDetection = fuelDetection;
-
     DriverStation.silenceJoystickConnectionWarning(true);
     driverController = new CommandXboxController(0);
     operatorController = new CommandXboxController(1);
