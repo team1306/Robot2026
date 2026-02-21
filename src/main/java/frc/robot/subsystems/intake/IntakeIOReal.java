@@ -45,8 +45,8 @@ public class IntakeIOReal implements IntakeIO {
     deployerMotor = new TalonFX(Constants.CanIds.DEPLOYER_MOTOR_ID);
 
     // configs
-    leftMotor.getConfigurator().apply(IntakeConstants.CW_INTAKE_MOTOR_CONFIGS);
-    rightMotor.getConfigurator().apply(IntakeConstants.CCW_INTAKE_MOTOR_CONFIGS);
+    leftMotor.getConfigurator().apply(IntakeConstants.CCW_INTAKE_MOTOR_CONFIGS);
+    rightMotor.getConfigurator().apply(IntakeConstants.CW_INTAKE_MOTOR_CONFIGS);
     deployerMotor.getConfigurator().apply(IntakeConstants.DEPLOYER_MOTOR_CONFIGS);
 
     leftSupplyCurrent = leftMotor.getSupplyCurrent();

@@ -25,15 +25,17 @@ public class IntakeConstants {
                   InvertedValue.Clockwise_Positive, NeutralModeValue.Brake));
 
   public static final TalonFXConfiguration CCW_INTAKE_MOTOR_CONFIGS =
-      CW_INTAKE_MOTOR_CONFIGS.withMotorOutput(
-          MotorConfigUtils.createMotorOutputConfig(
-              InvertedValue.CounterClockwise_Positive, NeutralModeValue.Brake));
+      CW_INTAKE_MOTOR_CONFIGS
+          .clone()
+          .withMotorOutput(
+              MotorConfigUtils.createMotorOutputConfig(
+                  InvertedValue.CounterClockwise_Positive, NeutralModeValue.Brake));
 
   public static final TalonFXConfiguration DEPLOYER_MOTOR_CONFIGS =
       new TalonFXConfiguration()
           .withMotorOutput(
               MotorConfigUtils.createMotorOutputConfig(
-                  InvertedValue.Clockwise_Positive, NeutralModeValue.Brake))
+                  InvertedValue.Clockwise_Positive, NeutralModeValue.Coast))
           .withCurrentLimits(
               new CurrentLimitsConfigs()
                   .withStatorCurrentLimitEnable(false)
