@@ -33,4 +33,6 @@ public interface IntakeIO {
   public default void setDutyCycle(double dutyCycle) {}
 
   public default void setDeployerPosition(Angle angle) {}
+  
+  public default void setDeployerDutyCycle(double dutyCycle) {}
 }
