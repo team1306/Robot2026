@@ -25,7 +25,7 @@ public class VisionConstants {
           Inches.of(-9.607),
           Inches.of(-13.028588),
           Inches.of(8.125806),
-          new Rotation3d(Degrees.of(180), Degrees.of(-23), Degrees.of(-165)));
+          new Rotation3d(Degrees.of(0), Degrees.of(-23), Degrees.of(-165)));
   public static final Transform3d RIGHT_SIDE_CAMERA_POSITION =
       new Transform3d(
           Inches.of(-7.002289),
