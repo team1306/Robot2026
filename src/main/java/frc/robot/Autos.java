@@ -94,6 +94,7 @@ public class Autos {
                 drive,
                 shooter,
                 indexer,
+                intake,
                 () -> 0,
                 () -> 0,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d())
@@ -123,6 +124,7 @@ public class Autos {
             drive,
             shooter,
             indexer,
+            intake,
             () -> 0,
             () -> 0,
             () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d()));
