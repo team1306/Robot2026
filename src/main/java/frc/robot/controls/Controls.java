@@ -21,9 +21,6 @@ public class Controls {
   private final CommandXboxController operatorController;
 
   // ============================== SUBSYSTEMS ====================================
-  private final Drive drivetrain;
-  private final Intake intake;
-
   private final EnumMap<ControlStates, ControllerMapping> mappings =
       new EnumMap<>(ControlStates.class);
 
@@ -32,9 +29,6 @@ public class Controls {
   private static final Set<Supplier<Trigger>> persistentTriggers = new HashSet<>();
 
   public Controls(Drive drivetrain, Intake intake, Indexer indexer, Shooter shooter) {
-    this.drivetrain = drivetrain;
-    this.intake = intake;
-
     DriverStation.silenceJoystickConnectionWarning(true);
     driverController = new CommandXboxController(0);
     operatorController = new CommandXboxController(1);
@@ -49,6 +43,10 @@ public class Controls {
     mappings.put(
         ControlStates.SYSID,
         new SysIdControllerMapping(driverController, operatorController, drivetrain));
+    mappings.put(
+        ControlStates.CLEANING,
+        new CleaningControllerMapping(
+            driverController, operatorController, intake, indexer, shooter));
 
     Consumer<Enum<ControlStates>> onChange =
         (nextState) -> {
