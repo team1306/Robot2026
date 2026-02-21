@@ -58,7 +58,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
                         ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
                         : RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())));
-    
+
     // Default Drive Control
     drive.setDefaultCommand(
         DriveCommands.joystickDriveCommand(
@@ -157,7 +157,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                             operatorController.setRumble(
                                 RumbleType.kBothRumble, operatorController.getLeftTriggerAxis()))))
         .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
-    
+
     // Spool Shooter
     operatorController
         .rightTrigger()
@@ -188,7 +188,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .povUp()
         .onTrue(
             new InstantCommand(() -> shooter.changeVelocityOverride(RotationsPerSecond.of(0.5))));
-    
+
     // Override Shooter by -0.5 RPS
     operatorController
         .povDown()
@@ -203,7 +203,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .y()
         .onTrue(ShooterCommands.shootAtSpeedCommand(shooter, () -> RotationsPerSecond.of(-20)))
         .onFalse(new InstantCommand(() -> shooter.setIdle()));
-    
+
     // Reverse Indexer
     operatorController
         .b()
