@@ -1,6 +1,5 @@
 package frc.robot.controls;
 
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import badgerutils.commands.CommandUtils;
@@ -152,15 +151,15 @@ public class CompetitionControllerMapping extends ControllerMapping {
             ShooterCommands.shootAtDistanceCommand(
                     shooter,
                     () ->
-                        LocationUtils.getDistanceToLocation(RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
-                            ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
-                            : RebuiltUtils.getNearestAllianceCorner(
-                                drive.getPose().getTranslation()), drive.getPose().getTranslation()))
+                        LocationUtils.getDistanceToLocation(
+                            RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
+                                ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
+                                : RebuiltUtils.getNearestAllianceCorner(
+                                    drive.getPose().getTranslation()),
+                            drive.getPose().getTranslation()))
                 .alongWith(
                     new InstantCommand(
-                        () ->
-                            operatorController.setRumble(
-                                RumbleType.kBothRumble, 1))))
+                        () -> operatorController.setRumble(RumbleType.kBothRumble, 1))))
         .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
 
     // Overides
@@ -184,7 +183,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
     //     .povLeft()
     //     .onTrue(new InstantCommand(() -> intake.));
     // Commented out untill spool command
-   
+
     operatorController
         .y()
         .onTrue(ShooterCommands.shootAtSpeedCommand(shooter, () -> RotationsPerSecond.of(-20)))
