@@ -20,7 +20,7 @@ public class DriveAtAngleCommand extends Command {
   private static final double ANGLE_MAX_VELOCITY = 8.0;
   private static final double ANGLE_MAX_ACCELERATION = 20.0;
   private static final Rotation2d INITIAL_TOLERANCE = Rotation2d.fromDegrees(1);
-  private static final Rotation2d ADJUSTMENT_TOLERANCE = Rotation2d.fromDegrees(3);
+  public static final Rotation2d ADJUSTMENT_TOLERANCE = Rotation2d.fromDegrees(2);
 
   private final Drive drive;
   private final DoubleSupplier xSupplier;

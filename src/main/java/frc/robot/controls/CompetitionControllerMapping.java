@@ -59,7 +59,9 @@ public class CompetitionControllerMapping extends ControllerMapping {
                         ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
                         : RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())));
 
-    // Default Drive Control
+    /* ---Default Commands--- */
+
+    // Drive with stick
     drive.setDefaultCommand(
         DriveCommands.joystickDriveCommand(
             drive,
@@ -67,6 +69,11 @@ public class CompetitionControllerMapping extends ControllerMapping {
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
     driverController.a().whileTrue(indexer.indexUntilCancelledCommand(0.5));
+
+    // Intake Really Slow
+    intake.setDefaultCommand(intake.intakeAtDutyCycleCommand(0.05));
+
+    /* ---P1--- */
 
     // Reset Odometry
     driverController
@@ -80,7 +87,11 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 .ignoringDisable(true));
 
     // Intake
-    driverController.leftTrigger(0.5).whileTrue(intake.intakeUntilInterruptedCommand(1));
+    driverController
+        .leftTrigger(0.5)
+        .whileTrue(
+            intake.intakeUntilInterruptedCommand(
+                operatorController.getLeftY() < 0.1 ? 0.25 : operatorController.getLeftY()));
 
     // Fuel Collection
     driverController.b().whileTrue(new FuelCollectionCommand(drive, fuelDetection));
@@ -110,6 +121,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 drive,
                 shooter,
                 indexer,
+                intake,
                 () -> -driverController.getLeftY(),
                 () -> -driverController.getLeftX(),
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d()));
@@ -122,6 +134,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 drive,
                 shooter,
                 indexer,
+                intake,
                 () -> -driverController.getLeftY(),
                 () -> -driverController.getLeftX(),
                 () -> RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())));
@@ -134,6 +147,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     drive,
                     shooter,
                     indexer,
+                    intake,
                     () -> -driverController.getLeftY(),
                     () -> -driverController.getLeftX(),
                     () ->
@@ -173,7 +187,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                             drive.getPose().getTranslation()))
                 .alongWith(
                     new InstantCommand(
-                        () -> operatorController.setRumble(RumbleType.kBothRumble, 1))))
+                        () -> operatorController.setRumble(RumbleType.kBothRumble, 0.25))))
         .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
 
     // Overides

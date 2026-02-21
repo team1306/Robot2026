@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -20,6 +21,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
       Drive drive,
       Shooter shooter,
       Indexer indexer,
+      Intake intake,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       Supplier<Translation2d> positionSupplier) {
@@ -31,22 +33,36 @@ public class SafeShootCommand extends ParallelCommandGroup {
     Command driveAtAngleCommand =
         DriveCommands.driveAimLockedCommand(drive, xSupplier, ySupplier, positionSupplier, true);
     Command indexerCommand = indexer.indexUntilCancelledCommand(1);
+    Command intakeCommand = intake.intakeAtDutyCycleCommand(1);
 
     BooleanSupplier shooterVelocityCondition = shooter.isAtRequestedSpeed();
 
-    BooleanSupplier driveAngleCondition = () -> drive.isLocked(drive, positionSupplier.get());
+    BooleanSupplier driveAngleCondition = () -> drive.isLocked(drive, positionSupplier.get(), true);
 
     Command guardedIndexerCommand =
         new GuardedCommand(indexerCommand, shooterVelocityCondition, driveAngleCondition);
 
+    Command guardedIntakeCommand =
+        new GuardedCommand(intakeCommand, shooterVelocityCondition, driveAngleCondition);
+
     Command loggedGuardCommand =
-        Commands.run(
-            () ->
-                Logger.recordOutput(
-                    "Controls/Ready To Shoot",
-                    shooterVelocityCondition.getAsBoolean() && driveAngleCondition.getAsBoolean()));
+        Commands.run(() -> logConditions(shooterVelocityCondition, driveAngleCondition));
 
     addCommands(
-        shootAtDistanceCommand, driveAtAngleCommand, guardedIndexerCommand, loggedGuardCommand);
+        shootAtDistanceCommand,
+        driveAtAngleCommand,
+        guardedIndexerCommand,
+        guardedIntakeCommand,
+        loggedGuardCommand);
+  }
+
+  private void logConditions(
+      BooleanSupplier shooterVelocityCondition, BooleanSupplier driveAngleCondition) {
+    Logger.recordOutput(
+        "Controls/Ready To Shoot",
+        shooterVelocityCondition.getAsBoolean() && driveAngleCondition.getAsBoolean());
+    Logger.recordOutput(
+        "Controls/Shooter Velocity Condition", shooterVelocityCondition.getAsBoolean());
+    Logger.recordOutput("Controls/Drive Angle Condition", driveAngleCondition.getAsBoolean());
   }
 }

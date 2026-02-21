@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
+import frc.robot.commands.DriveAtAngleCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.util.LocalADStarAK;
 import java.util.concurrent.locks.Lock;
@@ -350,13 +351,15 @@ public class Drive extends SubsystemBase {
     return TunerConstants.kMaxTurningSpeed.in(MetersPerSecond) / DRIVE_BASE_RADIUS;
   }
 
-  public boolean isLocked(Drive drive, Translation2d target) {
+  public boolean isLocked(Drive drive, Translation2d target, boolean inverted) {
     Rotation2d targetAngle =
         Rotation2d.fromRadians(
-            Math.atan2(
-                target.getY() - drive.getPose().getY(), target.getX() - drive.getPose().getX()));
-    double angleError = drive.getRotation().minus(targetAngle).getRadians();
-    return Math.abs(angleError) < 0.1;
+                Math.atan2(
+                    target.getY() - drive.getPose().getY(), target.getX() - drive.getPose().getX()))
+            .plus(Rotation2d.k180deg);
+    Rotation2d angleError = drive.getRotation().minus(targetAngle);
+    return Math.abs(angleError.getRadians())
+        < DriveAtAngleCommand.ADJUSTMENT_TOLERANCE.getRadians();
   }
 
   /** Returns an array of module translations. */
