@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightToLeft Bump Bump - Friendly Collect"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot-until-done"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Sussex",
+  "choreoAuto": false
+}
