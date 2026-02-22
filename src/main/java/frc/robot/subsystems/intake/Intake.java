@@ -53,7 +53,8 @@ public class Intake extends SubsystemBase {
 
   public Command deployAtDutyCycleCommand(double dutyCycle) {
     Logger.recordOutput("Intake/Deployer Duty Cycle Setpoint", dutyCycle);
-    return new StartEndCommand(() -> intakeIO.setDeployerDutyCycle(dutyCycle), () -> intakeIO.setDeployerDutyCycle(0));
+    return new StartEndCommand(
+        () -> intakeIO.setDeployerDutyCycle(dutyCycle), () -> intakeIO.setDeployerDutyCycle(0));
   }
 
   public Command deployCommand() {
