@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shoot-8"
+            "name": "shoot-until-done"
           }
         }
       ]
