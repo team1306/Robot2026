@@ -7,6 +7,7 @@ import badgerutils.commands.CommandUtils;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -55,7 +56,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
     Command logWithinRangeCommand =
         Commands.run(
             () ->
-                Logger.recordOutput(
+                SmartDashboard.putBoolean(
                     "Controls/In Range",
                     LocationUtils.getDistanceToLocation(
                             drive.getPose().getTranslation(),
@@ -76,13 +77,12 @@ public class CompetitionControllerMapping extends ControllerMapping {
     // Drive with stick
     drive.setDefaultCommand(
         DriveCommands.joystickDriveCommand(
-            drive,
-            () -> -driverController.getLeftY(),
-            () -> -driverController.getLeftX(),
-            () -> -driverController.getRightX()));
-    driverController
-        .a()
-        .whileTrue(indexer.indexUntilCancelledCommand(0.5).alongWith(logWithinRangeCommand));
+                drive,
+                () -> -driverController.getLeftY(),
+                () -> -driverController.getLeftX(),
+                () -> -driverController.getRightX())
+            .alongWith(logWithinRangeCommand));
+    driverController.a().whileTrue(indexer.indexUntilCancelledCommand(0.5));
 
     /* ---P1--- */
 

@@ -9,6 +9,12 @@
           "data": {
             "pathName": "RightToLeft - Friendly Collect"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot-until-done"
+          }
         }
       ]
     }
