@@ -39,15 +39,15 @@ public class Intake extends SubsystemBase {
   }
 
   public Command intakeAtDutyCycleCommand(double dutyCycle) {
-    return new InstantCommand(() -> this.setDutyCycle(dutyCycle));
+    return new InstantCommand(() -> this.setDutyCycle(dutyCycle), this);
   }
 
   public Command positionDeployerCommand(Angle angle) {
-    return new InstantCommand(() -> this.setDeployerPosition(angle));
+    return new InstantCommand(() -> this.setDeployerPosition(angle), this);
   }
 
   public Command positionDeployerCommand(DeployerPosition position) {
-    return new InstantCommand(() -> this.setDeployerPosition(position));
+    return new InstantCommand(() -> this.setDeployerPosition(position), this);
   }
 
   public Command intakeUntilInterruptedCommand(double dutyCycleWhileOn) {

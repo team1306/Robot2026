@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.4,
-        "y": 7.35
+        "x": 5.3963980072059785,
+        "y": 7.265200169599492
       },
       "isLocked": false,
       "linkedName": "start-trench-left"
@@ -37,7 +37,7 @@
       },
       "prevControl": {
         "x": 8.6,
-        "y": 7.5
+        "y": 7.75
       },
       "nextControl": {
         "x": 8.6,

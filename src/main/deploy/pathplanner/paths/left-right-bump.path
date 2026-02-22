@@ -3,64 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.4,
-        "y": 0.75
+        "x": 3.4727349397590364,
+        "y": 5.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.3965655024977615,
-        "y": 0.8328082075122043
+        "x": 4.4727349397590395,
+        "y": 5.5
       },
       "isLocked": false,
-      "linkedName": "start-trench-right"
-    },
-    {
-      "anchor": {
-        "x": 6.0,
-        "y": 0.75
-      },
-      "prevControl": {
-        "x": 5.5,
-        "y": 0.7500000000000001
-      },
-      "nextControl": {
-        "x": 6.5,
-        "y": 0.75
-      },
-      "isLocked": false,
-      "linkedName": "trench-right-center"
-    },
-    {
-      "anchor": {
-        "x": 8.6,
-        "y": 1.5
-      },
-      "prevControl": {
-        "x": 8.6,
-        "y": 0.25
-      },
-      "nextControl": {
-        "x": 8.6,
-        "y": 2.499999999999992
-      },
-      "isLocked": false,
-      "linkedName": "fuel-far-right-entrance"
-    },
-    {
-      "anchor": {
-        "x": 8.4,
-        "y": 5.75
-      },
-      "prevControl": {
-        "x": 8.753553390593273,
-        "y": 5.396446609406727
-      },
-      "nextControl": {
-        "x": 8.046446609406727,
-        "y": 6.103553390593273
-      },
-      "isLocked": false,
-      "linkedName": "fuel-far-left-exit"
+      "linkedName": "start-bump-left-alliance"
     },
     {
       "anchor": {
@@ -68,42 +20,90 @@
         "y": 5.5
       },
       "prevControl": {
-        "x": 7.2,
-        "y": 5.5
+        "x": 6.132516750127748,
+        "y": 5.004574918896227
       },
       "nextControl": {
-        "x": 5.2,
-        "y": 5.5
+        "x": 6.390433734939759,
+        "y": 6.898060240963855
       },
       "isLocked": false,
       "linkedName": "bump-left-center"
     },
     {
       "anchor": {
+        "x": 8.6,
+        "y": 6.5
+      },
+      "prevControl": {
+        "x": 8.581636434462986,
+        "y": 8.499915693088269
+      },
+      "nextControl": {
+        "x": 8.609181782768507,
+        "y": 5.500042153455865
+      },
+      "isLocked": false,
+      "linkedName": "fuel-far-left-entrance"
+    },
+    {
+      "anchor": {
+        "x": 8.4,
+        "y": 2.25
+      },
+      "prevControl": {
+        "x": 8.753553390593273,
+        "y": 2.603553390593274
+      },
+      "nextControl": {
+        "x": 8.046446609406727,
+        "y": 1.8964466094067265
+      },
+      "isLocked": false,
+      "linkedName": "fuel-far-right-exit"
+    },
+    {
+      "anchor": {
+        "x": 6.2,
+        "y": 2.5
+      },
+      "prevControl": {
+        "x": 7.2,
+        "y": 2.5
+      },
+      "nextControl": {
+        "x": 5.2,
+        "y": 2.5
+      },
+      "isLocked": false,
+      "linkedName": "bump-right-center"
+    },
+    {
+      "anchor": {
         "x": 3.0,
-        "y": 5.5
+        "y": 2.5
       },
       "prevControl": {
         "x": 3.25,
-        "y": 5.5
+        "y": 2.5
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "bump-left-alliance"
+      "linkedName": "bump-right-alliance"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
-      "rotationDegrees": -90.0
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 135.0
     },
     {
       "waypointRelativePos": 1.8547717842323648,
-      "rotationDegrees": 90.0
+      "rotationDegrees": -90.0
     },
     {
       "waypointRelativePos": 4,
-      "rotationDegrees": 135.0
+      "rotationDegrees": -135.0
     }
   ],
   "constraintZones": [],
@@ -111,7 +111,7 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 1.75,
+      "waypointRelativePos": 1.85,
       "endWaypointRelativePos": null,
       "command": null
     },
@@ -138,13 +138,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 135.0
+    "rotation": -135.0
   },
   "reversed": false,
   "folder": "Center Collection",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -95.0
+    "rotation": 135.0
   },
   "useDefaultConstraints": true
 }
