@@ -54,6 +54,10 @@ public class Controls {
     mappings.put(
         ControlStates.SYSID,
         new SysIdControllerMapping(driverController, operatorController, drivetrain));
+    mappings.put(
+        ControlStates.CLEANING,
+        new CleaningControllerMapping(
+            driverController, operatorController, intake, indexer, shooter));
 
     Consumer<Enum<ControlStates>> onChange =
         (nextState) -> {
