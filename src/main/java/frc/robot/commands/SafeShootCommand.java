@@ -24,7 +24,8 @@ public class SafeShootCommand extends ParallelCommandGroup {
       Intake intake,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
-      Supplier<Translation2d> positionSupplier) {
+      Supplier<Translation2d> positionSupplier,
+      BooleanSupplier override) {
 
     Command shootAtDistanceCommand =
         ShooterCommands.shootAtDistanceCommand(
@@ -33,17 +34,20 @@ public class SafeShootCommand extends ParallelCommandGroup {
     Command driveAtAngleCommand =
         DriveCommands.driveAimLockedCommand(drive, xSupplier, ySupplier, positionSupplier, true);
     Command indexerCommand = indexer.indexUntilCancelledCommand(1);
-    Command intakeCommand = intake.intakeAtDutyCycleCommand(1);
+    Command intakeCommand = intake.jumbleIntake();
 
     BooleanSupplier shooterVelocityCondition = shooter.isAtRequestedSpeed();
 
     BooleanSupplier driveAngleCondition = () -> drive.isLocked(drive, positionSupplier.get(), true);
 
-    Command guardedIndexerCommand =
-        new GuardedCommand(indexerCommand, shooterVelocityCondition, driveAngleCondition);
+    BooleanSupplier shootCondition =
+        () ->
+            override.getAsBoolean()
+                || (shooterVelocityCondition.getAsBoolean() && driveAngleCondition.getAsBoolean());
 
-    Command guardedIntakeCommand =
-        new GuardedCommand(intakeCommand, shooterVelocityCondition, driveAngleCondition);
+    Command guardedIndexerCommand = new GuardedCommand(indexerCommand, shootCondition);
+
+    Command guardedIntakeCommand = new GuardedCommand(intakeCommand, shootCondition);
 
     Command loggedGuardCommand =
         Commands.run(() -> logConditions(shooterVelocityCondition, driveAngleCondition));

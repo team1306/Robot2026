@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -70,9 +71,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
             () -> -driverController.getRightX()));
     driverController.a().whileTrue(indexer.indexUntilCancelledCommand(0.5));
 
-    // Intake Really Slow
-    intake.setDefaultCommand(intake.intakeAtDutyCycleCommand(0.05));
-
     /* ---P1--- */
 
     // Reset Odometry
@@ -90,8 +88,10 @@ public class CompetitionControllerMapping extends ControllerMapping {
     driverController
         .leftTrigger(0.5)
         .whileTrue(
-            intake.intakeUntilInterruptedCommand(
-                operatorController.getLeftY() < 0.1 ? 0.25 : operatorController.getLeftY()));
+            intake
+                .intakeUntilInterruptedCommand(
+                    () -> operatorController.rightStick().getAsBoolean() ? 0.5 : 0.75)
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
     // Fuel Collection
     driverController.b().whileTrue(new FuelCollectionCommand(drive, fuelDetection));
@@ -101,43 +101,49 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .x()
         .whileTrue(
             DriveCommands.robotRelativeAngularVelocityCommand(
-                drive,
-                () -> -driverController.getLeftY(),
-                () -> -driverController.getLeftX(),
-                () -> -driverController.getRightX()));
+                    drive,
+                    () -> -driverController.getLeftY(),
+                    () -> -driverController.getLeftX(),
+                    () -> -driverController.getRightX())
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
     // Snake Mode
     driverController
         .y()
         .whileTrue(
             new FaceforwardCommand(
-                drive, () -> -driverController.getLeftY(), () -> -driverController.getLeftX()));
+                    drive, () -> -driverController.getLeftY(), () -> -driverController.getLeftX())
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
     // Shoot to Hub
     driverController
         .rightBumper()
         .whileTrue(
             new SafeShootCommand(
-                drive,
-                shooter,
-                indexer,
-                intake,
-                () -> -driverController.getLeftY(),
-                () -> -driverController.getLeftX(),
-                () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d()));
+                    drive,
+                    shooter,
+                    indexer,
+                    intake,
+                    () -> -driverController.getLeftY(),
+                    () -> -driverController.getLeftX(),
+                    () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                    operatorController.rightBumper())
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
     // Shoot to Corner
     driverController
         .leftBumper()
         .whileTrue(
             new SafeShootCommand(
-                drive,
-                shooter,
-                indexer,
-                intake,
-                () -> -driverController.getLeftY(),
-                () -> -driverController.getLeftX(),
-                () -> RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())));
+                    drive,
+                    shooter,
+                    indexer,
+                    intake,
+                    () -> -driverController.getLeftY(),
+                    () -> -driverController.getLeftX(),
+                    () -> RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation()),
+                    operatorController.rightBumper())
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
     // Shoot to Hub or Corner Depending on Location
     driverController
@@ -154,24 +160,37 @@ public class CompetitionControllerMapping extends ControllerMapping {
                         RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
                             ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
                             : RebuiltUtils.getNearestAllianceCorner(
-                                drive.getPose().getTranslation()))
+                                drive.getPose().getTranslation()),
+                    operatorController.rightBumper())
                 .alongWith(loggedTargetCommand));
 
     /* ---P2--- */
 
     // Jumble Indexer
     operatorController
+            .leftTrigger(0.1)
+            .whileTrue(
+                indexer
+                    .jumbleIndexer(() -> operatorController.getLeftTriggerAxis())
+                    .alongWith(
+                        new InstantCommand(
+                            () ->
+                                operatorController.setRumble(
+                                    RumbleType.kBothRumble, operatorController.getLeftTriggerAxis()))))
+            .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
+    /*
+    operatorController
         .leftTrigger(0.1)
         .whileTrue(
-            indexer
-                .jumbleIndexer(() -> operatorController.getLeftTriggerAxis())
+            intake
+                .jumbleIntake()
                 .alongWith(
                     new InstantCommand(
                         () ->
                             operatorController.setRumble(
                                 RumbleType.kBothRumble, operatorController.getLeftTriggerAxis()))))
         .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
-
+ */
     // Spool Shooter
     operatorController
         .rightTrigger()
@@ -192,10 +211,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
 
     // Overides
 
-    // Brake Shooter
-    operatorController
-        .leftBumper()
-        .onTrue(new InstantCommand(() -> shooter.setVelocity(RotationsPerSecond.of(0)))); // brake
+    // Force Indexer
+    operatorController.rightBumper().whileTrue(indexer.indexUntilCancelledCommand(1));
 
     // Override Shooter by +0.5 RPS
     operatorController

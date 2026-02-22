@@ -1,10 +1,12 @@
 package frc.robot.subsystems.intake;
 
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
@@ -51,6 +53,18 @@ public class Intake extends SubsystemBase {
   public Command intakeUntilInterruptedCommand(double dutyCycleWhileOn) {
     return Commands.startEnd(
         () -> this.setDutyCycle(dutyCycleWhileOn), () -> this.setDutyCycle(0), this);
+  }
+
+  public Command intakeUntilInterruptedCommand(DoubleSupplier dutyCycleWhileOn) {
+    return Commands.runEnd(
+        () -> this.setDutyCycle(dutyCycleWhileOn.getAsDouble()), () -> this.setDutyCycle(0), this);
+  }
+
+  public Command jumbleIntake() {
+    return (Commands.runEnd(
+        () -> setDutyCycle(Math.sin(RobotController.getFPGATime() * 0.0001) * 0.5 + 0.25),
+        () -> setDutyCycle(0),
+        this));
   }
 
   public Command intakeUntilInterruptedCommand() {

@@ -40,7 +40,7 @@ public class Indexer extends SubsystemBase {
     return (Commands.runEnd(
         () ->
             setDutyCycle(
-                Math.sin(RobotController.getFPGATime() * 0.001) * speed.getAsDouble() * 0.25),
+                Math.sin(RobotController.getFPGATime() * 0.0001) * speed.getAsDouble() * 0.25),
         () -> setDutyCycle(0),
         this));
   }
