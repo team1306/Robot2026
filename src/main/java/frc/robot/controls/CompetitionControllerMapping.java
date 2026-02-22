@@ -52,8 +52,15 @@ public class CompetitionControllerMapping extends ControllerMapping {
 
   @Override
   public void bind() {
-    Command logWithinRangeCommand = Commands.run(() -> Logger.recordOutput("Controls/In Range", LocationUtils.getDistanceToLocation(drive.getPose().getTranslation(), RebuiltUtils.getCurrentHubLocation().toTranslation2d()).gt(Feet.of(7.5))));
-
+    Command logWithinRangeCommand =
+        Commands.run(
+            () ->
+                Logger.recordOutput(
+                    "Controls/In Range",
+                    LocationUtils.getDistanceToLocation(
+                            drive.getPose().getTranslation(),
+                            RebuiltUtils.getCurrentHubLocation().toTranslation2d())
+                        .gt(Feet.of(7.5))));
 
     Command loggedTargetCommand =
         Commands.run(
@@ -73,7 +80,9 @@ public class CompetitionControllerMapping extends ControllerMapping {
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
-    driverController.a().whileTrue(indexer.indexUntilCancelledCommand(0.5).alongWith(logWithinRangeCommand));
+    driverController
+        .a()
+        .whileTrue(indexer.indexUntilCancelledCommand(0.5).alongWith(logWithinRangeCommand));
 
     /* ---P1--- */
 
