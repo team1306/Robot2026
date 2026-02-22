@@ -168,29 +168,29 @@ public class CompetitionControllerMapping extends ControllerMapping {
 
     // Jumble Indexer
     operatorController
-            .leftTrigger(0.1)
-            .whileTrue(
-                indexer
-                    .jumbleIndexer(() -> operatorController.getLeftTriggerAxis())
-                    .alongWith(
-                        new InstantCommand(
-                            () ->
-                                operatorController.setRumble(
-                                    RumbleType.kBothRumble, operatorController.getLeftTriggerAxis()))))
-            .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
-    /*
-    operatorController
         .leftTrigger(0.1)
         .whileTrue(
-            intake
-                .jumbleIntake()
+            indexer
+                .jumbleIndexer(() -> operatorController.getLeftTriggerAxis())
                 .alongWith(
                     new InstantCommand(
                         () ->
                             operatorController.setRumble(
                                 RumbleType.kBothRumble, operatorController.getLeftTriggerAxis()))))
         .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
- */
+    /*
+       operatorController
+           .leftTrigger(0.1)
+           .whileTrue(
+               intake
+                   .jumbleIntake()
+                   .alongWith(
+                       new InstantCommand(
+                           () ->
+                               operatorController.setRumble(
+                                   RumbleType.kBothRumble, operatorController.getLeftTriggerAxis()))))
+           .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
+    */
     // Spool Shooter
     operatorController
         .rightTrigger()
