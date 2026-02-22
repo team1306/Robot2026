@@ -232,8 +232,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
     // Reverse Shooter
     operatorController
         .y()
-        .onTrue(ShooterCommands.shootAtSpeedCommand(shooter, () -> RotationsPerSecond.of(-20)))
-        .onFalse(new InstantCommand(() -> shooter.setIdle()));
+        .whileTrue(ShooterCommands.shootAtSpeedCommand(shooter, () -> RotationsPerSecond.of(-20)));
+      
 
     // Reverse Indexer
     operatorController
