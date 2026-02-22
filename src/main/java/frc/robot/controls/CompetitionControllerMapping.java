@@ -1,5 +1,6 @@
 package frc.robot.controls;
 
+import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import badgerutils.commands.CommandUtils;
@@ -51,6 +52,9 @@ public class CompetitionControllerMapping extends ControllerMapping {
 
   @Override
   public void bind() {
+    Command logWithinRangeCommand = Commands.run(() -> Logger.recordOutput("Controls/In Range", LocationUtils.getDistanceToLocation(drive.getPose().getTranslation(), RebuiltUtils.getCurrentHubLocation().toTranslation2d()).gt(Feet.of(7.5))));
+
+
     Command loggedTargetCommand =
         Commands.run(
             () ->
@@ -69,7 +73,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
-    driverController.a().whileTrue(indexer.indexUntilCancelledCommand(0.5));
+    driverController.a().whileTrue(indexer.indexUntilCancelledCommand(0.5).alongWith(logWithinRangeCommand));
 
     /* ---P1--- */
 
