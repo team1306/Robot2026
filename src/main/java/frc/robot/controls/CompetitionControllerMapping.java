@@ -47,8 +47,31 @@ public class CompetitionControllerMapping extends ControllerMapping {
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
+    driverController.a().whileTrue(indexer.indexUntilCancelledCommand(0.5));
 
-    driverController.a().onTrue(intake.deployCommand());
+    driverController
+        .leftTrigger(0.5)
+        .whileTrue(
+            DriveCommands.driveAimLockedCommand(
+                drive,
+                () -> -driverController.getLeftY(),
+                () -> -driverController.getLeftX(),
+                () -> Constants.Locations.blueHub.toTranslation2d(),
+                true));
+
+    driverController
+        .start()
+        .onTrue(
+            Commands.runOnce(
+                    () ->
+                        drive.setPose(
+                            new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
+                    drive)
+                .ignoringDisable(true));
+    driverController
+        .leftTrigger(0.5)
+        .onTrue(Commands.runOnce(() -> intake.setDutyCycle(1)))
+        .onFalse(Commands.runOnce(() -> intake.setDutyCycle(0)));
   }
 
   @Override
