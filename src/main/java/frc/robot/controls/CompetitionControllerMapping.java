@@ -209,6 +209,9 @@ public class CompetitionControllerMapping extends ControllerMapping {
                         () -> operatorController.setRumble(RumbleType.kBothRumble, 0.25))))
         .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
 
+    // Deploy Intake
+    operatorController.x().onTrue(intake.deployCommand());
+
     // Overides
 
     // Force Indexer
