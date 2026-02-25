@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
@@ -55,7 +55,8 @@ public class Intake extends SubsystemBase {
 
   public Command deployAtDutyCycleCommand(double dutyCycle) {
     Logger.recordOutput("Intake/Deployer Duty Cycle Setpoint", dutyCycle);
-    return new StartEndCommand(() -> intakeIO.setDeployerDutyCycle(dutyCycle), () -> intakeIO.setDeployerDutyCycle(0));
+    return new StartEndCommand(
+        () -> intakeIO.setDeployerDutyCycle(dutyCycle), () -> intakeIO.setDeployerDutyCycle(0));
   }
 
   public Command deployCommand() {
