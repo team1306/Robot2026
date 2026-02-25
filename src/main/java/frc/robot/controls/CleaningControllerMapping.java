@@ -40,7 +40,6 @@ public class CleaningControllerMapping extends ControllerMapping {
     driverController
         .x()
         .whileTrue(ShooterCommands.shootAtSpeedCommand(shooter, RotationsPerSecond.of(0.5)));
-
     driverController.y().whileTrue(intake.deployAtDutyCycleCommand(-0.25));
   }
 
