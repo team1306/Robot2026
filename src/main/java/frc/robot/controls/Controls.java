@@ -41,7 +41,7 @@ public class Controls {
 
     mappings.put(
         ControlStates.COMPETITION,
-        new CompetitionControllerMapping(
+        new BangBangControllerMapping(
             driverController, operatorController, drivetrain, intake, indexer, shooter));
     mappings.put(
         ControlStates.TEST_ONLY_REMOVE_ME,
@@ -49,6 +49,10 @@ public class Controls {
     mappings.put(
         ControlStates.SYSID,
         new SysIdControllerMapping(driverController, operatorController, drivetrain));
+    mappings.put(
+        ControlStates.BANG_BANG,
+        new BangBangControllerMapping(
+            driverController, operatorController, drivetrain, intake, indexer, shooter));
 
     Consumer<Enum<ControlStates>> onChange =
         (nextState) -> {
