@@ -9,36 +9,38 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.LocationUtils;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class ShootOnTheMoveCommand extends ParallelCommandGroup {
-  private Translation2d leadTarget;
 
   public ShootOnTheMoveCommand(
       Drive drive,
       Shooter shooter,
+      Indexer indexer,
+      Intake intake,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
-      Translation2d target) {
+      Supplier<Translation2d> target,
+      BooleanSupplier override) {
     addCommands(
-        new RunCommand(() -> leadTarget = calculateLeadTarget(drive)),
-        ShooterCommands.shootAtDistanceCommand(
-            shooter,
-            () ->
-                LocationUtils.getDistanceToLocation(drive.getPose().getTranslation(), leadTarget)),
-        new DriveAtAngleCommand(
+        new SafeShootCommand(
             drive,
+            shooter,
+            indexer,
+            intake,
             xSupplier,
             ySupplier,
-            () ->
-                LocationUtils.getDirectionToLocation(
-                    drive.getPose().getTranslation(), leadTarget)));
+            () -> calculateLeadTarget(drive),
+            override));
   }
 
   private Translation2d calculateLeadTarget(Drive drive) {

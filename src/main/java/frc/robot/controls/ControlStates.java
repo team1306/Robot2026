@@ -5,4 +5,5 @@ public enum ControlStates {
   CLEANING,
   SYSID,
   TEST_ONLY_REMOVE_ME,
+  SHOOT_ON_THE_MOVE,
 }

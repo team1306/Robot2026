@@ -40,7 +40,7 @@ public class Controls {
 
     mappings.put(
         ControlStates.COMPETITION,
-        new CompetitionControllerMapping(
+        new ShootOnTheMoveControllerMapping(
             driverController,
             operatorController,
             drivetrain,
@@ -56,6 +56,10 @@ public class Controls {
         new SysIdControllerMapping(driverController, operatorController, drivetrain));
     mappings.put(
         ControlStates.CLEANING,
+        new CleaningControllerMapping(
+            driverController, operatorController, intake, indexer, shooter));
+    mappings.put(
+        ControlStates.SHOOT_ON_THE_MOVE,
         new CleaningControllerMapping(
             driverController, operatorController, intake, indexer, shooter));
 
