@@ -189,8 +189,10 @@ public class CompetitionControllerMapping extends ControllerMapping {
                         () ->
                             operatorController.setRumble(
                                 RumbleType.kBothRumble, operatorController.getLeftTriggerAxis()))))
-        .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)).ignoringDisable(true));
-    
+        .onFalse(
+            new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0))
+                .ignoringDisable(true));
+
     // Spool Shooter
     operatorController
         .rightTrigger()
