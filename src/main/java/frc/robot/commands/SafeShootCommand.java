@@ -1,8 +1,11 @@
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.Meters;
 
+import badgerutils.networktables.LoggedNetworkTablesBuilder;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -17,6 +20,8 @@ import org.littletonrobotics.junction.Logger;
 
 public class SafeShootCommand extends ParallelCommandGroup {
 
+  private static final Distance MINIMUM_SHOT_DISTANCE = Feet.of(8);
+
   public SafeShootCommand(
       Drive drive,
       Shooter shooter,
@@ -27,6 +32,9 @@ public class SafeShootCommand extends ParallelCommandGroup {
       Supplier<Translation2d> positionSupplier,
       BooleanSupplier override) {
 
+    BooleanSupplier autoRangingOverride =
+        LoggedNetworkTablesBuilder.createLoggedButton("Controls/Disable Auto Ranging");
+
     Command shootAtDistanceCommand =
         ShooterCommands.shootAtDistanceCommand(
             shooter,
@@ -35,38 +43,57 @@ public class SafeShootCommand extends ParallelCommandGroup {
         DriveCommands.driveAimLockedCommand(drive, xSupplier, ySupplier, positionSupplier, true);
     Command indexerCommand = indexer.indexUntilCancelledCommand(1);
     Command intakeCommand = intake.jumbleIntake();
+    Command moveIntoRangeCommand =
+        new MoveIntoRangeCommand(drive, positionSupplier.get(), MINIMUM_SHOT_DISTANCE);
 
     BooleanSupplier shooterVelocityCondition = shooter.isAtRequestedSpeed();
-
     BooleanSupplier driveAngleCondition = () -> drive.isLocked(drive, positionSupplier.get(), true);
+    BooleanSupplier fartherThanCondition =
+        () -> drive.fartherThan(positionSupplier.get(), MINIMUM_SHOT_DISTANCE);
 
     BooleanSupplier shootCondition =
         () ->
             override.getAsBoolean()
-                || (shooterVelocityCondition.getAsBoolean() && driveAngleCondition.getAsBoolean());
+                || (shooterVelocityCondition.getAsBoolean()
+                    && driveAngleCondition.getAsBoolean()
+                    && (fartherThanCondition.getAsBoolean() != autoRangingOverride.getAsBoolean()));
 
     Command guardedIndexerCommand = new GuardedCommand(indexerCommand, shootCondition);
-
     Command guardedIntakeCommand = new GuardedCommand(intakeCommand, shootCondition);
+    Command guardedRangeCommand =
+        new GuardedCommand(
+            moveIntoRangeCommand,
+            driveAngleCondition,
+            () -> !fartherThanCondition.getAsBoolean(),
+            () -> !autoRangingOverride.getAsBoolean());
 
     Command loggedGuardCommand =
-        Commands.run(() -> logConditions(shooterVelocityCondition, driveAngleCondition));
+        Commands.run(
+            () ->
+                logConditions(
+                    shootCondition,
+                    shooterVelocityCondition,
+                    driveAngleCondition,
+                    fartherThanCondition));
 
     addCommands(
         shootAtDistanceCommand,
         driveAtAngleCommand,
         guardedIndexerCommand,
         guardedIntakeCommand,
-        loggedGuardCommand);
+        loggedGuardCommand,
+        guardedRangeCommand);
   }
 
   private void logConditions(
-      BooleanSupplier shooterVelocityCondition, BooleanSupplier driveAngleCondition) {
-    Logger.recordOutput(
-        "Controls/Ready To Shoot",
-        shooterVelocityCondition.getAsBoolean() && driveAngleCondition.getAsBoolean());
+      BooleanSupplier canShootCondition,
+      BooleanSupplier shooterVelocityCondition,
+      BooleanSupplier driveAngleCondition,
+      BooleanSupplier fartherThanCondition) {
+    Logger.recordOutput("Controls/Ready To Shoot", canShootCondition.getAsBoolean());
     Logger.recordOutput(
         "Controls/Shooter Velocity Condition", shooterVelocityCondition.getAsBoolean());
     Logger.recordOutput("Controls/Drive Angle Condition", driveAngleCondition.getAsBoolean());
+    Logger.recordOutput("Controls/Within Distance Condition", fartherThanCondition.getAsBoolean());
   }
 }
