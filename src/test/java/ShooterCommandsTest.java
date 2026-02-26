@@ -1,6 +1,5 @@
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Seconds;
 import static org.junit.jupiter.api.Assertions.*;
 
 import frc.robot.commands.ShooterCommands;
@@ -21,41 +20,29 @@ public class ShooterCommandsTest {
   void distanceInterpolationTest() {
     assertEquals(
         0,
-        ShooterCommands.interpolateSetpoints(testSetpoints, Meters.of(-5))
-            .velocity()
-            .in(RotationsPerSecond),
+        ShooterCommands.interpolateSetpoints(testSetpoints, Meters.of(-5)).in(RotationsPerSecond),
         delta);
     assertEquals(
         0,
-        ShooterCommands.interpolateSetpoints(testSetpoints, Meters.of(0))
-            .velocity()
-            .in(RotationsPerSecond),
+        ShooterCommands.interpolateSetpoints(testSetpoints, Meters.of(0)).in(RotationsPerSecond),
         delta);
 
     assertEquals(
         0.25,
-        ShooterCommands.interpolateSetpoints(testSetpoints, Meters.of(2.5))
-            .velocity()
-            .in(RotationsPerSecond),
+        ShooterCommands.interpolateSetpoints(testSetpoints, Meters.of(2.5)).in(RotationsPerSecond),
         delta);
     assertEquals(
         0.75,
-        ShooterCommands.interpolateSetpoints(testSetpoints, Meters.of(7.5))
-            .velocity()
-            .in(RotationsPerSecond),
+        ShooterCommands.interpolateSetpoints(testSetpoints, Meters.of(7.5)).in(RotationsPerSecond),
         delta);
 
     assertEquals(
         1,
-        ShooterCommands.interpolateSetpoints(testSetpoints, Meters.of(10))
-            .velocity()
-            .in(RotationsPerSecond),
+        ShooterCommands.interpolateSetpoints(testSetpoints, Meters.of(10)).in(RotationsPerSecond),
         delta);
     assertEquals(
         1,
-        ShooterCommands.interpolateSetpoints(testSetpoints, Meters.of(15))
-            .velocity()
-            .in(RotationsPerSecond),
+        ShooterCommands.interpolateSetpoints(testSetpoints, Meters.of(15)).in(RotationsPerSecond),
         delta);
   }
 }
