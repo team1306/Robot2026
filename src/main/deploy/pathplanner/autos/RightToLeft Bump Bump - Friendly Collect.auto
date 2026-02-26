@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightToLeft - Friendly Collect"
+            "pathName": "RightToLeft Bump Bump - Friendly Collect"
           }
         },
         {
@@ -26,6 +26,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Sussex",
   "choreoAuto": false
 }

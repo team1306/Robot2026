@@ -33,14 +33,15 @@ public class CleaningControllerMapping extends ControllerMapping {
 
   @Override
   public void bind() {
-    driverController.a().whileTrue(intake.intakeUntilInterruptedCommand(0.05));
+    driverController.a().whileTrue(intake.intakeUntilInterruptedCommand(0.08));
 
     driverController.b().whileTrue(indexer.indexUntilCancelledCommand(0.05));
 
     driverController
         .x()
-        .whileTrue(ShooterCommands.shootAtSpeedCommand(shooter, RotationsPerSecond.of(0.5)));
-    driverController.y().whileTrue(intake.deployAtDutyCycleCommand(-0.25));
+        .whileTrue(ShooterCommands.shootAtSpeedCommand(shooter, RotationsPerSecond.of(0.75)));
+
+    driverController.y().whileTrue(intake.deployAtDutyCycleCommand(-0.5));
   }
 
   @Override
