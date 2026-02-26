@@ -16,6 +16,7 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class SafeShootCommand extends ParallelCommandGroup {
+  private static double INDEXER_SPEED = 0.5;
 
   public SafeShootCommand(
       Drive drive,
@@ -33,7 +34,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
             () -> Meters.of(drive.getPose().getTranslation().getDistance(positionSupplier.get())));
     Command driveAtAngleCommand =
         DriveCommands.driveAimLockedCommand(drive, xSupplier, ySupplier, positionSupplier, true);
-    Command indexerCommand = indexer.indexUntilCancelledCommand(1);
+    Command indexerCommand = indexer.indexUntilCancelledCommand(INDEXER_SPEED);
     Command intakeCommand = intake.jumbleIntake();
 
     BooleanSupplier shooterVelocityCondition = shooter.isAtRequestedSpeed();

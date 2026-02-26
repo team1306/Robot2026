@@ -103,7 +103,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .whileTrue(
             intake
                 .intakeUntilInterruptedCommand(
-                    () -> operatorController.rightStick().getAsBoolean() ? 0.5 : 0.75)
+                    () -> operatorController.rightStick().getAsBoolean() ? 0.5 : 1)
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
     // Fuel Collection
