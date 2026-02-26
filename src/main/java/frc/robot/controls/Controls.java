@@ -49,9 +49,6 @@ public class Controls {
             indexer,
             fuelDetection));
     mappings.put(
-        ControlStates.TEST_ONLY_REMOVE_ME,
-        new RemoveMeControllerMapping(driverController, operatorController));
-    mappings.put(
         ControlStates.SYSID,
         new SysIdControllerMapping(driverController, operatorController, drivetrain));
     mappings.put(

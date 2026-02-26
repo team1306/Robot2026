@@ -4,5 +4,4 @@ public enum ControlStates {
   COMPETITION,
   CLEANING,
   SYSID,
-  TEST_ONLY_REMOVE_ME,
 }

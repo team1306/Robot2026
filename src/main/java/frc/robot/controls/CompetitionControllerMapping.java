@@ -82,7 +82,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 () -> -driverController.getLeftX(),
                 () -> -driverController.getRightX())
             .alongWith(logWithinRangeCommand));
-    driverController.a().whileTrue(indexer.indexUntilCancelledCommand(0.5));
 
     /* ---P1--- */
 
@@ -190,20 +189,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
                         () ->
                             operatorController.setRumble(
                                 RumbleType.kBothRumble, operatorController.getLeftTriggerAxis()))))
-        .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
-    /*
-       operatorController
-           .leftTrigger(0.1)
-           .whileTrue(
-               intake
-                   .jumbleIntake()
-                   .alongWith(
-                       new InstantCommand(
-                           () ->
-                               operatorController.setRumble(
-                                   RumbleType.kBothRumble, operatorController.getLeftTriggerAxis()))))
-           .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
-    */
+        .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)).ignoringDisable(true));
+    
     // Spool Shooter
     operatorController
         .rightTrigger()
