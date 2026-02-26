@@ -27,7 +27,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "left-right-bump"
+                        "pathName": null
                       }
                     },
                     {

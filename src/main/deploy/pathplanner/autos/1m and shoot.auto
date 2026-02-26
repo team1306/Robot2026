@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "1m and shoot"
           }
         },
         {
@@ -20,6 +20,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Testing",
   "choreoAuto": false
 }

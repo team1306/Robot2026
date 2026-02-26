@@ -9,6 +9,9 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.fueldetection.FuelDetection;
+import frc.robot.subsystems.fueldetection.FuelDetectionIO;
+import frc.robot.subsystems.fueldetection.FuelDetectionReal;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIOReal;
@@ -16,12 +19,14 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOReal;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOReal;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
+import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,9 +41,13 @@ public class RobotContainer {
   private final Intake intake;
   private final Indexer indexer;
   private final Shooter shooter;
+  private final FuelDetection fuelDetection;
 
   private final Controls controls;
   private final Autos autos;
+
+  // Initializing constants for tuning
+  private final ShooterConstants shooterConstants = new ShooterConstants();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -58,15 +67,18 @@ public class RobotContainer {
             new Vision(
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVision(
-                    VisionConstants.LEFT_CAMERA_NAME, VisionConstants.LEFT_CAMERA_POSITION),
+                    VisionConstants.LEFT_BACK_CAMERA_NAME,
+                    VisionConstants.LEFT_BACK_CAMERA_POSITION),
                 new VisionIOPhotonVision(
-                    VisionConstants.BACK_LEFT_CAMERA_NAME,
-                    VisionConstants.BACK_LEFT_CAMERA_POSITION),
+                    VisionConstants.LEFT_SIDE_CAMERA_NAME,
+                    VisionConstants.LEFT_SIDE_CAMERA_POSITION),
                 new VisionIOPhotonVision(
-                    VisionConstants.BACK_RIGHT_CAMERA_NAME,
-                    VisionConstants.BACK_RIGHT_CAMERA_POSITION),
+                    VisionConstants.RIGHT_BACK_CAMERA_NAME,
+                    VisionConstants.RIGHT_BACK_CAMERA_POSITION),
                 new VisionIOPhotonVision(
-                    VisionConstants.RIGHT_CAMERA_NAME, VisionConstants.RIGHT_CAMERA_POSITION));
+                    VisionConstants.RIGHT_SIDE_CAMERA_NAME,
+                    VisionConstants.RIGHT_SIDE_CAMERA_POSITION));
+        fuelDetection = new FuelDetection(new FuelDetectionReal());
         break;
 
       case SIM:
@@ -84,10 +96,23 @@ public class RobotContainer {
         vision =
             new Vision(
                 drive::addVisionMeasurement,
-                new VisionIO() {},
-                new VisionIO() {},
-                new VisionIO() {},
-                new VisionIO() {});
+                new VisionIOPhotonVisionSim(
+                    VisionConstants.LEFT_BACK_CAMERA_NAME,
+                    VisionConstants.LEFT_BACK_CAMERA_POSITION,
+                    () -> drive.getPose()),
+                new VisionIOPhotonVisionSim(
+                    VisionConstants.LEFT_SIDE_CAMERA_NAME,
+                    VisionConstants.LEFT_SIDE_CAMERA_POSITION,
+                    () -> drive.getPose()),
+                new VisionIOPhotonVisionSim(
+                    VisionConstants.RIGHT_BACK_CAMERA_NAME,
+                    VisionConstants.RIGHT_BACK_CAMERA_POSITION,
+                    () -> drive.getPose()),
+                new VisionIOPhotonVisionSim(
+                    VisionConstants.RIGHT_SIDE_CAMERA_NAME,
+                    VisionConstants.RIGHT_SIDE_CAMERA_POSITION,
+                    () -> drive.getPose()));
+        fuelDetection = new FuelDetection(new FuelDetectionReal());
         break;
 
       default:
@@ -109,11 +134,12 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {},
                 new VisionIO() {});
+        fuelDetection = new FuelDetection(new FuelDetectionIO() {});
         break;
     }
 
-    controls = new Controls(drive, shooter, intake);
-    autos = new Autos(drive);
+    controls = new Controls(drive, intake, shooter, indexer, fuelDetection);
+    autos = new Autos(drive, indexer, intake, shooter);
   }
 
   public Command getAutonomousCommand() {

@@ -35,6 +35,7 @@ public class IntakeIOReal implements IntakeIO {
 
   // control
   private final PositionTorqueCurrentFOC deployerPositionRequest;
+  private final DutyCycleOut deployerDutyCycleRequest;
   private final DutyCycleOut dutyCycleRequest;
 
   public IntakeIOReal() {
@@ -44,8 +45,8 @@ public class IntakeIOReal implements IntakeIO {
     deployerMotor = new TalonFX(Constants.CanIds.DEPLOYER_MOTOR_ID);
 
     // configs
-    leftMotor.getConfigurator().apply(IntakeConstants.CW_INTAKE_MOTOR_CONFIGS);
-    rightMotor.getConfigurator().apply(IntakeConstants.CCW_INTAKE_MOTOR_CONFIGS);
+    leftMotor.getConfigurator().apply(IntakeConstants.CCW_INTAKE_MOTOR_CONFIGS);
+    rightMotor.getConfigurator().apply(IntakeConstants.CW_INTAKE_MOTOR_CONFIGS);
     deployerMotor.getConfigurator().apply(IntakeConstants.DEPLOYER_MOTOR_CONFIGS);
 
     leftSupplyCurrent = leftMotor.getSupplyCurrent();
@@ -62,6 +63,7 @@ public class IntakeIOReal implements IntakeIO {
 
     // control
     deployerPositionRequest = new PositionTorqueCurrentFOC(Degrees.of(0));
+    deployerDutyCycleRequest = new DutyCycleOut(0).withEnableFOC(true);
     dutyCycleRequest = new DutyCycleOut(0).withEnableFOC(true);
   }
 
@@ -93,12 +95,17 @@ public class IntakeIOReal implements IntakeIO {
 
   @Override
   public void setDutyCycle(double dutyCycle) {
-    leftMotor.setControl(this.dutyCycleRequest.withOutput(dutyCycle));
-    rightMotor.setControl(this.dutyCycleRequest.withOutput(dutyCycle));
+    leftMotor.setControl(dutyCycleRequest.withOutput(dutyCycle));
+    rightMotor.setControl(dutyCycleRequest.withOutput(dutyCycle));
   }
 
   @Override
   public void setDeployerPosition(Angle angle) {
     deployerMotor.setControl(deployerPositionRequest.withPosition(angle));
+  }
+
+  @Override
+  public void setDeployerDutyCycle(double dutyCycle) {
+    deployerMotor.setControl(deployerDutyCycleRequest.withOutput(dutyCycle));
   }
 }
