@@ -1,11 +1,13 @@
 package frc.robot.controls;
 
+import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import badgerutils.commands.CommandUtils;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -51,6 +53,16 @@ public class CompetitionControllerMapping extends ControllerMapping {
 
   @Override
   public void bind() {
+    Command logWithinRangeCommand =
+        Commands.run(
+            () ->
+                SmartDashboard.putBoolean(
+                    "Controls/In Range",
+                    LocationUtils.getDistanceToLocation(
+                            drive.getPose().getTranslation(),
+                            RebuiltUtils.getCurrentHubLocation().toTranslation2d())
+                        .gt(Feet.of(7.5))));
+
     Command loggedTargetCommand =
         Commands.run(
             () ->
@@ -65,10 +77,11 @@ public class CompetitionControllerMapping extends ControllerMapping {
     // Drive with stick
     drive.setDefaultCommand(
         DriveCommands.joystickDriveCommand(
-            drive,
-            () -> -driverController.getLeftY(),
-            () -> -driverController.getLeftX(),
-            () -> -driverController.getRightX()));
+                drive,
+                () -> -driverController.getLeftY(),
+                () -> -driverController.getLeftX(),
+                () -> -driverController.getRightX())
+            .alongWith(logWithinRangeCommand));
     driverController.a().whileTrue(indexer.indexUntilCancelledCommand(0.5));
 
     /* ---P1--- */
@@ -90,7 +103,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .whileTrue(
             intake
                 .intakeUntilInterruptedCommand(
-                    () -> operatorController.rightStick().getAsBoolean() ? 0.5 : 0.75)
+                    () -> operatorController.rightStick().getAsBoolean() ? 0.5 : 1)
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
     // Fuel Collection
