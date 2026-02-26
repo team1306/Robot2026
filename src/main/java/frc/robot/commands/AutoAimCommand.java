@@ -26,7 +26,8 @@ public class AutoAimCommand extends ParallelCommandGroup {
             drive,
             xSupplier,
             ySupplier,
-            () -> new Translation2d(getResultantVector(drive, getHubTranslation())));
+            () -> new Translation2d(getResultantVector(drive, getHubTranslation())),
+            true);
 
     Command shooterSpeedCommand =
         ShooterCommands.shootAtDistanceCommand(

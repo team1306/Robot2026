@@ -3,6 +3,7 @@ package frc.robot.commands;
 import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
@@ -16,13 +17,18 @@ import frc.robot.util.Interpolation;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
 public class ShooterCommands {
 
   public static final ShooterSetpoint[] SETPOINTS =
       Arrays.stream(
               new ShooterSetpoint[] {
+                new ShooterSetpoint(Meters.of(0), RotationsPerSecond.of(0), Seconds.of(0)),
+                new ShooterSetpoint(Meters.of(1), RotationsPerSecond.of(10), Seconds.of(0.15)),
+                new ShooterSetpoint(Meters.of(2), RotationsPerSecond.of(20), Seconds.of(0.30)),
+                new ShooterSetpoint(Meters.of(3), RotationsPerSecond.of(30), Seconds.of(0.45)),
+                new ShooterSetpoint(Meters.of(4), RotationsPerSecond.of(40), Seconds.of(0.70)),
+                new ShooterSetpoint(Meters.of(5), RotationsPerSecond.of(50), Seconds.of(0.85)),
                 new ShooterSetpoint(Feet.of(7.5), RotationsPerSecond.of(41), Seconds.of(0.7875)),
                 new ShooterSetpoint(Feet.of(9), RotationsPerSecond.of(42), Seconds.of(0.8209)),
                 new ShooterSetpoint(Feet.of(12), RotationsPerSecond.of(48), Seconds.of(1.0416)),
@@ -32,7 +38,7 @@ public class ShooterCommands {
           .sorted()
           .toArray(ShooterSetpoint[]::new);
 
-  public static AngularVelocity interpolateSetpoints(
+  public static ShooterSetpoint interpolateSetpoints(
       ShooterSetpoint[] setpoints, Distance distance) {
     Optional<ShooterSetpoint> firstSetpointOptional =
         Arrays.stream(setpoints)
@@ -43,9 +49,9 @@ public class ShooterCommands {
         Arrays.stream(setpoints).filter(setpoint -> setpoint.distance.gte(distance)).findFirst();
 
     if (firstSetpointOptional.isEmpty() && secondSetpointOptional.isEmpty())
-      return RotationsPerSecond.of(0);
-    else if (firstSetpointOptional.isEmpty()) return secondSetpointOptional.get().velocity;
-    else if (secondSetpointOptional.isEmpty()) return firstSetpointOptional.get().velocity;
+      return new ShooterSetpoint(Meters.of(0), RotationsPerSecond.of(0), Seconds.of(0));
+    else if (firstSetpointOptional.isEmpty()) return secondSetpointOptional.get();
+    else if (secondSetpointOptional.isEmpty()) return firstSetpointOptional.get();
 
     ShooterSetpoint firstSetpoint = firstSetpointOptional.get();
     ShooterSetpoint secondSetpoint = secondSetpointOptional.get();
@@ -55,7 +61,7 @@ public class ShooterCommands {
             firstSetpoint.distance.in(Meters),
             secondSetpoint.distance.in(Meters),
             distance.in(Meters));
-    double lerpedValue =
+    double lerpedVelocity =
         Interpolation.lerp(
             firstSetpoint.velocity.in(RotationsPerSecond),
             secondSetpoint.velocity.in(RotationsPerSecond),
@@ -87,7 +93,7 @@ public class ShooterCommands {
         new WaitCommand(time), shootAtDistanceCommand(shooter, distanceSupplier));
   }
 
-  public record ShooterSetpoint(Distance distance, AngularVelocity velocity)
+  public record ShooterSetpoint(Distance distance, AngularVelocity velocity, Time time)
       implements Comparable<ShooterSetpoint> {
     @Override
     public int compareTo(ShooterSetpoint o) {
