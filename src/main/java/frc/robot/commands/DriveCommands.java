@@ -23,7 +23,7 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 public class DriveCommands {
-  private static final double DEADBAND = 0.1;
+  public static final double DEADBAND = 0.1;
   private static final double FF_START_DELAY = 2.0; // Secs
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
@@ -49,12 +49,15 @@ public class DriveCommands {
       Drive drive,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
-      Supplier<Translation2d> pose) {
+      Supplier<Translation2d> pose,
+      boolean isBackward) {
     return new DriveAtAngleCommand(
         drive,
         xSupplier,
         ySupplier,
-        () -> LocationUtils.getDirectionToLocation(drive.getPose().getTranslation(), pose.get()));
+        () ->
+            LocationUtils.getDirectionToLocation(drive.getPose().getTranslation(), pose.get())
+                .plus(isBackward ? Rotation2d.k180deg : Rotation2d.kZero));
   }
 
   /**
@@ -226,6 +229,31 @@ public class DriveCommands {
                               + formatter.format(Units.metersToInches(wheelRadius))
                               + " inches");
                     })));
+  }
+
+  @SuppressWarnings("DuplicatedCode")
+  public static Command robotRelativeAngularVelocityCommand(
+      Drive drive,
+      DoubleSupplier xSupplier,
+      DoubleSupplier ySupplier,
+      DoubleSupplier omegaSupplier) {
+    return Commands.runEnd(
+        () -> {
+          double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
+
+          omega = Math.copySign(omega * omega, omega);
+
+          // Convert to field relative speeds & send command
+          ChassisSpeeds speeds =
+              new ChassisSpeeds(
+                  xSupplier.getAsDouble() * drive.getMaxLinearSpeedMetersPerSec(),
+                  ySupplier.getAsDouble() * drive.getMaxLinearSpeedMetersPerSec(),
+                  omega * drive.getMaxAngularSpeedRadPerSec());
+
+          drive.runVelocity(speeds);
+        },
+        drive::stop,
+        drive);
   }
 
   private static class WheelRadiusCharacterizationState {
