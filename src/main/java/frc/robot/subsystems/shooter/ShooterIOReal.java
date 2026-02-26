@@ -5,12 +5,14 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -73,9 +75,12 @@ public class ShooterIOReal implements ShooterIO {
 
   private final CANcoder encoder;
 
+  private final BangBangController bangBangController;
+
   private final VelocityTorqueCurrentFOC velocityRequest;
   private final NeutralOut neutralRequest;
   private final VoltageOut voltageRequest;
+  private final DutyCycleOut dutyCycleRequest;
 
   public ShooterIOReal() {
     KP_SUPPLIER.addSubscriber(value -> updatePIDFromTunables());
@@ -86,6 +91,9 @@ public class ShooterIOReal implements ShooterIO {
     velocityRequest = new VelocityTorqueCurrentFOC(0);
     neutralRequest = new NeutralOut();
     voltageRequest = new VoltageOut(0).withEnableFOC(true);
+    dutyCycleRequest = new DutyCycleOut(0).withEnableFOC(true);
+
+    bangBangController = new BangBangController(ShooterConstants.ERROR_THRESHOLD);
 
     // CAN Device Initialization
     leftTopMotor = new TalonFX(Constants.CanIds.SHOOTER_LEFT_TOP_MOTOR_ID);
@@ -220,6 +228,14 @@ public class ShooterIOReal implements ShooterIO {
     leftBottomMotor.setControl(velocityRequest.withVelocity(velocity));
     rightTopMotor.setControl(velocityRequest.withVelocity(velocity));
     rightBottomMotor.setControl(velocityRequest.withVelocity(velocity));
+  }
+
+  @Override
+  public void setDutyCycle(double dutyCycle) {
+    leftTopMotor.setControl(dutyCycleRequest.withOutput(dutyCycle));
+    leftBottomMotor.setControl(dutyCycleRequest.withOutput(dutyCycle));
+    rightTopMotor.setControl(dutyCycleRequest.withOutput(dutyCycle));
+    rightBottomMotor.setControl(dutyCycleRequest.withOutput(dutyCycle));
   }
 
   @Override

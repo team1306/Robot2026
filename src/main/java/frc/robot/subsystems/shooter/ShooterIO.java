@@ -58,6 +58,8 @@ public interface ShooterIO {
 
   default void setVelocity(AngularVelocity velocity) {}
 
+  default void setDutyCycle(double dutyCycle) {}
+
   default void setIdle() {}
 
   default void runCharacterization(Voltage voltage) {}

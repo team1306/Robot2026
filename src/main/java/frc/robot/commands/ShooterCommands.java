@@ -10,6 +10,7 @@ import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.Interpolation;
@@ -78,6 +79,12 @@ public class ShooterCommands {
       Shooter shooter, Supplier<Distance> distanceSupplier, Time time) {
     return new ParallelDeadlineGroup(
         new WaitCommand(time), shootAtDistanceCommand(shooter, distanceSupplier));
+  }
+
+  public static Command shootBangBangCommand(Shooter shooter, Supplier<Distance> distanceSupplier) {
+    return new RunCommand(
+        () -> shooter.runBangBang(interpolateSetpoints(SETPOINTS, distanceSupplier.get())),
+        shooter);
   }
 
   public record ShooterSetpoint(Distance distance, AngularVelocity velocity)
