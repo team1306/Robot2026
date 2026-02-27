@@ -80,6 +80,8 @@ public class Robot extends LoggedRobot {
     // the Command-based framework to work.
     CommandScheduler.getInstance().run();
     SmartDashboard.putBoolean("isHubActive", RebuiltUtils.isHubActive());
+    SmartDashboard.putString("CurrentShift", RebuiltUtils.getAllianceShift().toString());
+    SmartDashboard.putNumber("ShiftTime", RebuiltUtils.getShiftTime());
     // Return to non-RT thread priority (do not modify the first argument)
     // Threads.setCurrentThreadPriority(false, 10);
   }
