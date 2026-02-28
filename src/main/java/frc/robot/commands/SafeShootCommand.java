@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
-import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -54,10 +53,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
         Commands.run(() -> logConditions(shooterVelocityCondition, driveAngleCondition));
 
     addCommands(
-        shootAtDistanceCommand,
-        driveAtAngleCommand,
-        guardedIndexerCommand,
-        loggedGuardCommand);
+        shootAtDistanceCommand, driveAtAngleCommand, guardedIndexerCommand, loggedGuardCommand);
   }
 
   private void logConditions(

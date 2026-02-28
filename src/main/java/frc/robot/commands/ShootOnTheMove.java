@@ -31,13 +31,7 @@ public class ShootOnTheMove {
       Supplier<Translation2d> target,
       BooleanSupplier override) {
     return new SafeShootCommand(
-        drive,
-        shooter,
-        indexer,
-        xSupplier,
-        ySupplier,
-        () -> calculateLeadTarget(drive),
-        override);
+        drive, shooter, indexer, xSupplier, ySupplier, () -> calculateLeadTarget(drive), override);
   }
 
   private static Translation2d calculateLeadTarget(Drive drive) {

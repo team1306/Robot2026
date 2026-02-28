@@ -97,7 +97,8 @@ public class Autos {
                 () -> 0,
                 () -> 0,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                () -> false).alongWith(intake.intakeUntilInterruptedCommand(0.5))
+                () -> false)
+            .alongWith(intake.intakeUntilInterruptedCommand(0.5))
             .withDeadline(Commands.waitTime(STARTING_FUEL_SHOOT_DURATION)));
 
     NamedCommands.registerCommand("intake", intake.intakeAtDutyCycleCommand(0.5));
@@ -121,13 +122,14 @@ public class Autos {
     NamedCommands.registerCommand(
         "shoot-until-done",
         new SafeShootCommand(
-            drive,
-            shooter,
-            indexer,
-            () -> 0,
-            () -> 0,
-            () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-            () -> false).alongWith(intake.intakeUntilInterruptedCommand(0.5)));
+                drive,
+                shooter,
+                indexer,
+                () -> 0,
+                () -> 0,
+                () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                () -> false)
+            .alongWith(intake.intakeUntilInterruptedCommand(0.5)));
   }
 
   public static final class Auto {
