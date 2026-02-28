@@ -21,6 +21,8 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class ShootOnTheMove {
+  private static double SLOWDOWN_FACTOR = 0.1;
+
   public static Command shootOnTheMoveCommand(
       Drive drive,
       Shooter shooter,
@@ -31,7 +33,7 @@ public class ShootOnTheMove {
       Supplier<Translation2d> target,
       BooleanSupplier override) {
     return new SafeShootCommand(
-        drive, shooter, indexer, xSupplier, ySupplier, () -> calculateLeadTarget(drive), override);
+        drive, shooter, indexer, () -> xSupplier.getAsDouble() * SLOWDOWN_FACTOR, () -> ySupplier.getAsDouble() * SLOWDOWN_FACTOR, () -> calculateLeadTarget(drive), override);
   }
 
   private static Translation2d calculateLeadTarget(Drive drive) {
