@@ -20,13 +20,11 @@ public class SafeShootCommand extends ParallelCommandGroup {
   private static Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(5);
 
   private static double INDEXER_SPEED = 0.5;
-  private static double INTAKE_SPEED = 0.5;
 
   public SafeShootCommand(
       Drive drive,
       Shooter shooter,
       Indexer indexer,
-      Intake intake,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       Supplier<Translation2d> positionSupplier,
@@ -39,7 +37,6 @@ public class SafeShootCommand extends ParallelCommandGroup {
     Command driveAtAngleCommand =
         DriveCommands.driveAimLockedCommand(drive, xSupplier, ySupplier, positionSupplier, true);
     Command indexerCommand = indexer.indexUntilCancelledCommand(INDEXER_SPEED);
-    Command intakeCommand = intake.intakeUntilInterruptedCommand(INTAKE_SPEED);
 
     BooleanSupplier shooterVelocityCondition = shooter.isAtRequestedSpeed();
 
@@ -53,8 +50,6 @@ public class SafeShootCommand extends ParallelCommandGroup {
 
     Command guardedIndexerCommand = new GuardedCommand(indexerCommand, shootCondition);
 
-    Command guardedIntakeCommand = new GuardedCommand(intakeCommand, shootCondition);
-
     Command loggedGuardCommand =
         Commands.run(() -> logConditions(shooterVelocityCondition, driveAngleCondition));
 
@@ -62,7 +57,6 @@ public class SafeShootCommand extends ParallelCommandGroup {
         shootAtDistanceCommand,
         driveAtAngleCommand,
         guardedIndexerCommand,
-        guardedIntakeCommand,
         loggedGuardCommand);
   }
 

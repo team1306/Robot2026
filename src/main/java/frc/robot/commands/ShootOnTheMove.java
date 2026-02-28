@@ -34,7 +34,6 @@ public class ShootOnTheMove {
         drive,
         shooter,
         indexer,
-        intake,
         xSupplier,
         ySupplier,
         () -> calculateLeadTarget(drive),
