@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FaceforwardCommand;
 import frc.robot.commands.FuelCollectionCommand;
-import frc.robot.commands.ShootOnTheMoveCommand;
+import frc.robot.commands.ShootOnTheMove;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.fueldetection.FuelDetection;
@@ -69,7 +69,6 @@ public class ShootOnTheMoveControllerMapping extends ControllerMapping {
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
-    driverController.a().whileTrue(indexer.indexUntilCancelledCommand(0.5));
 
     /* ---P1--- */
 
@@ -118,7 +117,7 @@ public class ShootOnTheMoveControllerMapping extends ControllerMapping {
     driverController
         .rightBumper()
         .whileTrue(
-            new ShootOnTheMoveCommand(
+            ShootOnTheMove.shootOnTheMoveCommand(
                     drive,
                     shooter,
                     indexer,
@@ -133,7 +132,7 @@ public class ShootOnTheMoveControllerMapping extends ControllerMapping {
     driverController
         .leftBumper()
         .whileTrue(
-            new ShootOnTheMoveCommand(
+            ShootOnTheMove.shootOnTheMoveCommand(
                     drive,
                     shooter,
                     indexer,
@@ -148,7 +147,7 @@ public class ShootOnTheMoveControllerMapping extends ControllerMapping {
     driverController
         .rightTrigger()
         .whileTrue(
-            new ShootOnTheMoveCommand(
+            ShootOnTheMove.shootOnTheMoveCommand(
                     drive,
                     shooter,
                     indexer,
