@@ -1,6 +1,7 @@
 package frc.robot.subsystems.indexer;
 
 import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,6 +34,15 @@ public class Indexer extends SubsystemBase {
 
   public Command indexUntilCancelledCommand(double speed) {
     return (Commands.startEnd(() -> setDutyCycle(speed), () -> setDutyCycle(0), this));
+  }
+
+  public Command jumbleIndexer(DoubleSupplier speed) {
+    return (Commands.runEnd(
+        () ->
+            setDutyCycle(
+                Math.sin(RobotController.getFPGATime() * 0.0001) * speed.getAsDouble() * 0.25),
+        () -> setDutyCycle(0),
+        this));
   }
 
   public Command indexForTime(Time time, double speed) {

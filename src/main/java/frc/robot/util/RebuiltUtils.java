@@ -1,12 +1,18 @@
 package frc.robot.util;
 
 import badgerutils.triggers.AllianceTriggers;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants;
+import frc.robot.Constants.Locations;
 import java.util.function.Supplier;
 
 public class RebuiltUtils {
+
+  public static boolean isInAllianceZone(Translation2d position) {
+    return position.getX() <= 4.02844 || position.getX() >= 16.540988 - 4.02844;
+  }
   /**
    * @return The current HUB state on robots alliance
    */
@@ -64,5 +70,22 @@ public class RebuiltUtils {
   public static Supplier<Translation3d> getCurrentHubLocationSupplier() {
     return () ->
         AllianceTriggers.isRedAlliance() ? Constants.Locations.redHub : Constants.Locations.blueHub;
+  }
+
+  public static Translation2d getNearestAllianceCorner(Translation2d currentPosition) {
+    Translation2d leftCorner =
+        AllianceTriggers.isRedAlliance()
+            ? Locations.leftCornerRedLocation
+            : Locations.leftCornerBlueLocation;
+    Translation2d rightCorner =
+        AllianceTriggers.isRedAlliance()
+            ? Locations.rightCornerRedLocation
+            : Locations.rightCornerBlueLocation;
+
+    boolean rightIsCloser =
+        currentPosition.getSquaredDistance(rightCorner)
+            < currentPosition.getSquaredDistance(leftCorner);
+
+    return rightIsCloser ? rightCorner : leftCorner;
   }
 }

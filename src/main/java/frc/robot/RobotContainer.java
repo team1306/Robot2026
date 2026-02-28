@@ -9,6 +9,9 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.fueldetection.FuelDetection;
+import frc.robot.subsystems.fueldetection.FuelDetectionIO;
+import frc.robot.subsystems.fueldetection.FuelDetectionReal;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIOReal;
@@ -38,6 +41,7 @@ public class RobotContainer {
   private final Intake intake;
   private final Indexer indexer;
   private final Shooter shooter;
+  private final FuelDetection fuelDetection;
 
   private final Controls controls;
   private final Autos autos;
@@ -63,15 +67,18 @@ public class RobotContainer {
             new Vision(
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVision(
-                    VisionConstants.LEFT_CAMERA_NAME, VisionConstants.LEFT_CAMERA_POSITION),
+                    VisionConstants.LEFT_BACK_CAMERA_NAME,
+                    VisionConstants.LEFT_BACK_CAMERA_POSITION),
                 new VisionIOPhotonVision(
-                    VisionConstants.BACK_LEFT_CAMERA_NAME,
-                    VisionConstants.BACK_LEFT_CAMERA_POSITION),
+                    VisionConstants.LEFT_SIDE_CAMERA_NAME,
+                    VisionConstants.LEFT_SIDE_CAMERA_POSITION),
                 new VisionIOPhotonVision(
-                    VisionConstants.BACK_RIGHT_CAMERA_NAME,
-                    VisionConstants.BACK_RIGHT_CAMERA_POSITION),
+                    VisionConstants.RIGHT_BACK_CAMERA_NAME,
+                    VisionConstants.RIGHT_BACK_CAMERA_POSITION),
                 new VisionIOPhotonVision(
-                    VisionConstants.RIGHT_CAMERA_NAME, VisionConstants.RIGHT_CAMERA_POSITION));
+                    VisionConstants.RIGHT_SIDE_CAMERA_NAME,
+                    VisionConstants.RIGHT_SIDE_CAMERA_POSITION));
+        fuelDetection = new FuelDetection(new FuelDetectionReal());
         break;
 
       case SIM:
@@ -90,21 +97,22 @@ public class RobotContainer {
             new Vision(
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVisionSim(
-                    VisionConstants.LEFT_CAMERA_NAME,
-                    VisionConstants.LEFT_CAMERA_POSITION,
+                    VisionConstants.LEFT_BACK_CAMERA_NAME,
+                    VisionConstants.LEFT_BACK_CAMERA_POSITION,
                     () -> drive.getPose()),
                 new VisionIOPhotonVisionSim(
-                    VisionConstants.BACK_LEFT_CAMERA_NAME,
-                    VisionConstants.BACK_LEFT_CAMERA_POSITION,
+                    VisionConstants.LEFT_SIDE_CAMERA_NAME,
+                    VisionConstants.LEFT_SIDE_CAMERA_POSITION,
                     () -> drive.getPose()),
                 new VisionIOPhotonVisionSim(
-                    VisionConstants.BACK_RIGHT_CAMERA_NAME,
-                    VisionConstants.BACK_RIGHT_CAMERA_POSITION,
+                    VisionConstants.RIGHT_BACK_CAMERA_NAME,
+                    VisionConstants.RIGHT_BACK_CAMERA_POSITION,
                     () -> drive.getPose()),
                 new VisionIOPhotonVisionSim(
-                    VisionConstants.RIGHT_CAMERA_NAME,
-                    VisionConstants.RIGHT_CAMERA_POSITION,
+                    VisionConstants.RIGHT_SIDE_CAMERA_NAME,
+                    VisionConstants.RIGHT_SIDE_CAMERA_POSITION,
                     () -> drive.getPose()));
+        fuelDetection = new FuelDetection(new FuelDetectionReal());
         break;
 
       default:
@@ -126,11 +134,12 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {},
                 new VisionIO() {});
+        fuelDetection = new FuelDetection(new FuelDetectionIO() {});
         break;
     }
 
-    controls = new Controls(drive, intake, indexer, shooter);
-    autos = new Autos(drive);
+    controls = new Controls(drive, intake, shooter, indexer, fuelDetection);
+    autos = new Autos(drive, indexer, intake, shooter);
   }
 
   public Command getAutonomousCommand() {

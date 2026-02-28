@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "intake"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "RightToLeft Bump Bump - Friendly Collect"
           }
         },
         {
@@ -20,6 +26,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Sussex",
   "choreoAuto": false
 }

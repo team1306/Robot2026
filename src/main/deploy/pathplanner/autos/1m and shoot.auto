@@ -7,13 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Example Path"
+            "pathName": "1m and shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot-until-done"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Testing",
   "choreoAuto": false
 }
