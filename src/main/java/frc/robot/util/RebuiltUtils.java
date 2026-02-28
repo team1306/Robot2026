@@ -94,7 +94,7 @@ public class RebuiltUtils {
         case TRANSITION:
           return time - 130;
         case SHIFT1:
-          return  time - 105;
+          return time - 105;
         case SHIFT2:
           return time - 80;
         case SHIFT3:

@@ -211,7 +211,9 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 .alongWith(
                     new InstantCommand(
                         () -> operatorController.setRumble(RumbleType.kBothRumble, 0.25))))
-        .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)).ignoringDisable(true));
+        .onFalse(
+            new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0))
+                .ignoringDisable(true));
 
     // Deploy Intake
     operatorController.x().onTrue(intake.deployCommand());
@@ -255,20 +257,23 @@ public class CompetitionControllerMapping extends ControllerMapping {
 
     // Alliance Shift Rumble
     // Define the pulsing behavior as a separate command
-Command rumblePulse = Commands.repeatingSequence(
-    Commands.runOnce(() -> operatorController.setRumble(RumbleType.kBothRumble, 0.1)),
-    Commands.waitTime(Seconds.of(0.5)),
-    Commands.runOnce(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)),
-    Commands.waitTime(Seconds.of(0.5))
-).finallyDo(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)); // Ensure it stops when trigger ends
+    Command rumblePulse =
+        Commands.repeatingSequence(
+                Commands.runOnce(() -> operatorController.setRumble(RumbleType.kBothRumble, 0.1)),
+                Commands.waitTime(Seconds.of(0.5)),
+                Commands.runOnce(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)),
+                Commands.waitTime(Seconds.of(0.5)))
+            .finallyDo(
+                () ->
+                    operatorController.setRumble(
+                        RumbleType.kBothRumble, 0)); // Ensure it stops when trigger ends
 
-// Apply it to your trigger
-Trigger warningTrigger = new Trigger(() -> 
-    RebuiltUtils.getShiftTime() <= 5 && RebuiltUtils.getShiftTime() != -1
-);
+    // Apply it to your trigger
+    Trigger warningTrigger =
+        new Trigger(() -> RebuiltUtils.getShiftTime() <= 5 && RebuiltUtils.getShiftTime() != -1);
 
-// .whileTrue starts the command when the condition is met and cancels it when it's not
-warningTrigger.whileTrue(rumblePulse.ignoringDisable(true));
+    // .whileTrue starts the command when the condition is met and cancels it when it's not
+    warningTrigger.whileTrue(rumblePulse.ignoringDisable(true));
   }
 
   @Override
