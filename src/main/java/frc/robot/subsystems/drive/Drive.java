@@ -348,7 +348,7 @@ public class Drive extends SubsystemBase {
 
   /** Returns the maximum angular speed in radians per sec. */
   public double getMaxAngularSpeedRadPerSec() {
-    return getMaxLinearSpeedMetersPerSec() / DRIVE_BASE_RADIUS;
+    return TunerConstants.kMaxTurningSpeed.in(MetersPerSecond) / DRIVE_BASE_RADIUS;
   }
 
   public boolean isLocked(Drive drive, Translation2d target, boolean inverted) {
