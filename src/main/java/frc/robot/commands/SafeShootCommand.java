@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.Meters;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -16,6 +17,8 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class SafeShootCommand extends ParallelCommandGroup {
+  private static Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(5);
+
   private static double INDEXER_SPEED = 0.5;
   private static double INTAKE_SPEED = 0.5;
 
@@ -40,7 +43,8 @@ public class SafeShootCommand extends ParallelCommandGroup {
 
     BooleanSupplier shooterVelocityCondition = shooter.isAtRequestedSpeed();
 
-    BooleanSupplier driveAngleCondition = () -> drive.isLocked(drive, positionSupplier.get(), true);
+    BooleanSupplier driveAngleCondition =
+        () -> drive.isLocked(drive, positionSupplier.get(), true, ANGLE_TOLERANCE);
 
     BooleanSupplier shootCondition =
         () ->
