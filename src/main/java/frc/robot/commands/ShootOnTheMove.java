@@ -21,7 +21,7 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class ShootOnTheMove {
-  private static double SLOWDOWN_FACTOR = 0.1;
+  private static double SLOWDOWN_FACTOR = 0.25;
 
   public static Command shootOnTheMoveCommand(
       Drive drive,
