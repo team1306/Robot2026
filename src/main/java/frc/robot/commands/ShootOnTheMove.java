@@ -33,7 +33,13 @@ public class ShootOnTheMove {
       Supplier<Translation2d> target,
       BooleanSupplier override) {
     return new SafeShootCommand(
-        drive, shooter, indexer, () -> xSupplier.getAsDouble() * SLOWDOWN_FACTOR, () -> ySupplier.getAsDouble() * SLOWDOWN_FACTOR, () -> calculateLeadTarget(drive), override);
+        drive,
+        shooter,
+        indexer,
+        () -> xSupplier.getAsDouble() * SLOWDOWN_FACTOR,
+        () -> ySupplier.getAsDouble() * SLOWDOWN_FACTOR,
+        () -> calculateLeadTarget(drive),
+        override);
   }
 
   private static Translation2d calculateLeadTarget(Drive drive) {
