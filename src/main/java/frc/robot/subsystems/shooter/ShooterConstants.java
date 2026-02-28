@@ -3,6 +3,7 @@ package frc.robot.subsystems.shooter;
 import badgerutils.motor.MotorConfigUtils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -30,6 +31,7 @@ public class ShooterConstants {
           .withSlot0(
               MotorConfigUtils.createPidConfig(
                   KP, KI, KD, KS, KV, 0, 0, GravityTypeValue.Arm_Cosine))
+          .withSlot1(new Slot1Configs().withKP(9999))
           .withFeedback(
               new FeedbackConfigs()
                   .withFeedbackRemoteSensorID(Constants.CanIds.SHOOTER_ENCODER_ID)

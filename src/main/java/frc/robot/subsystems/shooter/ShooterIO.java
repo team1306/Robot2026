@@ -62,6 +62,8 @@ public interface ShooterIO {
 
   default void setIdle() {}
 
+  default void runBangBang(AngularVelocity velocity) {}
+
   default void runCharacterization(Voltage voltage) {}
   ;
 }

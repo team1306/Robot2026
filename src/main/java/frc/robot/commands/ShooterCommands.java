@@ -81,9 +81,18 @@ public class ShooterCommands {
         new WaitCommand(time), shootAtDistanceCommand(shooter, distanceSupplier));
   }
 
-  public static Command shootBangBangCommand(Shooter shooter, Supplier<Distance> distanceSupplier) {
+  public static Command shootBangBangControllerCommand(
+      Shooter shooter, Supplier<Distance> distanceSupplier) {
     return new RunCommand(
-        () -> shooter.runBangBang(interpolateSetpoints(SETPOINTS, distanceSupplier.get())),
+        () ->
+            shooter.runBangBangController(interpolateSetpoints(SETPOINTS, distanceSupplier.get())),
+        shooter);
+  }
+
+  public static Command shootPIDBangBangCommand(
+      Shooter shooter, Supplier<Distance> distanceSupplier) {
+    return new RunCommand(
+        () -> shooter.runPIDBangBang(interpolateSetpoints(SETPOINTS, distanceSupplier.get())),
         shooter);
   }
 

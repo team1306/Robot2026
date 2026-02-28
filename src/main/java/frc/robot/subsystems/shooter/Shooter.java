@@ -53,10 +53,14 @@ public class Shooter extends SubsystemBase {
     Logger.recordOutput("Shooter/Velocity Setpoint", 0);
   }
 
-  public void runBangBang(AngularVelocity setpoint) {
+  public void runBangBangController(AngularVelocity setpoint) {
     shooterIO.setDutyCycle(
         controller.calculate(
             getAvgVelocity().in(RotationsPerSecond), setpoint.in(RotationsPerSecond)));
+  }
+
+  public void runPIDBangBang(AngularVelocity setpoint) {
+    shooterIO.runBangBang(setpoint);
   }
 
   public void runCharacterization(Voltage output) {

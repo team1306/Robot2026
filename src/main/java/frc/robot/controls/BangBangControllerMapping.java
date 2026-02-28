@@ -79,7 +79,17 @@ public class BangBangControllerMapping extends ControllerMapping {
     driverController
         .rightBumper()
         .whileTrue(
-            ShooterCommands.shootBangBangCommand(
+            ShooterCommands.shootBangBangControllerCommand(
+                shooter,
+                () ->
+                    LocationUtils.getDistanceToLocation(
+                        drive.getPose().getTranslation(),
+                        RebuiltUtils.getCurrentHubLocation().toTranslation2d())));
+
+    driverController
+        .leftBumper()
+        .whileTrue(
+            ShooterCommands.shootPIDBangBangCommand(
                 shooter,
                 () ->
                     LocationUtils.getDistanceToLocation(
