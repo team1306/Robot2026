@@ -17,6 +17,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class SafeShootCommand extends ParallelCommandGroup {
   private static double INDEXER_SPEED = 0.5;
+  private static double INTAKE_SPEED = 0.5;
 
   public SafeShootCommand(
       Drive drive,
@@ -35,7 +36,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
     Command driveAtAngleCommand =
         DriveCommands.driveAimLockedCommand(drive, xSupplier, ySupplier, positionSupplier, true);
     Command indexerCommand = indexer.indexUntilCancelledCommand(INDEXER_SPEED);
-    Command intakeCommand = intake.jumbleIntake();
+    Command intakeCommand = intake.intakeUntilInterruptedCommand(INTAKE_SPEED);
 
     BooleanSupplier shooterVelocityCondition = shooter.isAtRequestedSpeed();
 
