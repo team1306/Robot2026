@@ -9,12 +9,12 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.LocationUtils;
+import frc.robot.util.RebuiltUtils;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -43,7 +43,7 @@ public class ShootOnTheMove {
 
   private static Translation2d calculateLeadTarget(Drive drive) {
     Translation2d robotPos = drive.getPose().getTranslation();
-    Translation2d targetPos = Constants.Locations.blueHub.toTranslation2d();
+    Translation2d targetPos = RebuiltUtils.getCurrentHubLocation().toTranslation2d();
 
     ChassisSpeeds fieldSpeeds =
         ChassisSpeeds.fromRobotRelativeSpeeds(drive.getChassisSpeeds(), drive.getRotation());

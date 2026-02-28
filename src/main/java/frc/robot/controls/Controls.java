@@ -57,8 +57,14 @@ public class Controls {
             driverController, operatorController, intake, indexer, shooter));
     mappings.put(
         ControlStates.SHOOT_ON_THE_MOVE,
-        new CleaningControllerMapping(
-            driverController, operatorController, intake, indexer, shooter));
+        new ShootOnTheMoveControllerMapping(
+            driverController,
+            operatorController,
+            drivetrain,
+            intake,
+            shooter,
+            indexer,
+            fuelDetection));
 
     Consumer<Enum<ControlStates>> onChange =
         (nextState) -> {
