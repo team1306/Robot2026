@@ -38,13 +38,13 @@ public class ShootOnTheMove {
         indexer,
         () -> xSupplier.getAsDouble() * SLOWDOWN_FACTOR,
         () -> ySupplier.getAsDouble() * SLOWDOWN_FACTOR,
-        () -> calculateLeadTarget(drive),
+        () -> calculateLeadTarget(drive, target),
         override);
   }
 
-  private static Translation2d calculateLeadTarget(Drive drive) {
+  private static Translation2d calculateLeadTarget(Drive drive, Supplier<Translation2d> target) {
     Translation2d robotPos = drive.getPose().getTranslation();
-    Translation2d targetPos = RebuiltUtils.getCurrentHubLocation().toTranslation2d();
+    Translation2d targetPos = target.get();
 
     ChassisSpeeds fieldSpeeds =
         ChassisSpeeds.fromRobotRelativeSpeeds(drive.getChassisSpeeds(), drive.getRotation());
