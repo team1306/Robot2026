@@ -1,5 +1,7 @@
 package frc.robot.controls;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import badgerutils.commands.CommandUtils;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -71,15 +73,11 @@ public class BangBangControllerMapping extends ControllerMapping {
                             new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
                     drive)
                 .ignoringDisable(true));
-    driverController
-        .leftTrigger(0.5)
-        .onTrue(Commands.runOnce(() -> intake.setDutyCycle(1)))
-        .onFalse(Commands.runOnce(() -> intake.setDutyCycle(0)));
 
     driverController
         .rightBumper()
         .whileTrue(
-            ShooterCommands.shootBangBangControllerCommand(
+            ShooterCommands.shootBangBangControllerDistanceCommand(
                 shooter,
                 () ->
                     LocationUtils.getDistanceToLocation(
@@ -89,12 +87,24 @@ public class BangBangControllerMapping extends ControllerMapping {
     driverController
         .leftBumper()
         .whileTrue(
-            ShooterCommands.shootPIDBangBangCommand(
+            ShooterCommands.shootPIDBangBangDistanceCommand(
                 shooter,
                 () ->
                     LocationUtils.getDistanceToLocation(
                         drive.getPose().getTranslation(),
                         RebuiltUtils.getCurrentHubLocation().toTranslation2d())));
+
+    driverController
+        .rightTrigger()
+        .whileTrue(
+            ShooterCommands.shootBangBangControllerVelocityCommand(
+                shooter, () -> RotationsPerSecond.of(targetSpeed.get())));
+
+    driverController
+        .leftTrigger()
+        .whileTrue(
+            ShooterCommands.shootPIDBangBangVelocityCommand(
+                shooter, () -> RotationsPerSecond.of(targetSpeed.get())));
   }
 
   @Override
