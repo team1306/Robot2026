@@ -64,6 +64,8 @@ public class BangBangControllerMapping extends ControllerMapping {
                 () -> Constants.Locations.blueHub.toTranslation2d(),
                 true));
 
+    driverController.a().whileTrue(intake.intakeUntilInterruptedCommand(-1));
+
     driverController
         .start()
         .onTrue(
