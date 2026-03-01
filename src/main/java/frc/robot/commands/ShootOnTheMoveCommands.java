@@ -19,7 +19,7 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-public class ShootOnTheMove {
+public class ShootOnTheMoveCommands {
   private static double SLOWDOWN_FACTOR = 0.25;
 
   public static Command shootOnTheMoveCommand(
