@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class SafeShootCommand extends ParallelCommandGroup {
-  private static double INDEXER_SPEED = 0.5;
+  private static double INDEXER_SPEED = 1;
   private static double INTAKE_SPEED = 0.5;
 
   public SafeShootCommand(

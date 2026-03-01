@@ -23,8 +23,10 @@ public class ShooterCommands {
       Arrays.stream(
               new ShooterSetpoint[] {
                 new ShooterSetpoint(Feet.of(7.5), RotationsPerSecond.of(41)),
+                new ShooterSetpoint(Feet.of(8.2), RotationsPerSecond.of(42)),
                 new ShooterSetpoint(Feet.of(9), RotationsPerSecond.of(42)),
                 new ShooterSetpoint(Feet.of(12), RotationsPerSecond.of(48)),
+                new ShooterSetpoint(Feet.of(13), RotationsPerSecond.of(51.5)),
                 new ShooterSetpoint(Feet.of(15), RotationsPerSecond.of(53.5)),
                 new ShooterSetpoint(Feet.of(18), RotationsPerSecond.of(59.75)),
               })
