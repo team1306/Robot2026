@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.SafeAimAndShootCommand;
-import frc.robot.commands.SafeShootCommand;
 import frc.robot.commands.ShootOnTheMove;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.controls.Controls;
