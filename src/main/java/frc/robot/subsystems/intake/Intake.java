@@ -60,7 +60,7 @@ public class Intake extends SubsystemBase {
   }
 
   public Command deployCommand() {
-    return new ParallelDeadlineGroup(new WaitCommand(1), deployAtDutyCycleCommand(0.25));
+    return new ParallelDeadlineGroup(new WaitCommand(1.5), deployAtDutyCycleCommand(1));
   }
 
   public Command intakeUntilInterruptedCommand(double dutyCycleWhileOn) {
