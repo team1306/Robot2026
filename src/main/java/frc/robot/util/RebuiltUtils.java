@@ -114,24 +114,14 @@ public class RebuiltUtils {
   public static double getShiftTime() {
     AllianceShift currentShift = getAllianceShiftFromTime(DriverStation.getMatchTime());
     double time = DriverStation.getMatchTime();
-    if (switch (currentShift) {
-      case AUTO, ENDGAME, DISCONNECTED, UNKNOWN -> false;
-      default -> true;
-    }) {
-      switch (currentShift) {
-        case TRANSITION:
-          return time - 130;
-        case SHIFT1:
-          return time - 105;
-        case SHIFT2:
-          return time - 80;
-        case SHIFT3:
-          return time - 55;
-        case SHIFT4:
-          return time - 30;
-      }
-    }
-    return -1;
+    return switch (currentShift) {
+      case TRANSITION -> time - 130;
+      case SHIFT1 -> time - 105;
+      case SHIFT2 -> time - 80;
+      case SHIFT3 -> time - 55;
+      case SHIFT4 -> time - 30;
+      default -> -1;
+    };
   }
 
   public static Translation3d getCurrentHubLocation() {
