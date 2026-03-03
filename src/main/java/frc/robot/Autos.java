@@ -97,7 +97,8 @@ public class Autos {
                 () -> 0,
                 () -> 0,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                () -> false)
+                () -> false,
+                () -> true)
             .withDeadline(Commands.waitTime(STARTING_FUEL_SHOOT_DURATION)));
 
     NamedCommands.registerCommand("intake", intake.intakeAtDutyCycleCommand(0.5));
@@ -127,7 +128,8 @@ public class Autos {
             () -> 0,
             () -> 0,
             () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-            () -> false));
+            () -> false,
+            () -> true));
   }
 
   public static final class Auto {

@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FaceforwardCommand;
 import frc.robot.commands.FuelCollectionCommand;
-import frc.robot.commands.SafeAimAndShootCommand;
 import frc.robot.commands.ShootOnTheMoveCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.drive.Drive;
@@ -141,6 +140,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     () -> -driverController.getLeftY(),
                     () -> -driverController.getLeftX(),
                     () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                    operatorController.leftBumper(),
                     operatorController.leftBumper())
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
@@ -156,6 +156,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     () -> -driverController.getLeftY(),
                     () -> -driverController.getLeftX(),
                     () -> RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation()),
+                    operatorController.leftBumper(),
                     operatorController.leftBumper())
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
@@ -175,6 +176,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                             ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
                             : RebuiltUtils.getNearestAllianceCorner(
                                 drive.getPose().getTranslation()),
+                    operatorController.leftBumper(),
                     operatorController.leftBumper())
                 .alongWith(loggedTargetCommand));
 
