@@ -48,15 +48,15 @@ public class RebuiltUtils {
     if (time >= 130) {
       return AllianceShift.TRANSITION;
     } // Transition Shift
-    else if (time <= 130 && time >= 105) {
+    else if (time < 130 && time >= 105) {
       return AllianceShift.SHIFT1;
-    } else if (time <= 105 && time >= 80) {
+    } else if (time < 105 && time >= 80) {
       return AllianceShift.SHIFT2;
-    } else if (time <= 80 && time >= 55) {
+    } else if (time < 80 && time >= 55) {
       return AllianceShift.SHIFT3;
-    } else if (time <= 55.0 && time >= 30.0) {
+    } else if (time < 55.0 && time >= 30.0) {
       return AllianceShift.SHIFT4;
-    } else if (time <= 30.0) {
+    } else if (time < 30.0) {
       return AllianceShift.ENDGAME;
     } // End Game
     return AllianceShift.UNKNOWN;
