@@ -44,8 +44,32 @@
   ],
   "eventMarkers": [
     {
+      "name": "spool-shooter",
+      "waypointRelativePos": 0.16,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "shoot-8",
+      "waypointRelativePos": 0.32,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "intake",
+      "waypointRelativePos": 0.48,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "stop-intake",
+      "waypointRelativePos": 0.6,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
       "name": "shoot-until-done",
-      "waypointRelativePos": 0.19950372208436234,
+      "waypointRelativePos": 0.72,
       "endWaypointRelativePos": null,
       "command": null
     }
