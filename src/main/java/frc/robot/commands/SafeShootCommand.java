@@ -22,6 +22,8 @@ public class SafeShootCommand extends ParallelCommandGroup {
   private static double INDEXER_SPEED = 0.5;
   private static double INTAKE_SPEED = 0.5;
 
+  private boolean isActive;
+
   public SafeShootCommand(
       Drive drive,
       Shooter shooter,
@@ -52,23 +54,28 @@ public class SafeShootCommand extends ParallelCommandGroup {
 
     Command intakeCommand = intake.intakeUntilInterruptedCommand(INTAKE_SPEED);
 
-    Trigger intakeRecheduler =
+    Trigger intakeRescheduler =
         new Trigger(
                 () ->
-                    (intake.getCurrentCommand() == null
-                        || intake.getCurrentCommand() == intake.getDefaultCommand()))
+                    this.isActive
+                        && (intake.getCurrentCommand() == null
+                            || intake.getCurrentCommand() == intake.getDefaultCommand()))
             .onTrue(intakeCommand);
-    Trigger indexerRecheduler =
+    Trigger indexerRescheduler =
         new Trigger(
                 () ->
-                    (indexer.getCurrentCommand() == null
-                        || indexer.getCurrentCommand() == indexer.getDefaultCommand()))
+                    this.isActive
+                        && (indexer.getCurrentCommand() == null
+                            || indexer.getCurrentCommand() == indexer.getDefaultCommand()))
             .onTrue(guardedIndexerCommand);
 
     Command loggedGuardCommand =
         Commands.run(() -> logConditions(shooterVelocityCondition, driveAngleCondition));
 
+    Command activityTracker = Commands.startEnd(() -> isActive = true, () -> isActive = false);
+
     addCommands(
+        activityTracker,
         shootAtDistanceCommand,
         guardedIndexerCommand.asProxy(),
         loggedGuardCommand,

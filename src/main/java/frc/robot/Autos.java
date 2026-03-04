@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.SafeAimAndShootCommand;
-import frc.robot.commands.ShootOnTheMove;
+import frc.robot.commands.ShootOnTheMoveCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.controls.Controls;
 import frc.robot.subsystems.drive.Drive;
@@ -92,18 +92,16 @@ public class Autos {
   private void bindNamedCommands() {
     NamedCommands.registerCommand(
         "shoot-8",
-        new SafeAimAndShootCommand(
+        ShootOnTheMoveCommands.shootOnTheMoveCommand(
                 drive,
                 shooter,
                 indexer,
                 intake,
-                () -> 0,
-                () -> 0,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
                 () -> false)
             .withDeadline(Commands.waitTime(STARTING_FUEL_SHOOT_DURATION)));
 
-    NamedCommands.registerCommand("intake", intake.intakeAtDutyCycleCommand(0.5));
+    NamedCommands.registerCommand("intake", intake.intakeAtDutyCycleCommand(1));
 
     NamedCommands.registerCommand("stop-intake", intake.intakeAtDutyCycleCommand(0));
 
@@ -134,15 +132,45 @@ public class Autos {
   }
 
   private void bindEventMarkers() {
-    new EventTrigger("test-shoot")
+    // NONE OF THESE SHOULD REQUIRE THE DRIVE SUBSYSTEM
+
+    new EventTrigger("shoot-until-done")
         .onTrue(
-            ShootOnTheMove.shootOnTheMoveCommand(
+            ShootOnTheMoveCommands.shootOnTheMoveCommand(
                 drive,
                 shooter,
                 indexer,
                 intake,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
                 () -> true));
+
+    new EventTrigger("shoot-8")
+        .onTrue(
+            ShootOnTheMoveCommands.shootOnTheMoveCommand(
+                    drive,
+                    shooter,
+                    indexer,
+                    intake,
+                    () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                    () -> false)
+                .withDeadline(Commands.waitTime(STARTING_FUEL_SHOOT_DURATION)));
+
+    new EventTrigger("intake").onTrue(intake.intakeAtDutyCycleCommand(1));
+
+    new EventTrigger("stop-intake").onTrue(intake.intakeAtDutyCycleCommand(0));
+
+    new EventTrigger("spool-shooter")
+        .onTrue(
+            ShooterCommands.shootAtDistanceCommand(
+                shooter,
+                () ->
+                    Meters.of(
+                        drive
+                            .getPose()
+                            .getTranslation()
+                            .getDistance(RebuiltUtils.getCurrentHubLocation().toTranslation2d()))));
+
+    new EventTrigger("deploy-intake").onTrue(intake.deployCommand());
   }
 
   public static final class Auto {

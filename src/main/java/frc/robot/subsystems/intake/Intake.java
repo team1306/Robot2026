@@ -32,35 +32,43 @@ public class Intake extends SubsystemBase {
     Logger.recordOutput("Intake/Duty Cycle Setpoint", dutyCycle);
   }
 
+  @Deprecated
   public void setDeployerPosition(Angle angle) {
-
+    intakeIO.setDeployerPosition(angle);
     Logger.recordOutput("Intake/Deployer Position Setpoint", angle);
   }
 
+  @Deprecated
   public void setDeployerPosition(DeployerPosition position) {
     this.setDeployerPosition(position.deployerPosition());
+  }
+
+  public void setDeployerDutyCycle(double dutyCycle) {
+    Logger.recordOutput("Intake/Deployer Duty Cycle Setpoint", dutyCycle);
+    intakeIO.setDeployerDutyCycle(dutyCycle);
   }
 
   public Command intakeAtDutyCycleCommand(double dutyCycle) {
     return new InstantCommand(() -> this.setDutyCycle(dutyCycle), this);
   }
 
+  @Deprecated
   public Command positionDeployerCommand(Angle angle) {
     return new InstantCommand(() -> this.setDeployerPosition(angle), this);
   }
 
+  @Deprecated
   public Command positionDeployerCommand(DeployerPosition position) {
     return new InstantCommand(() -> this.setDeployerPosition(position), this);
   }
 
   public Command deployAtDutyCycleCommand(double dutyCycle) {
-    Logger.recordOutput("Intake/Deployer Duty Cycle Setpoint", dutyCycle);
     return new StartEndCommand(
-        () -> intakeIO.setDeployerDutyCycle(dutyCycle), () -> intakeIO.setDeployerDutyCycle(0));
+        () -> this.setDeployerDutyCycle(dutyCycle), () -> this.setDeployerDutyCycle(0));
   }
 
   public Command deployCommand() {
-    return new ParallelDeadlineGroup(new WaitCommand(1), deployAtDutyCycleCommand(0.25));
+    return new ParallelDeadlineGroup(new WaitCommand(1.5), deployAtDutyCycleCommand(1));
   }
 
   public Command intakeUntilInterruptedCommand(double dutyCycleWhileOn) {

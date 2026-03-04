@@ -7,19 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "depot-trench"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot-until-done"
+            "pathName": "named-commands-test"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Testing",
   "choreoAuto": false
 }
