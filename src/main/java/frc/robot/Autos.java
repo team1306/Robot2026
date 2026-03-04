@@ -92,11 +92,13 @@ public class Autos {
   private void bindNamedCommands() {
     NamedCommands.registerCommand(
         "shoot-8",
-        ShootOnTheMoveCommands.shootOnTheMoveCommand(
+        new SafeAimAndShootCommand(
                 drive,
                 shooter,
                 indexer,
                 intake,
+                () -> 0,
+                () -> 0,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
                 () -> false)
             .withDeadline(Commands.waitTime(STARTING_FUEL_SHOOT_DURATION)));
