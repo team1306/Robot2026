@@ -11,7 +11,9 @@ import java.util.function.Supplier;
 public class RebuiltUtils {
 
   public static boolean isInAllianceZone(Translation2d position) {
-    return position.getX() <= 4.02844 || position.getX() >= 16.540988 - 4.02844;
+    return AllianceTriggers.isBlueAlliance()
+        ? position.getX() <= 4.5
+        : position.getX() >= 16.540988 - 4.5;
   }
   /**
    * @return The current HUB state on robots alliance
