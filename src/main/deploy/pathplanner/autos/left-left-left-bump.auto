@@ -21,7 +21,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "right-right-trench-far"
+                        "pathName": "left-left-bump-far"
                       }
                     },
                     {
@@ -33,7 +33,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "right-right-trench-close"
+                        "pathName": "left-left-trench-close"
                       }
                     },
                     {

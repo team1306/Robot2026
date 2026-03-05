@@ -35,6 +35,12 @@
                       "data": {
                         "pathName": "left-left-trench-close"
                       }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot-until-done"
+                      }
                     }
                   ]
                 }
