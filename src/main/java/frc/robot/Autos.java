@@ -32,7 +32,8 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 public class Autos {
-  private static final Time STARTING_FUEL_SHOOT_DURATION = Seconds.of(3);
+  private static final Time STARTING_FUEL_SHOOT_DURATION = Seconds.of(2);
+  private static final Time SMALL_HOPPER_SHOOT_DURATION = Seconds.of(5);
 
   private final Drive drive;
   private final Indexer indexer;
@@ -131,6 +132,19 @@ public class Autos {
             () -> 0,
             () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
             () -> false));
+
+    NamedCommands.registerCommand(
+        "shoot-small-hopper",
+        new SafeAimAndShootCommand(
+                drive,
+                shooter,
+                indexer,
+                intake,
+                () -> 0,
+                () -> 0,
+                () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                () -> false)
+            .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)));
   }
 
   private void bindEventMarkers() {
@@ -173,6 +187,17 @@ public class Autos {
                             .getDistance(RebuiltUtils.getCurrentHubLocation().toTranslation2d()))));
 
     new EventTrigger("deploy-intake").onTrue(intake.deployCommand());
+
+    new EventTrigger("shoot-small-hopper")
+        .onTrue(
+            ShootOnTheMoveCommands.shootOnTheMoveCommand(
+                    drive,
+                    shooter,
+                    indexer,
+                    intake,
+                    () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                    () -> false)
+                .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)));
   }
 
   public static final class Auto {
