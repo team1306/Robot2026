@@ -146,7 +146,7 @@ public class Autos {
                 indexer,
                 intake,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                () -> true));
+                () -> true, () -> true));
 
     new EventTrigger("shoot-8")
         .onTrue(
@@ -156,7 +156,7 @@ public class Autos {
                     indexer,
                     intake,
                     () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                    () -> false)
+                    () -> false, () -> true)
                 .withDeadline(Commands.waitTime(STARTING_FUEL_SHOOT_DURATION)));
 
     new EventTrigger("intake").onTrue(intake.intakeAtDutyCycleCommand(1));
