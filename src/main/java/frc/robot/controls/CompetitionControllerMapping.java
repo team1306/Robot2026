@@ -128,41 +128,9 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     drive, () -> -driverController.getLeftY(), () -> -driverController.getLeftX())
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
-    // Shoot to Hub
-    driverController
-        .rightBumper()
-        .whileTrue(
-            ShootOnTheMoveCommands.aimAndShootOnTheMoveCommand(
-                    drive,
-                    shooter,
-                    indexer,
-                    intake,
-                    () -> -driverController.getLeftY(),
-                    () -> -driverController.getLeftX(),
-                    () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                    operatorController.leftBumper(),
-                    operatorController.leftBumper())
-                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
-
-    // Shoot to Corner
-    driverController
-        .leftBumper()
-        .whileTrue(
-            ShootOnTheMoveCommands.aimAndShootOnTheMoveCommand(
-                    drive,
-                    shooter,
-                    indexer,
-                    intake,
-                    () -> -driverController.getLeftY(),
-                    () -> -driverController.getLeftX(),
-                    () -> RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation()),
-                    operatorController.leftBumper(),
-                    operatorController.leftBumper())
-                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
-
     // Shoot to Hub or Corner Depending on Location
     driverController
-        .rightTrigger()
+        .rightBumper()
         .whileTrue(
             ShootOnTheMoveCommands.aimAndShootOnTheMoveCommand(
                     drive,
