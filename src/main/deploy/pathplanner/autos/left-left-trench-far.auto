@@ -9,12 +9,6 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "deploy-intake"
-                }
-              },
-              {
                 "type": "sequential",
                 "data": {
                   "commands": [

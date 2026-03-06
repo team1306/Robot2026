@@ -64,11 +64,11 @@
     },
     {
       "anchor": {
-        "x": 3.0,
+        "x": 2.587590361445783,
         "y": 5.5
       },
       "prevControl": {
-        "x": 3.25,
+        "x": 2.837590361445783,
         "y": 5.5
       },
       "nextControl": null,
@@ -79,7 +79,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.95,
-      "rotationDegrees": 45.0
+      "rotationDegrees": 90.0
     },
     {
       "waypointRelativePos": 3.0,
@@ -90,6 +90,12 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "deploy-intake",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
       "name": "intake",
       "waypointRelativePos": 0.5,
       "endWaypointRelativePos": null,
@@ -98,12 +104,6 @@
     {
       "name": "stop-intake",
       "waypointRelativePos": 3.0,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "spool-shooter",
-      "waypointRelativePos": 3.0049627791562967,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -118,7 +118,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 133.3376446743923
+    "rotation": 144.82397065842056
   },
   "reversed": false,
   "folder": "Center Collection",

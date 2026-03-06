@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 3.3752352941176476,
-        "y": 0.6280336134453774
+        "y": 0.6280336134453776
       },
       "nextControl": {
         "x": 5.3752352941176476,
@@ -41,7 +41,7 @@
       },
       "nextControl": {
         "x": 5.6095636335261165,
-        "y": 1.590385412527815
+        "y": 1.5903854125278154
       },
       "isLocked": false,
       "linkedName": "trench-right-wall"
@@ -80,11 +80,11 @@
     },
     {
       "anchor": {
-        "x": 3.0,
+        "x": 2.587590361445783,
         "y": 5.5
       },
       "prevControl": {
-        "x": 3.25,
+        "x": 2.837590361445783,
         "y": 5.5
       },
       "nextControl": null,
@@ -146,7 +146,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 133.3376446743923
+    "rotation": 144.82397065842056
   },
   "reversed": false,
   "folder": "Close Collection",

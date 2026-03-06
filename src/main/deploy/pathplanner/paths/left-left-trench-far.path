@@ -80,11 +80,11 @@
     },
     {
       "anchor": {
-        "x": 3.0,
+        "x": 2.587590361445783,
         "y": 5.5
       },
       "prevControl": {
-        "x": 3.25,
+        "x": 2.837590361445783,
         "y": 5.5
       },
       "nextControl": null,
@@ -106,9 +106,29 @@
       "rotationDegrees": 135.0
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.9975186104218245,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [
+    {
+      "name": "deploy-intake",
+      "waypointRelativePos": 0.2,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
     {
       "name": "intake",
       "waypointRelativePos": 1.5,
@@ -118,12 +138,6 @@
     {
       "name": "stop-intake",
       "waypointRelativePos": 4.0,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "spool-shooter",
-      "waypointRelativePos": 4.004962779156297,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -138,7 +152,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 133.3376446743923
+    "rotation": 144.82397065842056
   },
   "reversed": false,
   "folder": "Center Collection",
