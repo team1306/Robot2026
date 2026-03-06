@@ -21,7 +21,7 @@ import org.littletonrobotics.junction.Logger;
 public class SafeShootCommand extends ParallelCommandGroup {
   private static Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(5);
 
-  private static double INDEXER_SPEED = 0.5;
+  private static double INDEXER_SPEED = 1;
   private static double INTAKE_SPEED = 0.5;
 
   private boolean isActive;
