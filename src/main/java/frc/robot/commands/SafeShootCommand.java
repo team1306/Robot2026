@@ -43,9 +43,9 @@ public class SafeShootCommand extends ParallelCommandGroup {
             indexer.indexUntilCancelledCommand(INDEXER_SPEED),
             () ->
                 (shooterVelocityCondition.getAsBoolean()
-                    || overrideVelocitySafeguard.getAsBoolean()
-                        && (driveAngleCondition.getAsBoolean()
-                            || overrideAngleSafeguard.getAsBoolean())));
+                        || overrideVelocitySafeguard.getAsBoolean())
+                    && (driveAngleCondition.getAsBoolean()
+                        || overrideAngleSafeguard.getAsBoolean()));
 
     Command shootAtDistanceCommand =
         ShooterCommands.shootAtDistanceCommand(
