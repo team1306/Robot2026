@@ -4,47 +4,47 @@
     {
       "anchor": {
         "x": 4.3752352941176476,
-        "y": 0.6280336134453774
+        "y": 7.3962352941176475
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.375235294117651,
-        "y": 0.6280336134453774
+        "x": 5.3752352941176476,
+        "y": 7.3962352941176475
       },
       "isLocked": false,
-      "linkedName": "start-trench-right"
+      "linkedName": "start-trench-left"
     },
     {
       "anchor": {
-        "x": 7.7345421686746985,
-        "y": 1.5216265060240959
+        "x": 7.898457831325301,
+        "y": 6.406313253012048
       },
       "prevControl": {
-        "x": 7.7345421686746985,
-        "y": 0.5216265060240959
+        "x": 7.898457831325301,
+        "y": 7.656313253012048
       },
       "nextControl": {
-        "x": 7.7345421686746985,
-        "y": 2.5216265060240923
+        "x": 7.898457831325301,
+        "y": 6.156313253012048
       },
       "isLocked": false,
-      "linkedName": "fuel-safe-right-entrance"
+      "linkedName": "fuel-safe-left-entrance"
     },
     {
       "anchor": {
-        "x": 7.7345421686746985,
-        "y": 3.41212048192771
+        "x": 7.5,
+        "y": 1.4779156626506016
       },
       "prevControl": {
-        "x": 7.7345421686746985,
-        "y": 3.91212048192771
+        "x": 7.853553390593273,
+        "y": 1.8314690532438755
       },
       "nextControl": {
-        "x": 7.7345421686746985,
-        "y": 2.912120481927711
+        "x": 7.146446609406727,
+        "y": 1.124362272057328
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "fuel-safe-right-exit"
     },
     {
       "anchor": {
@@ -79,11 +79,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.95,
-      "rotationDegrees": 90.0
-    },
-    {
-      "waypointRelativePos": 2.0,
-      "rotationDegrees": 90.0
+      "rotationDegrees": -90.0
     },
     {
       "waypointRelativePos": 3.0,
@@ -127,7 +123,7 @@
   "reversed": false,
   "folder": "Center Collection",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 0.0,
     "rotation": 0.0
   },
   "useDefaultConstraints": true
