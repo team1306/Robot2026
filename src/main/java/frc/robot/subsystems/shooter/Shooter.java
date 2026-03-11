@@ -20,6 +20,8 @@ public class Shooter extends SubsystemBase {
 
   private final SysIdRoutine sysId;
 
+  private AngularVelocity setpoint = RotationsPerSecond.zero();
+
   public Shooter(ShooterIO shooterIO) {
     this.shooterIO = shooterIO;
 
@@ -44,6 +46,24 @@ public class Shooter extends SubsystemBase {
 
     shooterIO.setVelocity(velocity.plus(speedOverride.times(multiplier)));
     Logger.recordOutput("Shooter/Velocity Setpoint", velocity);
+  }
+
+  public void setDutyCycle(double dutyCycle) {
+    shooterIO.setDutyCycle(dutyCycle);
+    Logger.recordOutput("Shooter/DutyCycle", dutyCycle);
+  }
+
+  public void runAtSpeed(AngularVelocity velocity) {
+    if (getAvgClosedLoopError().gt(ShooterConstants.DUTY_CYCLE_THRESHOLD)) {
+      // if below setpoint, duty cycle = 1; if above setpoint, duty cycle = 0
+      setDutyCycle(getAvgVelocity().lt(velocity) ? 1 : 0);
+      // wouldn't normally show the setpoint
+      Logger.recordOutput("Shooter/Velocity Setpoint", velocity);
+    } else {
+      setVelocity(velocity);
+      // no longer care about duty cycle
+      Logger.recordOutput("Shooter/DutyCycle", 0);
+    }
   }
 
   public void changeVelocityOverride(AngularVelocity velocity) {
@@ -77,7 +97,7 @@ public class Shooter extends SubsystemBase {
         .andThen(sysId.dynamic(direction));
   }
 
-  public double getAvgClosedLoopError() {
+  public AngularVelocity getAvgClosedLoopError() {
     boolean[] connectedMotors =
         new boolean[] {
           inputs.isShooterLeftTopMotorConnected,
@@ -85,26 +105,56 @@ public class Shooter extends SubsystemBase {
           inputs.isShooterRightTopMotorConnected,
           inputs.isShooterRightBottomMotorConnected
         };
-    double[] error =
-        new double[] {
-          inputs.shooterLeftTopClosedLoopError,
-          inputs.shooterLeftBottomClosedLoopError,
-          inputs.shooterRightTopClosedLoopError,
-          inputs.shooterRightBottomClosedLoopError
+    AngularVelocity[] error =
+        new AngularVelocity[] {
+          RotationsPerSecond.of(inputs.shooterLeftTopClosedLoopError),
+          RotationsPerSecond.of(inputs.shooterLeftBottomClosedLoopError),
+          RotationsPerSecond.of(inputs.shooterRightTopClosedLoopError),
+          RotationsPerSecond.of(inputs.shooterRightBottomClosedLoopError)
         };
 
-    double sum = 0;
+    AngularVelocity sum = RotationsPerSecond.zero();
     int count = 0;
     for (int i = 0; i < connectedMotors.length; i++) {
       if (connectedMotors[i]) {
-        sum += error[i];
+        sum = sum.plus(error[i]);
         count++;
       }
     }
 
-    Logger.recordOutput("Shooter/Setpoint Error", sum / count);
+    Logger.recordOutput("Shooter/Setpoint Error", sum.div(count));
 
-    return sum / count;
+    return sum.div(count);
+  }
+
+  public AngularVelocity getAvgVelocity() {
+    boolean[] connectedMotors =
+        new boolean[] {
+          inputs.isShooterLeftTopMotorConnected,
+          inputs.isShooterLeftBottomMotorConnected,
+          inputs.isShooterRightTopMotorConnected,
+          inputs.isShooterRightBottomMotorConnected
+        };
+    AngularVelocity[] velocity =
+        new AngularVelocity[] {
+          inputs.shooterLeftTopMotorSpeed,
+          inputs.shooterLeftBottomMotorSpeed,
+          inputs.shooterRightTopMotorSpeed,
+          inputs.shooterRightBottomMotorSpeed
+        };
+
+    AngularVelocity sum = RotationsPerSecond.zero();
+    int count = 0;
+    for (int i = 0; i < connectedMotors.length; i++) {
+      if (connectedMotors[i]) {
+        sum = sum.plus(velocity[i]);
+        count++;
+      }
+    }
+
+    Logger.recordOutput("Shooter/Average Speed", sum.div(count));
+
+    return sum.div(count);
   }
 
   /**
@@ -114,7 +164,7 @@ public class Shooter extends SubsystemBase {
    * @return a new boolean supplier
    */
   public BooleanSupplier isAtRequestedSpeed() {
-    return () -> getAvgClosedLoopError() < ShooterConstants.ERROR_THRESHOLD;
+    return () -> getAvgClosedLoopError().lt(ShooterConstants.AIM_THRESHOLD);
   }
 
   public Trigger isAtRequestedSpeedTrigger() {

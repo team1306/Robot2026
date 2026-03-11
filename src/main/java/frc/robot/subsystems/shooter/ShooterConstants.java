@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import badgerutils.motor.MotorConfigUtils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
@@ -8,6 +10,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.Constants;
 
 public class ShooterConstants {
@@ -22,7 +25,8 @@ public class ShooterConstants {
 
   public static final double SUPPLY_CURRENT_LIMIT = 60;
 
-  public static final double ERROR_THRESHOLD = 2;
+  public static final AngularVelocity AIM_THRESHOLD = RotationsPerSecond.of(2);
+  public static final AngularVelocity DUTY_CYCLE_THRESHOLD = RotationsPerSecond.of(1);
 
   // CONFIGS
   public static final TalonFXConfiguration CW_SHOOTER_MOTOR_CONFIGS =
