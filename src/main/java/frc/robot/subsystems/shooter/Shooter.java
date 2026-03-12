@@ -39,7 +39,7 @@ public class Shooter extends SubsystemBase {
     Logger.processInputs("Shooter", inputs);
   }
 
-  private void setVelocity(AngularVelocity velocity) {
+  public void setVelocity(AngularVelocity velocity) {
     double multiplier = Math.signum(velocity.in(RotationsPerSecond));
 
     shooterIO.setVelocity(velocity.plus(speedOverride.times(multiplier)));
@@ -52,15 +52,16 @@ public class Shooter extends SubsystemBase {
   }
 
   public void runAtSpeed(AngularVelocity velocity) {
-    if (getAvgClosedLoopError().gt(ShooterConstants.DUTY_CYCLE_THRESHOLD)) {
+    Logger.recordOutput("Persistant error", velocity.minus(getAvgVelocity()));
+    if (velocity.minus(getAvgVelocity()).gt(ShooterConstants.AIM_THRESHOLD)) {
       // if below setpoint, duty cycle = 1; if above setpoint, duty cycle = 0
-      setDutyCycle(getAvgVelocity().lt(velocity) ? 1 : 0);
+      setDutyCycle(1);
       // wouldn't normally show the setpoint
       Logger.recordOutput("Shooter/Velocity Setpoint", velocity);
     } else {
       setVelocity(velocity);
       // no longer care about duty cycle
-      Logger.recordOutput("Shooter/DutyCycle", 0);
+      Logger.recordOutput("Shooter/DutyCycle", 0D);
     }
   }
 

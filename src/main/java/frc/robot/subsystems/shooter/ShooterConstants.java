@@ -18,7 +18,7 @@ public class ShooterConstants {
   public static final double KI = 0;
   public static final double KD = 0;
 
-  public static final double KV = 0.028795;
+  public static final double KV = 0.075;
   public static final double KS = 0.058037;
 
   public static final double ROTOR_TO_SENSOR_RATIO = 1.5;
@@ -26,7 +26,6 @@ public class ShooterConstants {
   public static final double SUPPLY_CURRENT_LIMIT = 60;
 
   public static final AngularVelocity AIM_THRESHOLD = RotationsPerSecond.of(2);
-  public static final AngularVelocity DUTY_CYCLE_THRESHOLD = RotationsPerSecond.of(1);
 
   // CONFIGS
   public static final TalonFXConfiguration CW_SHOOTER_MOTOR_CONFIGS =

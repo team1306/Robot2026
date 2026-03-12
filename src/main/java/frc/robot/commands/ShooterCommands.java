@@ -73,11 +73,11 @@ public class ShooterCommands {
   }
 
   public static Command shootAtSpeedCommand(Shooter shooter, AngularVelocity velocity) {
-    return Commands.startEnd(() -> shooter.runAtSpeed(velocity), shooter::setIdle, shooter);
+    return Commands.startEnd(() -> shooter.setVelocity(velocity), shooter::setIdle, shooter);
   }
 
   public static Command shootAtSpeedCommand(Shooter shooter, Supplier<AngularVelocity> velocity) {
-    return Commands.runEnd(() -> shooter.runAtSpeed(velocity.get()), shooter::setIdle, shooter);
+    return Commands.runEnd(() -> shooter.setVelocity(velocity.get()), shooter::setIdle, shooter);
   }
 
   public static Command shootAtDistanceCommand(Shooter shooter, Supplier<Distance> distance) {
