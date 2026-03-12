@@ -24,9 +24,9 @@ public class OutreachControllerMapping extends ControllerMapping {
   private final Indexer indexer;
 
   private final LoggedNetworkNumber driveSpeedFactor =
-      new LoggedNetworkNumber("Outreach/Drive Speed", 0.25);
+      new LoggedNetworkNumber("Outreach/Drive Speed", 0.5);
   private final LoggedNetworkNumber rotationSpeedFactor =
-      new LoggedNetworkNumber("Outreach/Rotation Speed", 0.25);
+      new LoggedNetworkNumber("Outreach/Rotation Speed", 0.5);
 
   public OutreachControllerMapping(
       CommandXboxController driverController,
@@ -71,8 +71,9 @@ public class OutreachControllerMapping extends ControllerMapping {
     driverController
         .rightTrigger(0.5)
         .whileTrue(
-            ShooterCommands.shootAtSpeedCommand(shooter, RotationsPerSecond.of(25))
-                .alongWith(indexer.indexUntilCancelledCommand(0.5)));
+            ShooterCommands.shootAtSpeedCommand(shooter, RotationsPerSecond.of(35))
+                .alongWith(
+                    Commands.waitSeconds(0.5).andThen(indexer.indexUntilCancelledCommand(0.5))));
 
     driverController.x().whileTrue(intake.deployCommand());
 
