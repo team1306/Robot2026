@@ -15,7 +15,7 @@ public class ShooterConstants {
   public static final double KI = 0;
   public static final double KD = 0;
 
-  public static final double KV = 0.028795;
+  public static final double KV = 0.075;
   public static final double KS = 0.058037;
 
   public static final double ROTOR_TO_SENSOR_RATIO = 1.5;
