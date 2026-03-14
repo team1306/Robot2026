@@ -79,15 +79,12 @@ public class Intake extends SubsystemBase {
 
   public Command intakeUntilInterruptedCommand(DoubleSupplier dutyCycleWhileOn) {
     return Commands.runEnd(
-            () -> this.setDutyCycle(dutyCycleWhileOn.getAsDouble()),
-            () -> this.setDutyCycle(0),
-            this)
-        .alongWith(deployAtDutyCycleCommand(IntakeConstants.IDLE_DEPLOYER_DUTY_CYCLE));
+        () -> this.setDutyCycle(dutyCycleWhileOn.getAsDouble()), () -> this.setDutyCycle(0), this);
   }
 
   public Command shakeIntake() {
-    final Time ON_DURATION = Seconds.of(1.5);
-    final Time OFF_DURATION = Seconds.of(0.5);
+    final Time ON_DURATION = Seconds.of(0.75);
+    final Time OFF_DURATION = Seconds.of(0.25);
     Timer shakeTimer = new Timer();
 
     return Commands.runEnd(

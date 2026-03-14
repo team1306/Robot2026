@@ -15,8 +15,6 @@ public class IntakeConstants {
   public static final double KI = 0;
   public static final double KD = 0;
 
-  public static final double IDLE_DEPLOYER_DUTY_CYCLE = 0.035;
-
   // CONFIG
   public static final TalonFXConfiguration CW_INTAKE_MOTOR_CONFIGS =
       new TalonFXConfiguration()

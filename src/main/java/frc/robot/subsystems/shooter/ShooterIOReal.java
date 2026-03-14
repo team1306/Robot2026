@@ -34,6 +34,10 @@ public class ShooterIOReal implements ShooterIO {
   private static final LoggedNetworkNumberPlus KD_SUPPLIER =
       new LoggedNetworkNumberPlus("/Tuning/Shooter KD", ShooterConstants.KD);
 
+  @AutoLogOutput
+  private static final LoggedNetworkNumberPlus KV_SUPPLIER =
+      new LoggedNetworkNumberPlus("/Tuning/Shooter KV", ShooterConstants.KV);
+
   private final StatusSignal<Current> leftTopMotorSupplyCurrent;
   private final StatusSignal<Current> leftBottomMotorSupplyCurrent;
   private final StatusSignal<Current> rightTopMotorSupplyCurrent;
@@ -81,6 +85,7 @@ public class ShooterIOReal implements ShooterIO {
     KP_SUPPLIER.addSubscriber(value -> updatePIDFromTunables());
     KI_SUPPLIER.addSubscriber(value -> updatePIDFromTunables());
     KD_SUPPLIER.addSubscriber(value -> updatePIDFromTunables());
+    KV_SUPPLIER.addSubscriber(value -> updatePIDFromTunables());
 
     // Request Initialization
     velocityRequest = new VelocityTorqueCurrentFOC(0);
@@ -245,7 +250,7 @@ public class ShooterIOReal implements ShooterIO {
             KI_SUPPLIER.get(),
             KD_SUPPLIER.get(),
             ShooterConstants.KS,
-            ShooterConstants.KV,
+            KV_SUPPLIER.get(),
             0,
             0,
             GravityTypeValue.Arm_Cosine);
