@@ -39,8 +39,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
     BooleanSupplier driveAngleCondition =
         () -> drive.isLocked(drive, positionSupplier.get(), true, ANGLE_TOLERANCE);
 
-    BooleanSupplier hubActiveCondition = () -> RebuiltUtils.isHubActive();
-    // || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
+    BooleanSupplier hubActiveCondition = () -> RebuiltUtils.isHubActive() || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
     Logger.recordOutput("Controls/Hub Active Condition", hubActiveCondition.getAsBoolean());
 
     BooleanSupplier shootCondition =
