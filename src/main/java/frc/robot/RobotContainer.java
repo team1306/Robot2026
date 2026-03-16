@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.controls.Controls;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Leds.Leds;
+import frc.robot.subsystems.Leds.LedsIO;
 import frc.robot.subsystems.Leds.LedsReal;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -117,6 +118,7 @@ public class RobotContainer {
                     VisionConstants.RIGHT_SIDE_CAMERA_POSITION,
                     () -> drive.getPose()));
         fuelDetection = new FuelDetection(new FuelDetectionReal());
+        leds = new Leds(new LedsIO() {});
         break;
 
       default:
@@ -139,6 +141,7 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {});
         fuelDetection = new FuelDetection(new FuelDetectionIO() {});
+        leds = new Leds(new LedsIO() {});
         break;
     }
 

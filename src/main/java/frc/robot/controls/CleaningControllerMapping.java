@@ -17,7 +17,7 @@ public class CleaningControllerMapping extends ControllerMapping {
 
   @AutoLogOutput
   private final LoggedNetworkNumberPlus targetSpeed =
-      new LoggedNetworkNumberPlus("/Tuning/Shooter RPS", 0);
+      new LoggedNetworkNumberPlus("/Tuning/Shooter RPS", 0.75);
 
   public CleaningControllerMapping(
       CommandXboxController driverController,
@@ -39,7 +39,9 @@ public class CleaningControllerMapping extends ControllerMapping {
 
     driverController
         .x()
-        .whileTrue(ShooterCommands.shootAtSpeedCommand(shooter, RotationsPerSecond.of(0.75)));
+        .whileTrue(
+            ShooterCommands.shootAtSpeedCommand(
+                shooter, () -> RotationsPerSecond.of(targetSpeed.get())));
 
     driverController.y().whileTrue(intake.deployAtDutyCycleCommand(-0.25));
   }

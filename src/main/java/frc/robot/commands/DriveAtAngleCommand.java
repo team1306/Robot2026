@@ -74,6 +74,7 @@ public class DriveAtAngleCommand extends Command {
 
     // Warning: PID error and setpoints are not correct when outputting, but it works, so it's good.
     Logger.recordOutput("Drive/At Angle Setpoint", angleController.atSetpoint());
+    Logger.recordOutput("Drive/Angle Setpoint Error", angleController.getPositionError());
 
     // If not moving and at desired angle
     if (linearVelocity.getX() == 0 && linearVelocity.getY() == 0 && angleController.atSetpoint()) {

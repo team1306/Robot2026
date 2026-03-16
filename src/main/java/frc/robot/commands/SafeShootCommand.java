@@ -31,7 +31,8 @@ public class SafeShootCommand extends ParallelCommandGroup {
       Indexer indexer,
       Intake intake,
       Supplier<Translation2d> positionSupplier,
-      BooleanSupplier overrideAllSafeguards,
+      BooleanSupplier overrideAngleSafeguard,
+      BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive) {
 
     BooleanSupplier shooterVelocityCondition = shooter.isAtRequestedSpeed();
@@ -39,17 +40,20 @@ public class SafeShootCommand extends ParallelCommandGroup {
     BooleanSupplier driveAngleCondition =
         () -> drive.isLocked(drive, positionSupplier.get(), true, ANGLE_TOLERANCE);
 
-    BooleanSupplier hubActiveCondition = () -> RebuiltUtils.isHubActive() || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
+    BooleanSupplier hubActiveCondition =
+        () ->
+            RebuiltUtils.isHubActive()
+                || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
     Logger.recordOutput("Controls/Hub Active Condition", hubActiveCondition.getAsBoolean());
 
-    BooleanSupplier shootCondition =
-        () ->
-            overrideAllSafeguards.getAsBoolean()
-                || (shooterVelocityCondition.getAsBoolean()
-                    && driveAngleCondition.getAsBoolean()
-                    && (overrideHubActive.getAsBoolean() || hubActiveCondition.getAsBoolean()));
     Command guardedIndexerCommand =
-        new GuardedCommand(indexer.indexUntilCancelledCommand(INDEXER_SPEED), shootCondition);
+        new GuardedCommand(
+            indexer.indexUntilCancelledCommand(INDEXER_SPEED),
+            () ->
+                (shooterVelocityCondition.getAsBoolean()
+                        || overrideVelocitySafeguard.getAsBoolean())
+                    && (driveAngleCondition.getAsBoolean() || overrideAngleSafeguard.getAsBoolean())
+                    && (overrideHubActive.getAsBoolean() || hubActiveCondition.getAsBoolean()));
 
     Command shootAtDistanceCommand =
         ShooterCommands.shootAtDistanceCommand(

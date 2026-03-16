@@ -21,7 +21,8 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       Supplier<Translation2d> positionSupplier,
-      BooleanSupplier overrideSafeguards,
+      BooleanSupplier overrideAngleSafeguard,
+      BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive) {
 
     Command safeShootCommand =
@@ -31,7 +32,8 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
             indexer,
             intake,
             positionSupplier,
-            overrideSafeguards,
+            overrideAngleSafeguard,
+            overrideVelocitySafeguard,
             overrideHubActive);
 
     Command driveAtAngleCommand =
