@@ -4,63 +4,131 @@ import badgerutils.triggers.AllianceTriggers;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.Constants.Locations;
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 public class RebuiltUtils {
+  public enum AllianceShift {
+    AUTO,
+    TRANSITION,
+    SHIFT1,
+    SHIFT2,
+    SHIFT3,
+    SHIFT4,
+    ENDGAME,
+    DISCONNECTED,
+    UNKNOWN;
+  }
 
-  public static boolean isInAllianceZone(Translation2d position) {
-    return AllianceTriggers.isBlueAlliance()
-        ? position.getX() <= 4.5
-        : position.getX() >= 16.540988 - 4.5;
+  private static final boolean[] loseSchedule = {
+    true, true, true, false, true, false, true, true, true
+  };
+  private static final boolean[] winSchedule = {
+    true, true, false, true, false, true, true, true, true
+  };
+
+  private static Timer shiftTimer = new Timer();
+
+  public static void initShiftTimer() {
+    shiftTimer.start();
+  }
+
+  private static AllianceShift getAllianceShiftFromTime(double time) {
+
+    if (DriverStation.isAutonomous()) {
+      return AllianceShift.AUTO;
+    }
+    if (!DriverStation.isFMSAttached()) {
+      // return AllianceShift.DISCONNECTED;
+    }
+
+    if (time >= 130) {
+      return AllianceShift.TRANSITION;
+    } // Transition Shift
+    else if (time < 130 && time >= 105) {
+      return AllianceShift.SHIFT1;
+    } else if (time < 105 && time >= 80) {
+      return AllianceShift.SHIFT2;
+    } else if (time < 80 && time >= 55) {
+      return AllianceShift.SHIFT3;
+    } else if (time < 55.0 && time >= 30.0) {
+      return AllianceShift.SHIFT4;
+    } else if (time < 30.0) {
+      return AllianceShift.ENDGAME;
+    } // End Game
+    return AllianceShift.UNKNOWN;
+  }
+
+  public static AllianceShift getOfficalAllianceShift() {
+    return getAllianceShiftFromTime(DriverStation.getMatchTime());
   }
   /**
    * @return The current HUB state on robots alliance
    */
   public static boolean isHubActive() {
-    // Holy if statment
+    boolean[] currentSchedule = new boolean[9];
     String gameData = DriverStation.getGameSpecificMessage();
     boolean isRedAlliance = AllianceTriggers.isRedAlliance();
     if (!gameData.isEmpty() && !DriverStation.isAutonomous()) {
-      boolean isShiftEven = getAllianceShift() % 2 == 0;
+
       switch (gameData.charAt(0)) {
         case 'B':
-          return isRedAlliance == !isShiftEven;
+          currentSchedule = isRedAlliance ? loseSchedule : winSchedule;
+          break;
         case 'R':
-          return isRedAlliance == isShiftEven;
+          currentSchedule = isRedAlliance ? winSchedule : loseSchedule;
+          break;
+        default:
+          Arrays.fill(currentSchedule, true);
+          break;
       }
+    } else {
+      Arrays.fill(currentSchedule, true);
     }
-    return true;
+
+    return currentSchedule[getAllianceShiftFromTime(DriverStation.getMatchTime()).ordinal()];
   }
-  /**
-   * @return The current alliance shift, if in AUTO, TRANSITION SHIFT or END GAME, returns 0
-   */
-  public static int getAllianceShift() {
+
+  public static boolean isHubActiveOffset(double offset) {
+    boolean[] currentSchedule = new boolean[9];
+    String gameData = DriverStation.getGameSpecificMessage();
+    boolean isRedAlliance = AllianceTriggers.isRedAlliance();
+    if (!gameData.isEmpty() && !DriverStation.isAutonomous()) {
+
+      switch (gameData.charAt(0)) {
+        case 'B':
+          currentSchedule = isRedAlliance ? loseSchedule : winSchedule;
+          break;
+        case 'R':
+          currentSchedule = isRedAlliance ? winSchedule : loseSchedule;
+          break;
+        default:
+          Arrays.fill(currentSchedule, true);
+          break;
+      }
+    } else {
+      Arrays.fill(currentSchedule, true);
+    }
+    // make sure we don't end our shooting period early
+    return currentSchedule[getAllianceShiftFromTime(140 - shiftTimer.get() - offset).ordinal()]
+        || currentSchedule[getAllianceShiftFromTime(140 - shiftTimer.get()).ordinal()];
+  }
+
+  public static double getShiftTime() {
+    AllianceShift currentShift = getAllianceShiftFromTime(DriverStation.getMatchTime());
     double time = DriverStation.getMatchTime();
-    if (DriverStation.isAutonomous()) {
-      return 0;
-    }
-    if (!DriverStation.isFMSAttached()) {
-      return 0;
-    }
-
-    if (time >= 130) {
-      return 0;
-    } // Transition Shift
-    else if (time <= 130 && time >= 105) {
-      return 1;
-    } else if (time <= 105 && time >= 80) {
-      return 2;
-    } else if (time <= 80 && time >= 55) {
-      return 3;
-    } else if (time <= 55 && time >= 30) {
-      return 4;
-    } else if (time <= 30) {
-      return 0;
-    } // End Game
-
-    return 0;
+    return switch (currentShift) {
+      case TRANSITION -> time - 130;
+      case SHIFT1 -> time - 105;
+      case SHIFT2 -> time - 80;
+      case SHIFT3 -> time - 55;
+      case SHIFT4 -> time - 30;
+      case ENDGAME -> time - 0;
+      default -> -1;
+    };
   }
 
   public static Translation3d getCurrentHubLocation() {
@@ -89,5 +157,11 @@ public class RebuiltUtils {
             < currentPosition.getSquaredDistance(leftCorner);
 
     return rightIsCloser ? rightCorner : leftCorner;
+  }
+
+  public static boolean isInAllianceZone(Translation2d position) {
+    return AllianceTriggers.isBlueAlliance()
+        ? position.getX() <= 4.5
+        : position.getX() >= 16.540988 - 4.5;
   }
 }

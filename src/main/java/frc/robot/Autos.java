@@ -102,7 +102,8 @@ public class Autos {
                 () -> 0,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
                 () -> false,
-                () -> false)
+                () -> false,
+                () -> true)
             .withDeadline(Commands.waitTime(STARTING_FUEL_SHOOT_DURATION)));
 
     NamedCommands.registerCommand("intake", intake.intakeAtDutyCycleCommand(1));
@@ -133,7 +134,8 @@ public class Autos {
             () -> 0,
             () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
             () -> false,
-            () -> false));
+            () -> false,
+            () -> true));
 
     NamedCommands.registerCommand(
         "shoot-small-hopper",
@@ -146,7 +148,8 @@ public class Autos {
                 () -> 0,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
                 () -> false,
-                () -> false)
+                () -> false,
+                () -> true)
             .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)));
   }
 
@@ -162,7 +165,8 @@ public class Autos {
                 intake,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
                 () -> true,
-                () -> false));
+                () -> false,
+                () -> true));
 
     new EventTrigger("shoot-8")
         .onTrue(
@@ -172,8 +176,9 @@ public class Autos {
                     indexer,
                     intake,
                     () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                    () -> true,
                     () -> false,
-                    () -> false)
+                    () -> true)
                 .withDeadline(Commands.waitTime(STARTING_FUEL_SHOOT_DURATION)));
 
     new EventTrigger("intake").onTrue(intake.intakeAtDutyCycleCommand(1));
@@ -201,8 +206,9 @@ public class Autos {
                     indexer,
                     intake,
                     () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                    () -> true,
                     () -> false,
-                    () -> false)
+                    () -> true)
                 .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)));
   }
 

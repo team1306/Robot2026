@@ -12,6 +12,7 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.util.RebuiltUtils;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -31,12 +32,19 @@ public class SafeShootCommand extends ParallelCommandGroup {
       Intake intake,
       Supplier<Translation2d> positionSupplier,
       BooleanSupplier overrideAngleSafeguard,
-      BooleanSupplier overrideVelocitySafeguard) {
+      BooleanSupplier overrideVelocitySafeguard,
+      BooleanSupplier overrideHubActive) {
 
     BooleanSupplier shooterVelocityCondition = shooter.isAtRequestedSpeed();
 
     BooleanSupplier driveAngleCondition =
         () -> drive.isLocked(drive, positionSupplier.get(), true, ANGLE_TOLERANCE);
+
+    BooleanSupplier hubActiveCondition =
+        () ->
+            RebuiltUtils.isHubActive()
+                || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
+    Logger.recordOutput("Controls/Hub Active Condition", hubActiveCondition.getAsBoolean());
 
     Command guardedIndexerCommand =
         new GuardedCommand(
@@ -44,8 +52,8 @@ public class SafeShootCommand extends ParallelCommandGroup {
             () ->
                 (shooterVelocityCondition.getAsBoolean()
                         || overrideVelocitySafeguard.getAsBoolean())
-                    && (driveAngleCondition.getAsBoolean()
-                        || overrideAngleSafeguard.getAsBoolean()));
+                    && (driveAngleCondition.getAsBoolean() || overrideAngleSafeguard.getAsBoolean())
+                    && (overrideHubActive.getAsBoolean() || hubActiveCondition.getAsBoolean()));
 
     Command shootAtDistanceCommand =
         ShooterCommands.shootAtDistanceCommand(
@@ -72,7 +80,8 @@ public class SafeShootCommand extends ParallelCommandGroup {
             .onTrue(guardedIndexerCommand);
 
     Command loggedGuardCommand =
-        Commands.run(() -> logConditions(shooterVelocityCondition, driveAngleCondition));
+        Commands.run(
+            () -> logConditions(shooterVelocityCondition, driveAngleCondition, hubActiveCondition));
 
     Command activityTracker = Commands.startEnd(() -> isActive = true, () -> isActive = false);
 
@@ -85,12 +94,15 @@ public class SafeShootCommand extends ParallelCommandGroup {
   }
 
   private void logConditions(
-      BooleanSupplier shooterVelocityCondition, BooleanSupplier driveAngleCondition) {
+      BooleanSupplier shooterVelocityCondition,
+      BooleanSupplier driveAngleCondition,
+      BooleanSupplier hubActiveCondition) {
     Logger.recordOutput(
         "Controls/Ready To Shoot",
         shooterVelocityCondition.getAsBoolean() && driveAngleCondition.getAsBoolean());
     Logger.recordOutput(
         "Controls/Shooter Velocity Condition", shooterVelocityCondition.getAsBoolean());
     Logger.recordOutput("Controls/Drive Angle Condition", driveAngleCondition.getAsBoolean());
+    Logger.recordOutput("Controls/HubActive", hubActiveCondition.getAsBoolean());
   }
 }

@@ -22,7 +22,8 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
       DoubleSupplier ySupplier,
       Supplier<Translation2d> positionSupplier,
       BooleanSupplier overrideAngleSafeguard,
-      BooleanSupplier overrideVelocitySafeguard) {
+      BooleanSupplier overrideVelocitySafeguard,
+      BooleanSupplier overrideHubActive) {
 
     Command safeShootCommand =
         new SafeShootCommand(
@@ -32,7 +33,8 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
             intake,
             positionSupplier,
             overrideAngleSafeguard,
-            overrideVelocitySafeguard);
+            overrideVelocitySafeguard,
+            overrideHubActive);
 
     Command driveAtAngleCommand =
         DriveCommands.driveAimLockedCommand(drive, xSupplier, ySupplier, positionSupplier, true);
