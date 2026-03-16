@@ -4,47 +4,63 @@
     {
       "anchor": {
         "x": 4.3752352941176476,
-        "y": 0.6280336134453774
+        "y": 0.6
       },
       "prevControl": null,
       "nextControl": {
         "x": 5.375235294117651,
-        "y": 0.6280336134453774
+        "y": 0.6
       },
       "isLocked": false,
       "linkedName": "start-trench-right"
     },
     {
       "anchor": {
-        "x": 7.75,
-        "y": 1.5216265060240959
+        "x": 8.2,
+        "y": 1.6
       },
       "prevControl": {
-        "x": 7.75,
-        "y": 0.5216265060240959
+        "x": 8.2,
+        "y": 0.6000000000000001
       },
       "nextControl": {
-        "x": 7.75,
-        "y": 2.5216265060240923
+        "x": 8.2,
+        "y": 2.599999999999997
       },
       "isLocked": false,
       "linkedName": "fuel-safe-right-entrance"
     },
     {
       "anchor": {
-        "x": 7.7345421686746985,
-        "y": 3.41212048192771
+        "x": 8.2,
+        "y": 3.25
       },
       "prevControl": {
-        "x": 7.7345421686746985,
-        "y": 3.91212048192771
+        "x": 8.2,
+        "y": 2.75
       },
       "nextControl": {
-        "x": 7.7345421686746985,
-        "y": 2.912120481927711
+        "x": 8.2,
+        "y": 3.749999999999999
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "fuel-halfway-right"
+    },
+    {
+      "anchor": {
+        "x": 7.25,
+        "y": 2.7
+      },
+      "prevControl": {
+        "x": 7.5367882181755235,
+        "y": 3.1095760221444957
+      },
+      "nextControl": {
+        "x": 6.819817672736715,
+        "y": 2.085635966783257
+      },
+      "isLocked": false,
+      "linkedName": "fuel-mid-right-exit"
     },
     {
       "anchor": {
@@ -79,14 +95,18 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.95,
-      "rotationDegrees": 90.0
+      "rotationDegrees": 100.0
     },
     {
       "waypointRelativePos": 2.0,
-      "rotationDegrees": 90.0
+      "rotationDegrees": 119.99999999999999
     },
     {
-      "waypointRelativePos": 3.0,
+      "waypointRelativePos": 2.5,
+      "rotationDegrees": -125.00000000000001
+    },
+    {
+      "waypointRelativePos": 4.0,
       "rotationDegrees": -135.0
     }
   ],
@@ -107,7 +127,7 @@
     },
     {
       "name": "stop-intake",
-      "waypointRelativePos": 3.2,
+      "waypointRelativePos": 4.2,
       "endWaypointRelativePos": null,
       "command": null
     }

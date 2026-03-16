@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 4.3752352941176476,
-        "y": 0.6280336134453774
+        "y": 0.6
       },
       "prevControl": null,
       "nextControl": {
         "x": 5.375235294117651,
-        "y": 0.6280336134453774
+        "y": 0.6
       },
       "isLocked": false,
       "linkedName": "start-trench-right"
     },
     {
       "anchor": {
-        "x": 7.75,
-        "y": 1.5216265060240959
+        "x": 8.2,
+        "y": 1.6
       },
       "prevControl": {
-        "x": 7.75,
-        "y": 0.5216265060240959
+        "x": 8.2,
+        "y": 0.6000000000000001
       },
       "nextControl": {
-        "x": 7.75,
-        "y": 2.5216265060240923
+        "x": 8.2,
+        "y": 2.5999999999999965
       },
       "isLocked": false,
       "linkedName": "fuel-safe-right-entrance"

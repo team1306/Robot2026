@@ -17,46 +17,46 @@
     {
       "anchor": {
         "x": 4.3752352941176476,
-        "y": 7.3962352941176475
+        "y": 7.4
       },
       "prevControl": {
         "x": 2.8752352941176476,
-        "y": 7.3962352941176475
+        "y": 7.4
       },
       "nextControl": {
-        "x": 5.3752352941176476,
-        "y": 7.3962352941176475
+        "x": 5.8752352941176476,
+        "y": 7.4
       },
       "isLocked": false,
       "linkedName": "start-trench-left"
     },
     {
       "anchor": {
-        "x": 5.768,
-        "y": 6.6
+        "x": 5.8,
+        "y": 6.8
       },
       "prevControl": {
-        "x": 6.528494200385246,
-        "y": 7.528250273999638
+        "x": 5.8,
+        "y": 7.3
       },
       "nextControl": {
-        "x": 5.609563708253074,
-        "y": 6.406614526250075
+        "x": 5.8,
+        "y": 6.55
       },
       "isLocked": false,
       "linkedName": "trench-left-wall"
     },
     {
       "anchor": {
-        "x": 5.768,
+        "x": 5.8,
         "y": 4.0
       },
       "prevControl": {
-        "x": 5.768,
-        "y": 6.0
+        "x": 5.8,
+        "y": 4.25
       },
       "nextControl": {
-        "x": 5.768,
+        "x": 5.8,
         "y": 3.75
       },
       "isLocked": false,
@@ -98,7 +98,7 @@
       "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 1.5,
+      "waypointRelativePos": 1.1,
       "rotationDegrees": 0.0
     },
     {
