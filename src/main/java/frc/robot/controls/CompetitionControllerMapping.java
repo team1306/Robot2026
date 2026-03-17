@@ -2,6 +2,7 @@ package frc.robot.controls;
 
 import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 
 import badgerutils.commands.CommandUtils;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FaceforwardCommand;
 import frc.robot.commands.FuelCollectionCommand;
@@ -145,7 +147,11 @@ public class CompetitionControllerMapping extends ControllerMapping {
                             ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
                             : RebuiltUtils.getNearestAllianceCorner(
                                 drive.getPose().getTranslation()),
-                    operatorController.rightBumper())
+                    operatorController.leftBumper(),
+                    operatorController.leftBumper(),
+                    () ->
+                        operatorController.rightBumper().getAsBoolean()
+                            || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation()))
                 .alongWith(loggedTargetCommand));
 
     /* ---P2--- */
@@ -181,7 +187,9 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 .alongWith(
                     new InstantCommand(
                         () -> operatorController.setRumble(RumbleType.kBothRumble, 0.25))))
-        .onFalse(new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)));
+        .onFalse(
+            new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0))
+                .ignoringDisable(true));
 
     // Deploy Intake
     operatorController.x().whileTrue(intake.deployCommand());
@@ -222,8 +230,18 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .a()
         .onTrue(new InstantCommand(() -> intake.setDutyCycle(-0.5)))
         .onFalse(new InstantCommand(() -> intake.setDutyCycle(0)));
-    // Led triggers
+
+    Command rumblePulse =
+        Commands.sequence(
+                Commands.runOnce(() -> operatorController.setRumble(RumbleType.kBothRumble, 0.1)),
+                Commands.waitTime(Seconds.of(0.1)),
+                Commands.runOnce(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)))
+            .finallyDo(() -> operatorController.setRumble(RumbleType.kBothRumble, 0));
+
     
+    Trigger warningTrigger = new Trigger(() -> RebuiltUtils.getShiftTime() <= 5.0);
+
+    warningTrigger.whileTrue(rumblePulse.ignoringDisable(true));
   }
 
   @Override

@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0,
+        "x": 2.5,
         "y": 2.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0,
+        "x": 2.5,
         "y": 1.4999999999999964
       },
       "isLocked": false,
@@ -20,8 +20,8 @@
         "y": 0.6280336134453774
       },
       "prevControl": {
-        "x": 3.3752352941176476,
-        "y": 0.6280336134453776
+        "x": 2.8752352941176476,
+        "y": 0.6280336134453777
       },
       "nextControl": {
         "x": 5.3752352941176476,
@@ -32,47 +32,47 @@
     },
     {
       "anchor": {
-        "x": 5.768,
-        "y": 1.397
+        "x": 5.8,
+        "y": 1.4
       },
       "prevControl": {
-        "x": 6.528494559074641,
-        "y": 0.468750019866487
+        "x": 6.560494559074641,
+        "y": 0.4717500198664869
       },
       "nextControl": {
-        "x": 5.6095636335261165,
-        "y": 1.5903854125278154
+        "x": 5.641563633526117,
+        "y": 1.5933854125278153
       },
       "isLocked": false,
       "linkedName": "trench-right-wall"
     },
     {
       "anchor": {
-        "x": 5.768,
-        "y": 4.107
+        "x": 5.75,
+        "y": 4.0
       },
       "prevControl": {
-        "x": 5.768,
-        "y": 3.857
+        "x": 5.75,
+        "y": 2.0
       },
       "nextControl": {
-        "x": 5.768,
-        "y": 4.357
+        "x": 5.75,
+        "y": 4.4
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.2,
+        "x": 5.9,
         "y": 2.5
       },
       "prevControl": {
-        "x": 7.2,
+        "x": 6.9,
         "y": 2.5
       },
       "nextControl": {
-        "x": 5.2,
+        "x": 4.9,
         "y": 2.5
       },
       "isLocked": false,
@@ -80,11 +80,11 @@
     },
     {
       "anchor": {
-        "x": 3.0,
+        "x": 2.5,
         "y": 2.5
       },
       "prevControl": {
-        "x": 3.25,
+        "x": 2.75,
         "y": 2.5
       },
       "nextControl": null,
@@ -125,13 +125,7 @@
     },
     {
       "name": "stop-intake",
-      "waypointRelativePos": 4.0,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "spool-shooter",
-      "waypointRelativePos": 4.004962779156297,
+      "waypointRelativePos": 4.2,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -146,13 +140,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -133.67497514699588
+    "rotation": -140.87772276439145
   },
   "reversed": false,
   "folder": "Close Collection",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -133.67497514699588
+    "rotation": -140.87772276439145
   },
   "useDefaultConstraints": true
 }

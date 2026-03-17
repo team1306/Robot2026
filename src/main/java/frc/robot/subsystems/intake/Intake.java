@@ -5,10 +5,8 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -68,7 +66,8 @@ public class Intake extends SubsystemBase {
   }
 
   public Command deployCommand() {
-    return new ParallelDeadlineGroup(new WaitCommand(1.5), deployAtDutyCycleCommand(1));
+    return (deployAtDutyCycleCommand(1).withDeadline(Commands.waitSeconds(.5)))
+        .andThen(deployAtDutyCycleCommand(.5).withDeadline(Commands.waitSeconds(.25)));
   }
 
   public Command intakeUntilInterruptedCommand(double dutyCycleWhileOn) {

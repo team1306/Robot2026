@@ -32,8 +32,8 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 public class Autos {
-  private static final Time STARTING_FUEL_SHOOT_DURATION = Seconds.of(2);
-  private static final Time SMALL_HOPPER_SHOOT_DURATION = Seconds.of(5);
+  private static final Time STARTING_FUEL_SHOOT_DURATION = Seconds.of(1);
+  private static final Time SMALL_HOPPER_SHOOT_DURATION = Seconds.of(3);
 
   private final Drive drive;
   private final Indexer indexer;
@@ -101,7 +101,9 @@ public class Autos {
                 () -> 0,
                 () -> 0,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                () -> false)
+                () -> false,
+                () -> false,
+                () -> true)
             .withDeadline(Commands.waitTime(STARTING_FUEL_SHOOT_DURATION)));
 
     NamedCommands.registerCommand("intake", intake.intakeAtDutyCycleCommand(1));
@@ -131,7 +133,9 @@ public class Autos {
             () -> 0,
             () -> 0,
             () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-            () -> false));
+            () -> false,
+            () -> false,
+            () -> true));
 
     NamedCommands.registerCommand(
         "shoot-small-hopper",
@@ -143,7 +147,9 @@ public class Autos {
                 () -> 0,
                 () -> 0,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                () -> false)
+                () -> false,
+                () -> false,
+                () -> true)
             .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)));
   }
 
@@ -158,6 +164,8 @@ public class Autos {
                 indexer,
                 intake,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                () -> true,
+                () -> false,
                 () -> true));
 
     new EventTrigger("shoot-8")
@@ -168,7 +176,9 @@ public class Autos {
                     indexer,
                     intake,
                     () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                    () -> false)
+                    () -> true,
+                    () -> false,
+                    () -> true)
                 .withDeadline(Commands.waitTime(STARTING_FUEL_SHOOT_DURATION)));
 
     new EventTrigger("intake").onTrue(intake.intakeAtDutyCycleCommand(1));
@@ -196,7 +206,9 @@ public class Autos {
                     indexer,
                     intake,
                     () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                    () -> false)
+                    () -> true,
+                    () -> false,
+                    () -> true)
                 .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)));
   }
 

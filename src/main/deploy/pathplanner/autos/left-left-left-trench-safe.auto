@@ -9,25 +9,25 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "deploy-intake"
-                }
-              },
-              {
                 "type": "sequential",
                 "data": {
                   "commands": [
                     {
+                      "type": "path",
+                      "data": {
+                        "pathName": "left-left-trench-safe"
+                      }
+                    },
+                    {
                       "type": "named",
                       "data": {
-                        "name": "shoot-8"
+                        "name": "shoot-small-hopper"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "left-right-trench-far"
+                        "pathName": "left-left-trench-close"
                       }
                     },
                     {
@@ -46,6 +46,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Single Pass",
+  "folder": "Double Pass",
   "choreoAuto": false
 }

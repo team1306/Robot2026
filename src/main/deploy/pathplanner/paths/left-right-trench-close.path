@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0,
+        "x": 2.5,
         "y": 5.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0,
-        "y": 6.5000000000000036
+        "x": 2.5,
+        "y": 6.5
       },
       "isLocked": false,
       "linkedName": "bump-left-alliance"
@@ -20,7 +20,7 @@
         "y": 7.3962352941176475
       },
       "prevControl": {
-        "x": 3.3752352941176476,
+        "x": 2.8752352941176476,
         "y": 7.3962352941176475
       },
       "nextControl": {
@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 5.767554216867469,
-        "y": 6.603012048192771
+        "x": 5.768,
+        "y": 6.6
       },
       "prevControl": {
-        "x": 6.528048775942111,
-        "y": 7.531262028326284
+        "x": 6.528494559074641,
+        "y": 7.528249980133513
       },
       "nextControl": {
-        "x": 5.609117850393586,
-        "y": 6.4096266356649565
+        "x": 5.6095636335261165,
+        "y": 6.406614587472185
       },
       "isLocked": false,
       "linkedName": "trench-left-wall"
@@ -53,7 +53,7 @@
       },
       "prevControl": {
         "x": 5.768,
-        "y": 3.92
+        "y": 4.67
       },
       "nextControl": {
         "x": 5.768,
@@ -64,15 +64,15 @@
     },
     {
       "anchor": {
-        "x": 6.2,
+        "x": 5.9,
         "y": 2.5
       },
       "prevControl": {
-        "x": 7.2,
+        "x": 6.9,
         "y": 2.5
       },
       "nextControl": {
-        "x": 5.2,
+        "x": 4.9,
         "y": 2.5
       },
       "isLocked": false,
@@ -80,11 +80,11 @@
     },
     {
       "anchor": {
-        "x": 3.0,
+        "x": 2.5,
         "y": 2.5
       },
       "prevControl": {
-        "x": 3.25,
+        "x": 2.75,
         "y": 2.5
       },
       "nextControl": null,
@@ -125,13 +125,7 @@
     },
     {
       "name": "stop-intake",
-      "waypointRelativePos": 4.0,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "spool-shooter",
-      "waypointRelativePos": 4.004962779156297,
+      "waypointRelativePos": 4.2,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -146,13 +140,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -133.67497514699588
+    "rotation": -140.87772276439145
   },
   "reversed": false,
   "folder": "Close Collection",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 133.3376446743923
+    "rotation": 144.82397065842056
   },
   "useDefaultConstraints": true
 }
