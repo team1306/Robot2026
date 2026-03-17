@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.RebuiltUtils;
 import java.util.function.BooleanSupplier;
@@ -30,6 +31,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
       Shooter shooter,
       Indexer indexer,
       Intake intake,
+      Leds leds,
       Supplier<Translation2d> positionSupplier,
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
@@ -85,6 +87,20 @@ public class SafeShootCommand extends ParallelCommandGroup {
 
     Command activityTracker = Commands.startEnd(() -> isActive = true, () -> isActive = false);
 
+    Trigger isShooting = new Trigger(() -> isActive);
+    Trigger readyToShoot =
+        new Trigger(
+            () ->
+                (shooterVelocityCondition.getAsBoolean()
+                    && driveAngleCondition.getAsBoolean()
+                    && hubActiveCondition.getAsBoolean()));
+
+    readyToShoot.whileTrue(
+        Commands.runEnd(
+            () -> leds.isInShootingTolerance = true, () -> leds.isInShootingTolerance = false));
+    isShooting.whileTrue(
+        Commands.runEnd(
+            () -> leds.isShooting = true, () -> leds.isShooting = false));
     addCommands(
         activityTracker,
         shootAtDistanceCommand,

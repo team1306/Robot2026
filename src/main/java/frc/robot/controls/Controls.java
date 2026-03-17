@@ -34,7 +34,8 @@ public class Controls {
       Intake intake,
       Shooter shooter,
       Indexer indexer,
-      FuelDetection fuelDetection, Leds leds) {
+      FuelDetection fuelDetection,
+      Leds leds) {
     DriverStation.silenceJoystickConnectionWarning(true);
     driverController = new CommandXboxController(0);
     operatorController = new CommandXboxController(1);
@@ -48,7 +49,8 @@ public class Controls {
             intake,
             shooter,
             indexer,
-            fuelDetection, leds));
+            fuelDetection,
+            leds));
     mappings.put(
         ControlStates.SYSID,
         new SysIdControllerMapping(driverController, operatorController, drivetrain));

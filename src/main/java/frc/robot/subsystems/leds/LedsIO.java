@@ -1,21 +1,11 @@
 package frc.robot.subsystems.leds;
 
-
-import edu.wpi.first.wpilibj.util.Color;
-
-
-/**
-* * LEDIO interface where you update the red, green, and blue LEDIO inputs
-* */
+/** * LEDIO interface where you update the red, green, and blue LEDIO inputs */
 public interface LedsIO {
-   /**
-    * Sets the LEDs to a red, green, and blue value
-    */
-  
-   default void setSolid(int red, int green, int blue) {}
+  /** Sets the LEDs to a red, green, and blue value */
+  default void setSolid(int red, int green, int blue) {}
 
+  default void setBlink(int red, int green, int blue, int speed) {}
 
-   default void setBlink(int red, int green, int blue, int speed){}
-   default void clearAnimation() {}
-  
+  default void clearAnimation() {}
 }

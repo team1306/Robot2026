@@ -46,7 +46,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
       Intake intake,
       Shooter shooter,
       Indexer indexer,
-      FuelDetection fuelDetection, Leds leds) {
+      FuelDetection fuelDetection,
+      Leds leds) {
     super(driverController, operatorController);
     this.drive = drive;
     this.intake = intake;
@@ -140,6 +141,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     shooter,
                     indexer,
                     intake,
+                    leds,
                     () -> -driverController.getLeftY(),
                     () -> -driverController.getLeftX(),
                     () ->
@@ -238,7 +240,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 Commands.runOnce(() -> operatorController.setRumble(RumbleType.kBothRumble, 0)))
             .finallyDo(() -> operatorController.setRumble(RumbleType.kBothRumble, 0));
 
-    
     Trigger warningTrigger = new Trigger(() -> RebuiltUtils.getShiftTime() <= 5.0);
 
     warningTrigger.whileTrue(rumblePulse.ignoringDisable(true));

@@ -146,7 +146,7 @@ public class RobotContainer {
     }
 
     controls = new Controls(drive, intake, shooter, indexer, fuelDetection, leds);
-    autos = new Autos(drive, indexer, intake, shooter);
+    autos = new Autos(drive, indexer, intake, shooter, leds);
   }
 
   public Command getAutonomousCommand() {
