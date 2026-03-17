@@ -99,8 +99,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
         Commands.runEnd(
             () -> leds.isInShootingTolerance = true, () -> leds.isInShootingTolerance = false));
     isShooting.whileTrue(
-        Commands.runEnd(
-            () -> leds.isShooting = true, () -> leds.isShooting = false));
+        Commands.runEnd(() -> leds.isShooting = true, () -> leds.isShooting = false));
     addCommands(
         activityTracker,
         shootAtDistanceCommand,
