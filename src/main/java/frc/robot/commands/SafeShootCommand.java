@@ -96,14 +96,9 @@ public class SafeShootCommand extends ParallelCommandGroup {
     Command activityTracker = Commands.startEnd(() -> isActive = true, () -> isActive = false);
 
     Trigger isShooting = new Trigger(() -> isActive);
-    Trigger readyToShoot =
-        new Trigger(
-            () ->
-                (shooterVelocityCondition.getAsBoolean()
-                    && driveAngleCondition.getAsBoolean()
-                    && hubActiveCondition.getAsBoolean()));
+    Trigger combinedTrigger = new Trigger(combinedCondition);
 
-    readyToShoot.whileTrue(
+    combinedTrigger.whileTrue(
         Commands.runEnd(
             () -> leds.isInShootingTolerance = true, () -> leds.isInShootingTolerance = false));
     isShooting.whileTrue(
