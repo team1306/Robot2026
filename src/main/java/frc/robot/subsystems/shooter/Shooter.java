@@ -113,11 +113,11 @@ public class Shooter extends SubsystemBase {
    *
    * @return a new boolean supplier
    */
-  public BooleanSupplier isAtRequestedSpeed() {
-    return () -> getAvgClosedLoopError() < ShooterConstants.ERROR_THRESHOLD;
+  public BooleanSupplier isAtRequestedSpeed(AngularVelocity tolerance) {
+    return () -> getAvgClosedLoopError() < tolerance.in(RotationsPerSecond);
   }
 
-  public Trigger isAtRequestedSpeedTrigger() {
-    return new Trigger(isAtRequestedSpeed());
+  public Trigger isAtRequestedSpeedTrigger(AngularVelocity tolerance) {
+    return new Trigger(isAtRequestedSpeed(tolerance));
   }
 }

@@ -11,7 +11,6 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.fueldetection.FuelDetection;
 import frc.robot.subsystems.fueldetection.FuelDetectionIO;
-import frc.robot.subsystems.fueldetection.FuelDetectionReal;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIOReal;
@@ -78,7 +77,7 @@ public class RobotContainer {
                 new VisionIOPhotonVision(
                     VisionConstants.RIGHT_SIDE_CAMERA_NAME,
                     VisionConstants.RIGHT_SIDE_CAMERA_POSITION));
-        fuelDetection = new FuelDetection(new FuelDetectionReal());
+        fuelDetection = new FuelDetection(new FuelDetectionIO() {});
         break;
 
       case SIM:
@@ -112,7 +111,7 @@ public class RobotContainer {
                     VisionConstants.RIGHT_SIDE_CAMERA_NAME,
                     VisionConstants.RIGHT_SIDE_CAMERA_POSITION,
                     () -> drive.getPose()));
-        fuelDetection = new FuelDetection(new FuelDetectionReal());
+        fuelDetection = new FuelDetection(new FuelDetectionIO() {});
         break;
 
       default:

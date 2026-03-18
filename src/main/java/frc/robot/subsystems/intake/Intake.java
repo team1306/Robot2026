@@ -1,7 +1,10 @@
 package frc.robot.subsystems.intake;
 
+import static edu.wpi.first.units.Units.Seconds;
+
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -71,8 +74,7 @@ public class Intake extends SubsystemBase {
   }
 
   public Command intakeUntilInterruptedCommand(double dutyCycleWhileOn) {
-    return Commands.startEnd(
-        () -> this.setDutyCycle(dutyCycleWhileOn), () -> this.setDutyCycle(0), this);
+    return intakeUntilInterruptedCommand(() -> dutyCycleWhileOn);
   }
 
   public Command intakeUntilInterruptedCommand(DoubleSupplier dutyCycleWhileOn) {
@@ -80,11 +82,24 @@ public class Intake extends SubsystemBase {
         () -> this.setDutyCycle(dutyCycleWhileOn.getAsDouble()), () -> this.setDutyCycle(0), this);
   }
 
-  public Command jumbleIntake() {
-    return (Commands.runEnd(
-        () -> setDutyCycle(Math.sin(RobotController.getFPGATime() * 0.0001) * 0.5 + 0.25),
-        () -> setDutyCycle(0),
-        this));
+  public Command shakeIntake() {
+    final Time ON_DURATION = Seconds.of(0.75);
+    final Time OFF_DURATION = Seconds.of(0.25);
+    Timer shakeTimer = new Timer();
+
+    return Commands.runEnd(
+            () -> {
+              if (!shakeTimer.hasElapsed(ON_DURATION)) {
+                setDutyCycle(1);
+              } else if (!shakeTimer.hasElapsed(ON_DURATION.plus(OFF_DURATION))) {
+                setDutyCycle(0);
+              } else {
+                shakeTimer.restart();
+              }
+            },
+            () -> setDutyCycle(0),
+            this)
+        .beforeStarting(() -> shakeTimer.start());
   }
 
   public Command intakeUntilInterruptedCommand() {
