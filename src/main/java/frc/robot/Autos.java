@@ -158,7 +158,7 @@ public class Autos {
 
     new EventTrigger("shoot-until-done")
         .onTrue(
-            ShootOnTheMoveCommands.shootOnTheMoveCommand(
+            ShootOnTheMoveCommands.shootOnTheMoveAutoCommand(
                 drive,
                 shooter,
                 indexer,
@@ -170,7 +170,7 @@ public class Autos {
 
     new EventTrigger("shoot-8")
         .onTrue(
-            ShootOnTheMoveCommands.shootOnTheMoveCommand(
+            ShootOnTheMoveCommands.shootOnTheMoveAutoCommand(
                     drive,
                     shooter,
                     indexer,
@@ -200,7 +200,7 @@ public class Autos {
 
     new EventTrigger("shoot-small-hopper")
         .onTrue(
-            ShootOnTheMoveCommands.shootOnTheMoveCommand(
+            ShootOnTheMoveCommands.shootOnTheMoveAutoCommand(
                     drive,
                     shooter,
                     indexer,

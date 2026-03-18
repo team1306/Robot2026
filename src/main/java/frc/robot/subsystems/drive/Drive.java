@@ -132,7 +132,6 @@ public class Drive extends SubsystemBase {
         (targetPose) -> {
           Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
         });
-
     // Configure SysId
     sysId =
         new SysIdRoutine(

@@ -142,28 +142,7 @@
       }
     }
   ],
-  "pointTowardsZones": [
-    {
-      "fieldPosition": {
-        "x": 4.6,
-        "y": 4.036
-      },
-      "rotationOffset": 180.0,
-      "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 0.5,
-      "name": "Point Towards Zone"
-    },
-    {
-      "fieldPosition": {
-        "x": 4.6,
-        "y": 4.036
-      },
-      "rotationOffset": 180.0,
-      "minWaypointRelativePos": 4.5,
-      "maxWaypointRelativePos": 5.0,
-      "name": "Point Towards Zone"
-    }
-  ],
+  "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "intake",

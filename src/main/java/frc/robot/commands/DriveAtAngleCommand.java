@@ -68,9 +68,7 @@ public class DriveAtAngleCommand extends Command {
             xSupplier.getAsDouble(), ySupplier.getAsDouble());
 
     // Calculate angular speed
-    double omega =
-        angleController.calculate(
-            drive.getRotation().getRadians(), rotationSupplier.get().getRadians());
+    double omega = getPIDOutput();
 
     // Warning: PID error and setpoints are not correct when outputting, but it works, so it's good.
     Logger.recordOutput("Drive/At Angle Setpoint", angleController.atSetpoint());
@@ -97,5 +95,10 @@ public class DriveAtAngleCommand extends Command {
         ChassisSpeeds.fromFieldRelativeSpeeds(
             speeds,
             isFlipped ? drive.getRotation().plus(new Rotation2d(Math.PI)) : drive.getRotation()));
+  }
+
+  public double getPIDOutput() {
+    return angleController.calculate(
+        drive.getRotation().getRadians(), rotationSupplier.get().getRadians());
   }
 }
