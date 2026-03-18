@@ -21,6 +21,7 @@ import frc.robot.subsystems.intake.IntakeIOReal;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.leds.LedsIO;
 import frc.robot.subsystems.leds.LedsReal;
+import frc.robot.subsystems.leds.LedsRio;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterIO;
@@ -83,7 +84,7 @@ public class RobotContainer {
                     VisionConstants.RIGHT_SIDE_CAMERA_NAME,
                     VisionConstants.RIGHT_SIDE_CAMERA_POSITION));
         fuelDetection = new FuelDetection(new FuelDetectionReal());
-        leds = new Leds(new LedsReal());
+        leds = new Leds(new LedsRio());
         break;
 
       case SIM:
@@ -118,7 +119,7 @@ public class RobotContainer {
                     VisionConstants.RIGHT_SIDE_CAMERA_POSITION,
                     () -> drive.getPose()));
         fuelDetection = new FuelDetection(new FuelDetectionReal());
-        leds = new Leds(new LedsReal());
+        leds = new Leds(new LedsRio());
         break;
 
       default:
