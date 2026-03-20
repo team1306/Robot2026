@@ -70,10 +70,6 @@ public class DriveAtAngleCommand extends Command {
     // Calculate angular speed
     double omega = getPIDOutput();
 
-    // Warning: PID error and setpoints are not correct when outputting, but it works, so it's good.
-    Logger.recordOutput("Drive/At Angle Setpoint", angleController.atSetpoint());
-    Logger.recordOutput("Drive/Angle Setpoint Error", angleController.getPositionError());
-
     // If not moving and at desired angle
     if (linearVelocity.getX() == 0 && linearVelocity.getY() == 0 && angleController.atSetpoint()) {
       drive.stopWithX();
@@ -98,6 +94,10 @@ public class DriveAtAngleCommand extends Command {
   }
 
   public double getPIDOutput() {
+    Logger.recordOutput("Drive/At Angle Setpoint", angleController.atSetpoint());
+
+    Logger.recordOutput("Drive/Angle Setpoint Error", angleController.getPositionError());
+
     return angleController.calculate(
         drive.getRotation().getRadians(), rotationSupplier.get().getRadians());
   }

@@ -48,11 +48,15 @@ public class ShootOnTheMoveCommands {
         new DriveAimLockedCommand(drive, () -> 0, () -> 0, target, true);
 
     return shootCommand.alongWith(
-        Commands.startEnd(
+        Commands.runOnce(
             () ->
                 PPHolonomicDriveController.overrideRotationFeedback(
-                    () -> driveCommand.getPIDOutput()),
-            () -> PPHolonomicDriveController.clearRotationFeedbackOverride()));
+                    () -> driveCommand.getPIDOutput())));
+    // Commands.startEnd(
+    //     () ->
+    //         PPHolonomicDriveController.overrideRotationFeedback(
+    //             () -> driveCommand.getPIDOutput()),
+    //     () -> PPHolonomicDriveController.clearRotationFeedbackOverride()));
   }
 
   public static Command aimAndShootOnTheMoveCommand(
