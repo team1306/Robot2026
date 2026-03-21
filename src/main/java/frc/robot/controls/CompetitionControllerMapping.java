@@ -159,10 +159,13 @@ public class CompetitionControllerMapping extends ControllerMapping {
                             ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
                             : RebuiltUtils.getNearestAllianceCorner(
                                 drive.getPose().getTranslation()),
-                    operatorController.leftBumper(),
-                    operatorController.leftBumper(),
+                    operatorController.rightBumper(),
                     () ->
                         operatorController.rightBumper().getAsBoolean()
+                            || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation()),
+                    () ->
+                        operatorController.rightBumper().getAsBoolean()
+                            || operatorController.leftBumper().getAsBoolean()
                             || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation()))
                 .alongWith(loggedTargetCommand));
 
