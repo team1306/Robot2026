@@ -55,7 +55,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
         () ->
             (shooterVelocityCondition.getAsBoolean() || overrideVelocitySafeguard.getAsBoolean())
                 && (driveAngleCondition.getAsBoolean() || overrideAngleSafeguard.getAsBoolean())
-                /* && (hubActiveCondition.getAsBoolean() || overrideHubActive.getAsBoolean()) */;
+        /* && (hubActiveCondition.getAsBoolean() || overrideHubActive.getAsBoolean()) */ ;
 
     Command guardedIndexerCommand =
         new GuardedCommand(
