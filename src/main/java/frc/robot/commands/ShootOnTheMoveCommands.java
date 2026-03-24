@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.LocationUtils;
 import java.util.function.BooleanSupplier;
@@ -29,6 +30,7 @@ public class ShootOnTheMoveCommands {
       Shooter shooter,
       Indexer indexer,
       Intake intake,
+      Leds leds,
       Supplier<Translation2d> target,
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
@@ -39,6 +41,7 @@ public class ShootOnTheMoveCommands {
             shooter,
             indexer,
             intake,
+            leds,
             () -> calculateLeadTarget(drive, target),
             overrideAngleSafeguard,
             overrideVelocitySafeguard,
@@ -61,6 +64,7 @@ public class ShootOnTheMoveCommands {
       Shooter shooter,
       Indexer indexer,
       Intake intake,
+      Leds leds,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       Supplier<Translation2d> target,
@@ -72,6 +76,7 @@ public class ShootOnTheMoveCommands {
         shooter,
         indexer,
         intake,
+        leds,
         () -> xSupplier.getAsDouble() * SLOWDOWN_FACTOR,
         () -> ySupplier.getAsDouble() * SLOWDOWN_FACTOR,
         () -> calculateLeadTarget(drive, target),

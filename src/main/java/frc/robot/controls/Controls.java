@@ -8,6 +8,7 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.fueldetection.FuelDetection;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -33,7 +34,8 @@ public class Controls {
       Intake intake,
       Shooter shooter,
       Indexer indexer,
-      FuelDetection fuelDetection) {
+      FuelDetection fuelDetection,
+      Leds leds) {
     DriverStation.silenceJoystickConnectionWarning(true);
     driverController = new CommandXboxController(0);
     operatorController = new CommandXboxController(1);
@@ -47,7 +49,8 @@ public class Controls {
             intake,
             shooter,
             indexer,
-            fuelDetection));
+            fuelDetection,
+            leds));
     mappings.put(
         ControlStates.SYSID,
         new SysIdControllerMapping(driverController, operatorController, drivetrain));

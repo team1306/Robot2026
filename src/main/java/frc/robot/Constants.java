@@ -52,6 +52,8 @@ public final class Constants {
     public static final int INTAKE_LEFT_MOTOR_ID = 23;
     public static final int INTAKE_RIGHT_MOTOR_ID = 24;
     public static final int DEPLOYER_MOTOR_ID = 25;
+
+    public static final int CANDLE_ID = 26;
   }
 
   public static enum Mode {

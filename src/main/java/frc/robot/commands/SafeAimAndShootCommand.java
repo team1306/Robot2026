@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -20,6 +21,7 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
       Shooter shooter,
       Indexer indexer,
       Intake intake,
+      Leds leds,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       Supplier<Translation2d> positionSupplier,
@@ -33,6 +35,7 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
             shooter,
             indexer,
             intake,
+            leds,
             positionSupplier,
             overrideAngleSafeguard,
             overrideVelocitySafeguard,

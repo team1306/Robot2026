@@ -24,6 +24,7 @@ import frc.robot.controls.Controls;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.RebuiltUtils;
 import java.util.List;
@@ -39,6 +40,7 @@ public class Autos {
   private final Indexer indexer;
   private final Intake intake;
   private final Shooter shooter;
+  private final Leds leds;
 
   // Prefer to construct autos lazily to save limited memory. Required with many auto files
   private final LoggedDashboardChooser<Auto> autoChooser;
@@ -48,11 +50,12 @@ public class Autos {
 
   private static final List<String> autoNames = AutoBuilder.getAllAutoNames();
 
-  public Autos(Drive drive, Indexer indexer, Intake intake, Shooter shooter) {
+  public Autos(Drive drive, Indexer indexer, Intake intake, Shooter shooter, Leds leds) {
     this.drive = drive;
     this.indexer = indexer;
     this.intake = intake;
     this.shooter = shooter;
+    this.leds = leds;
     autoWaitTime.set(0);
 
     autoChooser = new LoggedDashboardChooser<>("Autos/Auto Chooser");
@@ -98,6 +101,7 @@ public class Autos {
                 shooter,
                 indexer,
                 intake,
+                leds,
                 () -> 0,
                 () -> 0,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
@@ -130,6 +134,7 @@ public class Autos {
             shooter,
             indexer,
             intake,
+            leds,
             () -> 0,
             () -> 0,
             () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
@@ -144,6 +149,7 @@ public class Autos {
                 shooter,
                 indexer,
                 intake,
+                leds,
                 () -> 0,
                 () -> 0,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
@@ -166,6 +172,7 @@ public class Autos {
                 shooter,
                 indexer,
                 intake,
+                leds,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
                 () -> true,
                 () -> false,
@@ -178,6 +185,7 @@ public class Autos {
                     shooter,
                     indexer,
                     intake,
+                    leds,
                     () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
                     () -> true,
                     () -> false,
@@ -208,6 +216,7 @@ public class Autos {
                     shooter,
                     indexer,
                     intake,
+                    leds,
                     () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
                     () -> true,
                     () -> false,
