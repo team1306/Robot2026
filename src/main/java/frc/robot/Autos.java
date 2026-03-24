@@ -151,6 +151,9 @@ public class Autos {
                 () -> false,
                 () -> true)
             .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)));
+
+    NamedCommands.registerCommand(
+        "stop-shooting", Commands.runOnce(() -> shooter.getCurrentCommand().cancel()));
   }
 
   private void bindEventMarkers() {

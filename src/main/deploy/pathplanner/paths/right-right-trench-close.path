@@ -57,10 +57,26 @@
       },
       "nextControl": {
         "x": 5.8,
-        "y": 4.25
+        "y": 5.0
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "hub-right-close"
+    },
+    {
+      "anchor": {
+        "x": 6.75,
+        "y": 3.65
+      },
+      "prevControl": {
+        "x": 6.75,
+        "y": 4.65
+      },
+      "nextControl": {
+        "x": 6.75,
+        "y": 2.65
+      },
+      "isLocked": false,
+      "linkedName": "hub-right-center"
     },
     {
       "anchor": {
@@ -68,7 +84,7 @@
         "y": 2.5
       },
       "prevControl": {
-        "x": 6.9,
+        "x": 6.65,
         "y": 2.5
       },
       "nextControl": {
@@ -110,7 +126,11 @@
       "rotationDegrees": 90.0
     },
     {
-      "waypointRelativePos": 4.0,
+      "waypointRelativePos": 3.85,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 5.0,
       "rotationDegrees": -135.0
     }
   ],
@@ -125,7 +145,7 @@
     },
     {
       "name": "stop-intake",
-      "waypointRelativePos": 4.2,
+      "waypointRelativePos": 5.2,
       "endWaypointRelativePos": null,
       "command": null
     }
