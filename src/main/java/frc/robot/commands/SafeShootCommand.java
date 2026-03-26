@@ -47,7 +47,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
 
     BooleanSupplier hubActiveCondition =
         () ->
-            RebuiltUtils.isHubActive()
+            RebuiltUtils.isHubActiveOffset(2)
                 || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
     Logger.recordOutput("Controls/Hub Active Condition", hubActiveCondition.getAsBoolean());
 
@@ -55,7 +55,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
         () ->
             (shooterVelocityCondition.getAsBoolean() || overrideVelocitySafeguard.getAsBoolean())
                 && (driveAngleCondition.getAsBoolean() || overrideAngleSafeguard.getAsBoolean())
-        /* && (hubActiveCondition.getAsBoolean() || overrideHubActive.getAsBoolean()) */ ;
+                && (hubActiveCondition.getAsBoolean() || overrideHubActive.getAsBoolean());
 
     Command guardedIndexerCommand =
         new GuardedCommand(
