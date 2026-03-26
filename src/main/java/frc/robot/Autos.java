@@ -15,6 +15,7 @@ import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.SafeAimAndShootCommand;
@@ -29,12 +30,15 @@ import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.RebuiltUtils;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 public class Autos {
   private static final Time STARTING_FUEL_SHOOT_DURATION = Seconds.of(1);
   private static final Time SMALL_HOPPER_SHOOT_DURATION = Seconds.of(3);
+
+  private final BooleanSupplier inAllianceZoneSupplier;
 
   private final Drive drive;
   private final Indexer indexer;
@@ -56,6 +60,9 @@ public class Autos {
     this.intake = intake;
     this.shooter = shooter;
     this.leds = leds;
+
+    inAllianceZoneSupplier = () -> RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
+
     autoWaitTime.set(0);
 
     autoChooser = new LoggedDashboardChooser<>("Autos/Auto Chooser");
@@ -96,18 +103,21 @@ public class Autos {
   private void bindNamedCommands() {
     NamedCommands.registerCommand(
         "shoot-8",
-        new SafeAimAndShootCommand(
-                drive,
-                shooter,
-                indexer,
-                intake,
-                leds,
-                () -> 0,
-                () -> 0,
-                () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                () -> false,
-                () -> false,
-                () -> true)
+        new ConditionalCommand(
+                new SafeAimAndShootCommand(
+                    drive,
+                    shooter,
+                    indexer,
+                    intake,
+                    leds,
+                    () -> 0,
+                    () -> 0,
+                    () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                    () -> false,
+                    () -> false,
+                    () -> true),
+                Commands.none(),
+                inAllianceZoneSupplier)
             .withDeadline(Commands.waitTime(STARTING_FUEL_SHOOT_DURATION)));
 
     NamedCommands.registerCommand("intake", intake.intakeAtDutyCycleCommand(1));
@@ -129,22 +139,8 @@ public class Autos {
 
     NamedCommands.registerCommand(
         "shoot-until-done",
-        new SafeAimAndShootCommand(
-            drive,
-            shooter,
-            indexer,
-            intake,
-            leds,
-            () -> 0,
-            () -> 0,
-            () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-            () -> false,
-            () -> false,
-            () -> true));
-
-    NamedCommands.registerCommand(
-        "shoot-small-hopper",
-        new SafeAimAndShootCommand(
+        new ConditionalCommand(
+            new SafeAimAndShootCommand(
                 drive,
                 shooter,
                 indexer,
@@ -155,7 +151,27 @@ public class Autos {
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
                 () -> false,
                 () -> false,
-                () -> true)
+                () -> true),
+            Commands.none(),
+            inAllianceZoneSupplier));
+
+    NamedCommands.registerCommand(
+        "shoot-small-hopper",
+        new ConditionalCommand(
+                new SafeAimAndShootCommand(
+                    drive,
+                    shooter,
+                    indexer,
+                    intake,
+                    leds,
+                    () -> 0,
+                    () -> 0,
+                    () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                    () -> false,
+                    () -> false,
+                    () -> true),
+                Commands.none(),
+                inAllianceZoneSupplier)
             .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)));
   }
 
@@ -164,20 +180,8 @@ public class Autos {
 
     new EventTrigger("shoot-until-done")
         .onTrue(
-            ShootOnTheMoveCommands.shootOnTheMoveCommand(
-                drive,
-                shooter,
-                indexer,
-                intake,
-                leds,
-                () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                () -> true,
-                () -> false,
-                () -> true));
-
-    new EventTrigger("shoot-8")
-        .onTrue(
-            ShootOnTheMoveCommands.shootOnTheMoveCommand(
+            new ConditionalCommand(
+                ShootOnTheMoveCommands.shootOnTheMoveCommand(
                     drive,
                     shooter,
                     indexer,
@@ -186,7 +190,25 @@ public class Autos {
                     () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
                     () -> true,
                     () -> false,
-                    () -> true)
+                    () -> true),
+                Commands.none(),
+                inAllianceZoneSupplier));
+
+    new EventTrigger("shoot-8")
+        .onTrue(
+            new ConditionalCommand(
+                    ShootOnTheMoveCommands.shootOnTheMoveCommand(
+                        drive,
+                        shooter,
+                        indexer,
+                        intake,
+                        leds,
+                        () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                        () -> true,
+                        () -> false,
+                        () -> true),
+                    Commands.none(),
+                    inAllianceZoneSupplier)
                 .withDeadline(Commands.waitTime(STARTING_FUEL_SHOOT_DURATION)));
 
     new EventTrigger("intake").onTrue(intake.intakeAtDutyCycleCommand(1));
@@ -208,16 +230,19 @@ public class Autos {
 
     new EventTrigger("shoot-small-hopper")
         .onTrue(
-            ShootOnTheMoveCommands.shootOnTheMoveCommand(
-                    drive,
-                    shooter,
-                    indexer,
-                    intake,
-                    leds,
-                    () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                    () -> true,
-                    () -> false,
-                    () -> true)
+            new ConditionalCommand(
+                    ShootOnTheMoveCommands.shootOnTheMoveCommand(
+                        drive,
+                        shooter,
+                        indexer,
+                        intake,
+                        leds,
+                        () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                        () -> true,
+                        () -> false,
+                        () -> true),
+                    Commands.none(),
+                    inAllianceZoneSupplier)
                 .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)));
   }
 
