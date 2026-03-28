@@ -1,6 +1,5 @@
 package frc.robot.subsystems.leds;
 
-import com.ctre.phoenix6.controls.RainbowAnimation;
 import com.ctre.phoenix6.controls.SolidColor;
 import com.ctre.phoenix6.controls.StrobeAnimation;
 import com.ctre.phoenix6.hardware.CANdle;
@@ -31,12 +30,12 @@ public class LedsReal implements LedsIO {
             .withColor(new RGBWColor(red, green, blue))
             .withFrameRate(speed));
   }
+
   @Override
-  public void setRainbow(int speed){
+  public void setRainbow(int speed) {
     candle.setControl(
         new StrobeAnimation(LedsConstants.STRIP_START_INDEX, LedsConstants.STRIP_END_INDEX)
             .withSlot(1)
             .withFrameRate(speed));
   }
-  }
-
+}
