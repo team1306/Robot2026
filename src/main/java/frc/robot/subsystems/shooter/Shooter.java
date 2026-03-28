@@ -48,7 +48,7 @@ public class Shooter extends SubsystemBase {
 
   public void changeVelocityOverride(AngularVelocity velocity) {
     speedOverride = speedOverride.plus(velocity);
-    Logger.recordOutput("Shooter/Velocity Override", velocity);
+    Logger.recordOutput("Shooter/Velocity Override", speedOverride);
   }
 
   public void resetVelocityOverride() {

@@ -92,7 +92,7 @@ public class RebuiltUtils {
     return currentSchedule[getAllianceShiftFromTime(DriverStation.getMatchTime()).ordinal()];
   }
 
-  public static boolean isHubActiveOffset(double offset) {
+  public static boolean isHubActiveOffset(double startingOffset, double endingOffset) {
     boolean[] currentSchedule = new boolean[9];
     String gameData = DriverStation.getGameSpecificMessage();
     boolean isRedAlliance = AllianceTriggers.isRedAlliance();
@@ -112,9 +112,12 @@ public class RebuiltUtils {
     } else {
       Arrays.fill(currentSchedule, true);
     }
-    // make sure we don't end our shooting period early
-    return currentSchedule[getAllianceShiftFromTime(140 - shiftTimer.get() - offset).ordinal()]
-        || currentSchedule[getAllianceShiftFromTime(140 - shiftTimer.get()).ordinal()];
+
+    return currentSchedule[
+            getAllianceShiftFromTime(DriverStation.getMatchTime() - endingOffset).ordinal()]
+        || currentSchedule[getAllianceShiftFromTime(DriverStation.getMatchTime()).ordinal()]
+        || currentSchedule[
+            getAllianceShiftFromTime(DriverStation.getMatchTime() + startingOffset).ordinal()];
   }
 
   public static double getShiftTime() {

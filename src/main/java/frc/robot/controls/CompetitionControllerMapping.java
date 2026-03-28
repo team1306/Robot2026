@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
@@ -55,6 +56,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
     this.indexer = indexer;
     this.fuelDetection = fuelDetection;
     this.leds = leds;
+
+    shooter.resetVelocityOverride();
   }
 
   @Override
@@ -124,9 +127,18 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     () -> -driverController.getRightX())
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
-    // Snake Mode
+    // Reverse Intake
     driverController
         .y()
+        .whileTrue(
+            new StartEndCommand(() -> intake.setDutyCycle(-1), () -> intake.setDutyCycle(0), intake)
+                .alongWith(
+                    Commands.startEnd(
+                        () -> indexer.setDutyCycle(-1), () -> indexer.setDutyCycle(0), indexer)));
+
+    // Snake Mode
+    driverController
+        .a()
         .whileTrue(
             new FaceforwardCommand(
                     drive, () -> -driverController.getLeftY(), () -> -driverController.getLeftX())
@@ -149,10 +161,13 @@ public class CompetitionControllerMapping extends ControllerMapping {
                             ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
                             : RebuiltUtils.getNearestAllianceCorner(
                                 drive.getPose().getTranslation()),
-                    operatorController.leftBumper(),
-                    operatorController.leftBumper(),
+                    operatorController.rightBumper(),
                     () ->
                         operatorController.rightBumper().getAsBoolean()
+                            || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation()),
+                    () ->
+                        operatorController.rightBumper().getAsBoolean()
+                            || operatorController.leftBumper().getAsBoolean()
                             || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation()))
                 .alongWith(loggedTargetCommand));
 
@@ -186,6 +201,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                                 : RebuiltUtils.getNearestAllianceCorner(
                                     drive.getPose().getTranslation()),
                             drive.getPose().getTranslation()))
+                .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
                 .alongWith(
                     new InstantCommand(
                         () -> operatorController.setRumble(RumbleType.kBothRumble, 0.25))))

@@ -84,6 +84,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().run();
     SmartDashboard.putBoolean("isHubActive", RebuiltUtils.isHubActive());
     SmartDashboard.putString("CurrentShift", RebuiltUtils.getOfficalAllianceShift().toString());
+    SmartDashboard.putBoolean("IsHubAlmostActive?", RebuiltUtils.isHubActiveOffset(2, 2));
     SmartDashboard.putNumber("ShiftTime", RebuiltUtils.getShiftTime());
     // Return to non-RT thread priority (do not modify the first argument)
     // Threads.setCurrentThreadPriority(false, 10);
@@ -117,6 +118,7 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+    RebuiltUtils.initShiftTimer();
   }
 
   /** This function is called periodically during operator control. */

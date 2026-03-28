@@ -32,35 +32,51 @@
     },
     {
       "anchor": {
-        "x": 8.5,
-        "y": 6.493734939759036
+        "x": 8.2,
+        "y": 6.4
       },
       "prevControl": {
-        "x": 8.481636434462986,
-        "y": 8.493650632847306
+        "x": 8.181636434462986,
+        "y": 8.399915693088271
       },
       "nextControl": {
-        "x": 8.509181782768508,
-        "y": 5.4937770932149
+        "x": 8.209181782768507,
+        "y": 5.400042153455865
       },
       "isLocked": false,
       "linkedName": "fuel-far-left-entrance"
     },
     {
       "anchor": {
-        "x": 8.3,
-        "y": 4.712518072289157
+        "x": 8.2,
+        "y": 4.75
       },
       "prevControl": {
-        "x": 8.3,
-        "y": 4.212518072289157
+        "x": 8.2,
+        "y": 5.25
       },
       "nextControl": {
-        "x": 8.3,
-        "y": 5.212518072289156
+        "x": 8.2,
+        "y": 4.25
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "fuel-halfway-left"
+    },
+    {
+      "anchor": {
+        "x": 7.25,
+        "y": 5.3
+      },
+      "prevControl": {
+        "x": 7.5367882181755235,
+        "y": 4.890423977855504
+      },
+      "nextControl": {
+        "x": 6.819817672736715,
+        "y": 5.914364033216743
+      },
+      "isLocked": false,
+      "linkedName": "fuel-mid-left-exit"
     },
     {
       "anchor": {
@@ -80,11 +96,11 @@
     },
     {
       "anchor": {
-        "x": 2.5,
+        "x": 2.0,
         "y": 5.5
       },
       "prevControl": {
-        "x": 2.75,
+        "x": 2.25,
         "y": 5.5
       },
       "nextControl": null,
@@ -99,14 +115,18 @@
     },
     {
       "waypointRelativePos": 1.8547717842323648,
-      "rotationDegrees": -90.0
+      "rotationDegrees": -100.0
     },
     {
-      "waypointRelativePos": 3,
-      "rotationDegrees": -90.0
+      "waypointRelativePos": 3.0,
+      "rotationDegrees": -119.99999999999999
     },
     {
-      "waypointRelativePos": 4,
+      "waypointRelativePos": 3.5,
+      "rotationDegrees": 125.00000000000001
+    },
+    {
+      "waypointRelativePos": 5.0,
       "rotationDegrees": 135.0
     }
   ],
@@ -127,7 +147,7 @@
     },
     {
       "name": "stop-intake",
-      "waypointRelativePos": 4.2,
+      "waypointRelativePos": 5.2,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -142,7 +162,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 144.82397065842056
+    "rotation": 145.83495451575692
   },
   "reversed": false,
   "folder": "Center Collection",
