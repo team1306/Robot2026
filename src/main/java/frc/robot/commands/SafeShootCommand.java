@@ -47,7 +47,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
 
     BooleanSupplier hubActiveCondition =
         () ->
-            RebuiltUtils.isHubActiveOffset(2)
+            RebuiltUtils.isHubActiveOffset(2, 2)
                 || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
     Logger.recordOutput("Controls/Hub Active Condition", hubActiveCondition.getAsBoolean());
 
