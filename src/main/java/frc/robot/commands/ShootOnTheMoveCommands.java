@@ -35,16 +35,17 @@ public class ShootOnTheMoveCommands {
       BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive) {
     return new SafeShootCommand(
-        drive,
-        shooter,
-        indexer,
-        intake,
-        leds,
-        () -> calculateLeadTarget(drive, target),
-        angleTolerance,
-        overrideAngleSafeguard,
-        overrideVelocitySafeguard,
-        overrideHubActive);
+            drive,
+            shooter,
+            indexer,
+            intake,
+            leds,
+            () -> calculateLeadTarget(drive, target),
+            angleTolerance,
+            overrideAngleSafeguard,
+            overrideVelocitySafeguard,
+            overrideHubActive)
+        .withName("Safe Shoot on the Move");
   }
 
   public static Command aimAndShootOnTheMoveCommand(
@@ -61,18 +62,19 @@ public class ShootOnTheMoveCommands {
       BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive) {
     return new SafeAimAndShootCommand(
-        drive,
-        shooter,
-        indexer,
-        intake,
-        leds,
-        () -> xSupplier.getAsDouble() * SLOWDOWN_FACTOR,
-        () -> ySupplier.getAsDouble() * SLOWDOWN_FACTOR,
-        () -> calculateLeadTarget(drive, target),
-        angleTolerance,
-        overrideAngleSafeguard,
-        overrideVelocitySafeguard,
-        overrideHubActive);
+            drive,
+            shooter,
+            indexer,
+            intake,
+            leds,
+            () -> xSupplier.getAsDouble() * SLOWDOWN_FACTOR,
+            () -> ySupplier.getAsDouble() * SLOWDOWN_FACTOR,
+            () -> calculateLeadTarget(drive, target),
+            angleTolerance,
+            overrideAngleSafeguard,
+            overrideVelocitySafeguard,
+            overrideHubActive)
+        .withName("Safe Aim and Shoot on the Move");
   }
 
   private static Translation2d calculateLeadTarget(Drive drive, Supplier<Translation2d> target) {

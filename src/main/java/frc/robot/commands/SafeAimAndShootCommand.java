@@ -45,6 +45,7 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
     Command driveAtAngleCommand =
         DriveCommands.driveAimLockedCommand(drive, xSupplier, ySupplier, positionSupplier, true);
 
+    setName("Safe Aim and Shoot");
     addCommands(safeShootCommand, driveAtAngleCommand);
   }
 }

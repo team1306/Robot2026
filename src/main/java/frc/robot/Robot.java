@@ -69,6 +69,22 @@ public class Robot extends LoggedRobot {
     robotContainer = new RobotContainer();
   }
 
+  @Override
+  public void robotInit() {
+    CommandScheduler.getInstance()
+        .onCommandInitialize(
+            (command) -> {
+              System.out.println(
+                  "Initialized Command:\nRequirements: "
+                      + command.getRequirements()
+                      + "\nName: "
+                      + command.getName()
+                      + "\nInterruption Behavior: "
+                      + command.getInterruptionBehavior()
+                      + "\n\n");
+            });
+  }
+
   /** This function is called periodically during all modes. */
   @Override
   public void robotPeriodic() {
@@ -81,6 +97,7 @@ public class Robot extends LoggedRobot {
     // finished or interrupted commands, and running subsystem periodic() methods.
     // This must be called from the robot's periodic block in order for anything in
     // the Command-based framework to work.
+
     CommandScheduler.getInstance().run();
     SmartDashboard.putBoolean("isHubActive", RebuiltUtils.isHubActive());
     SmartDashboard.putString("CurrentShift", RebuiltUtils.getOfficalAllianceShift().toString());

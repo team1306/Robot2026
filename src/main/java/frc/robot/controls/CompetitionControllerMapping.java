@@ -91,6 +91,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 () -> -driverController.getLeftY(),
                 () -> -driverController.getLeftX(),
                 () -> -driverController.getRightX())
+            .withName("Default Drive")
             .alongWith(logWithinRangeCommand));
 
     /* ---P1--- */
@@ -104,7 +105,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
                         drive.setPose(
                             new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
                     drive)
-                .ignoringDisable(true));
+                .ignoringDisable(true)
+                .withName("Reset Odometry"));
 
     // Intake
     driverController
@@ -112,10 +114,13 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .whileTrue(
             intake
                 .intakeUntilInterruptedCommand(1)
-                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming)
+                .withName("Intaking"));
 
     // Fuel Collection
-    driverController.b().whileTrue(new FuelCollectionCommand(drive, fuelDetection));
+    driverController
+        .b()
+        .whileTrue(new FuelCollectionCommand(drive, fuelDetection).withName("Fuel Collection"));
 
     // Robot Relative Drive
     driverController
@@ -126,16 +131,20 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     () -> -driverController.getLeftY(),
                     () -> -driverController.getLeftX(),
                     () -> -driverController.getRightX())
-                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
+                .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+                .withName("Robot Relative Drive"));
 
     // Reverse Intake
     driverController
         .y()
         .whileTrue(
             new StartEndCommand(() -> intake.setDutyCycle(-1), () -> intake.setDutyCycle(0), intake)
+                .withName("Intake Spit")
                 .alongWith(
                     Commands.startEnd(
-                        () -> indexer.setDutyCycle(-1), () -> indexer.setDutyCycle(0), indexer)));
+                            () -> indexer.setDutyCycle(-1), () -> indexer.setDutyCycle(0), indexer)
+                        .withName("Indexer Spit"))
+                .withName("Spit"));
 
     // Snake Mode
     driverController
@@ -143,6 +152,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .whileTrue(
             new FaceforwardCommand(
                     drive, () -> -driverController.getLeftY(), () -> -driverController.getLeftX())
+                .withName("Snake Mode")
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
     // Shoot to Hub or Corner Depending on Location
@@ -173,7 +183,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
                         operatorController.rightBumper().getAsBoolean()
                             || operatorController.leftBumper().getAsBoolean()
                             || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation()))
-                .alongWith(loggedTargetCommand));
+                .alongWith(loggedTargetCommand)
+                .withName("Shooting"));
 
     /* ---P2--- */
 
@@ -208,7 +219,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
                 .alongWith(
                     new InstantCommand(
-                        () -> operatorController.setRumble(RumbleType.kBothRumble, 0.25))))
+                        () -> operatorController.setRumble(RumbleType.kBothRumble, 0.25)))
+                .withName("Spool Shooter"))
         .onFalse(
             new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0))
                 .ignoringDisable(true));
