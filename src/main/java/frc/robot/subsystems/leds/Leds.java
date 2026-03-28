@@ -19,10 +19,7 @@ public class Leds extends SubsystemBase {
   public void periodic() {
     if (DriverStation.isDisabled()) {
 
-      LedsIO.setSolid(
-          AllianceTriggers.isRedAlliance() ? 150 : 0,
-          0,
-          AllianceTriggers.isRedAlliance() ? 0 : 150);
+      LedsIO.setRainbow(4);
 
     } else if (DriverStation.isAutonomous()) {
       LedsIO.setSolid(150, 0, 150);

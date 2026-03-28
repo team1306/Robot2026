@@ -19,6 +19,7 @@ import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOReal;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.leds.LedsIO;
+import frc.robot.subsystems.leds.LedsReal;
 import frc.robot.subsystems.leds.LedsRio;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
@@ -34,7 +35,7 @@ import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and button mappings) should be declared here.
+ * subsystems, commands, and button mappings) should  be declared here.
  */
 public class RobotContainer {
   // Subsystems
@@ -82,7 +83,7 @@ public class RobotContainer {
                     VisionConstants.RIGHT_SIDE_CAMERA_NAME,
                     VisionConstants.RIGHT_SIDE_CAMERA_POSITION));
         fuelDetection = new FuelDetection(new FuelDetectionIO() {});
-        leds = new Leds(new LedsRio());
+        leds = new Leds(new LedsReal());
 
         break;
 
@@ -119,7 +120,7 @@ public class RobotContainer {
                     () -> drive.getPose()));
 
         fuelDetection = new FuelDetection(new FuelDetectionIO() {});
-        leds = new Leds(new LedsRio());
+        leds = new Leds(new LedsReal());
         break;
 
       default:
