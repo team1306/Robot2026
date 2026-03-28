@@ -71,7 +71,7 @@ public class OutreachControllerMapping extends ControllerMapping {
     driverController
         .rightTrigger(0.5)
         .whileTrue(
-            ShooterCommands.shootAtSpeedCommand(shooter, RotationsPerSecond.of(35))
+            ShooterCommands.shootAtSpeedCommand(shooter, RotationsPerSecond.of(40))
                 .alongWith(
                     Commands.waitSeconds(0.5).andThen(indexer.indexUntilCancelledCommand(0.5))));
 
