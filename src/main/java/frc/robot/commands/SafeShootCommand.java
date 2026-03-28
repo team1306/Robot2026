@@ -1,15 +1,14 @@
 package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
@@ -21,8 +20,6 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class SafeShootCommand extends ParallelCommandGroup {
-  private static final AngularVelocity INITIAL_SPEED_TOLERANCE = RotationsPerSecond.of(0.5);
-  public static final AngularVelocity NORMAL_SPEED_TOLERANCE = RotationsPerSecond.of(2);
 
   private static double INDEXER_SPEED = 1;
 
@@ -40,7 +37,8 @@ public class SafeShootCommand extends ParallelCommandGroup {
       BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive) {
 
-    BooleanSupplier shooterVelocityCondition = shooter.isAtRequestedSpeed(NORMAL_SPEED_TOLERANCE);
+    BooleanSupplier shooterVelocityCondition =
+        shooter.isAtRequestedSpeed(Constants.Tolerances.NORMAL_SPEED_TOLERANCE);
 
     BooleanSupplier driveAngleCondition =
         () -> drive.isLocked(drive, positionSupplier.get(), true, angleTolerance);
@@ -61,7 +59,9 @@ public class SafeShootCommand extends ParallelCommandGroup {
         new GuardedCommand(
             Commands.waitUntil(
                     () ->
-                        shooter.isAtRequestedSpeed(INITIAL_SPEED_TOLERANCE).getAsBoolean()
+                        shooter
+                                .isAtRequestedSpeed(Constants.Tolerances.INITIAL_SPEED_TOLERANCE)
+                                .getAsBoolean()
                             || overrideVelocitySafeguard.getAsBoolean())
                 .andThen(indexer.indexUntilCancelledCommand(INDEXER_SPEED)),
             combinedCondition);

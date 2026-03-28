@@ -162,7 +162,9 @@ public class CompetitionControllerMapping extends ControllerMapping {
                             ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
                             : RebuiltUtils.getNearestAllianceCorner(
                                 drive.getPose().getTranslation()),
-                    RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation()) ? Constants.Tolerances.SCORING_ANGLE_TOLERANCE : Constants.Tolerances.PASSING_ANGLE_TOLERANCE,
+                    RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
+                        ? Constants.Tolerances.SCORING_ANGLE_TOLERANCE
+                        : Constants.Tolerances.PASSING_ANGLE_TOLERANCE,
                     operatorController.rightBumper(),
                     () ->
                         operatorController.rightBumper().getAsBoolean()

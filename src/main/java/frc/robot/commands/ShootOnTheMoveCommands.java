@@ -69,7 +69,7 @@ public class ShootOnTheMoveCommands {
         () -> xSupplier.getAsDouble() * SLOWDOWN_FACTOR,
         () -> ySupplier.getAsDouble() * SLOWDOWN_FACTOR,
         () -> calculateLeadTarget(drive, target),
-                angleTolerance,
+        angleTolerance,
         overrideAngleSafeguard,
         overrideVelocitySafeguard,
         overrideHubActive);
