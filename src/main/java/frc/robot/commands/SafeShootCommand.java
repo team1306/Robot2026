@@ -92,6 +92,16 @@ public class SafeShootCommand extends ParallelCommandGroup {
                             || indexer.getCurrentCommand() == indexer.getDefaultCommand()))
             .onTrue(guardedIndexerCommand);
 
+    @SuppressWarnings("unused")
+    Trigger commandCanceler =
+        new Trigger(() -> !this.isActive)
+            .onTrue(
+                Commands.runOnce(
+                    () -> {
+                      intakeCommand.cancel();
+                      guardedIndexerCommand.cancel();
+                    }));
+
     Command loggedGuardCommand =
         Commands.run(
             () -> logConditions(shooterVelocityCondition, driveAngleCondition, hubActiveCondition));

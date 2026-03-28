@@ -173,8 +173,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
                         operatorController.rightBumper().getAsBoolean()
                             || operatorController.leftBumper().getAsBoolean()
                             || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation()))
-                .alongWith(loggedTargetCommand));
-
+                .alongWith(loggedTargetCommand)
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
     /* ---P2--- */
 
     // Jumble Indexer

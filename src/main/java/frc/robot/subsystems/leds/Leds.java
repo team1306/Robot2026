@@ -2,7 +2,6 @@ package frc.robot.subsystems.leds;
 
 import badgerutils.statemachine.Edges;
 import badgerutils.statemachine.StateMachine;
-import badgerutils.triggers.AllianceTriggers;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
@@ -19,7 +18,8 @@ public class Leds extends SubsystemBase {
     AUTO,
     AIMING,
     SHOOTING,
-    OTHER
+    OTHER,
+    NONE,
   }
 
   public Leds(LedsIO LedsIO) {
@@ -30,19 +30,13 @@ public class Leds extends SubsystemBase {
   public void periodic() {
     Edges<LedState> edges =
         new Edges<LedState>()
-            .anyToState(LedState.DISABLED, state -> LedsIO.setRainbow(4))
-            .anyToState(LedState.AUTO, state -> LedsIO.setBlink(255, 0, 255, 4))
-            .anyToState(LedState.AIMING, state -> LedsIO.setSolid(0, 150, 0))
-            .anyToState(LedState.SHOOTING, state -> LedsIO.setBlink(0, 255, 0, 4))
-            .anyToState(
-                LedState.OTHER,
-                state ->
-                    LedsIO.setSolid(
-                        AllianceTriggers.isRedAlliance() ? 150 : 0,
-                        0,
-                        AllianceTriggers.isRedAlliance() ? 0 : 150));
+            .anyToState(LedState.DISABLED, state -> LedsIO.setRainbow(100))
+            .anyToState(LedState.AUTO, state -> LedsIO.setSolid(255, 0, 255))
+            .anyToState(LedState.AIMING, state -> LedsIO.setSolid(0, 255, 0))
+            .anyToState(LedState.SHOOTING, state -> LedsIO.setBounce(0, 255, 0, 80))
+            .anyToState(LedState.OTHER, state -> LedsIO.setSolid(255, 255, 255));
 
-    stateMachine = new StateMachine<>(LedState.DISABLED, edges);
+    stateMachine = new StateMachine<>(LedState.NONE, edges);
     if (DriverStation.isDisabled()) {
       stateMachine.tryChangeState(LedState.DISABLED);
     } else if (DriverStation.isAutonomous()) {
@@ -54,7 +48,7 @@ public class Leds extends SubsystemBase {
     } else {
       stateMachine.tryChangeState(LedState.OTHER);
     }
-
+    Logger.recordOutput("Leds/state", stateMachine.getCurrentState());
     Logger.recordOutput("Leds/isShooting", isShooting);
     Logger.recordOutput("Leds/isInShootingTolerance", isInShootingTolerance);
   }
