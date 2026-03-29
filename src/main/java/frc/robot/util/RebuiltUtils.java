@@ -4,7 +4,6 @@ import badgerutils.triggers.AllianceTriggers;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.Constants.Locations;
 import java.util.Arrays;
@@ -29,12 +28,6 @@ public class RebuiltUtils {
   private static final boolean[] winSchedule = {
     true, true, false, true, false, true, true, true, true
   };
-
-  private static Timer shiftTimer = new Timer();
-
-  public static void initShiftTimer() {
-    shiftTimer.start();
-  }
 
   private static AllianceShift getAllianceShiftFromTime(double time) {
 
