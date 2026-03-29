@@ -4,7 +4,6 @@ import badgerutils.triggers.AllianceTriggers;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.Constants.Locations;
 import java.util.Arrays;
@@ -29,12 +28,6 @@ public class RebuiltUtils {
   private static final boolean[] winSchedule = {
     true, true, false, true, false, true, true, true, true
   };
-
-  private static Timer shiftTimer = new Timer();
-
-  public static void initShiftTimer() {
-    shiftTimer.start();
-  }
 
   private static AllianceShift getAllianceShiftFromTime(double time) {
 
@@ -92,7 +85,7 @@ public class RebuiltUtils {
     return currentSchedule[getAllianceShiftFromTime(DriverStation.getMatchTime()).ordinal()];
   }
 
-  public static boolean isHubActiveOffset(double offset) {
+  public static boolean isHubActiveOffset(double startingOffset, double endingOffset) {
     boolean[] currentSchedule = new boolean[9];
     String gameData = DriverStation.getGameSpecificMessage();
     boolean isRedAlliance = AllianceTriggers.isRedAlliance();
@@ -112,9 +105,12 @@ public class RebuiltUtils {
     } else {
       Arrays.fill(currentSchedule, true);
     }
-    // make sure we don't end our shooting period early
-    return currentSchedule[getAllianceShiftFromTime(140 - shiftTimer.get() - offset).ordinal()]
-        || currentSchedule[getAllianceShiftFromTime(140 - shiftTimer.get()).ordinal()];
+
+    return currentSchedule[
+            getAllianceShiftFromTime(DriverStation.getMatchTime() - endingOffset).ordinal()]
+        || currentSchedule[getAllianceShiftFromTime(DriverStation.getMatchTime()).ordinal()]
+        || currentSchedule[
+            getAllianceShiftFromTime(DriverStation.getMatchTime() + startingOffset).ordinal()];
   }
 
   public static double getShiftTime() {

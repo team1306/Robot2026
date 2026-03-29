@@ -4,86 +4,94 @@
     {
       "anchor": {
         "x": 4.3752352941176476,
-        "y": 0.6
+        "y": 7.3962352941176475
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.3752352941176476,
-        "y": 0.6
+        "x": 5.375235294117651,
+        "y": 7.3962352941176475
       },
       "isLocked": false,
-      "linkedName": "start-trench-right"
+      "linkedName": "start-trench-left"
     },
     {
       "anchor": {
         "x": 8.2,
-        "y": 1.6
+        "y": 6.4
       },
       "prevControl": {
         "x": 8.2,
-        "y": 0.3500000000000001
+        "y": 7.4
       },
       "nextControl": {
         "x": 8.2,
-        "y": 2.599999999999992
+        "y": 5.400000000000004
       },
       "isLocked": false,
-      "linkedName": "fuel-far-right-entrance"
+      "linkedName": "fuel-far-left-entrance"
     },
     {
       "anchor": {
-        "x": 8.0,
-        "y": 6.0
+        "x": 8.2,
+        "y": 4.75
       },
       "prevControl": {
-        "x": 8.353553390593273,
-        "y": 5.646446609406727
+        "x": 8.2,
+        "y": 5.25
       },
       "nextControl": {
-        "x": 7.646446609406727,
-        "y": 6.353553390593273
+        "x": 8.2,
+        "y": 4.250000000000001
       },
       "isLocked": false,
-      "linkedName": "fuel-far-left-exit"
+      "linkedName": "fuel-halfway-left"
     },
     {
       "anchor": {
+        "x": 7.25,
+        "y": 5.3
+      },
+      "prevControl": {
+        "x": 7.5,
+        "y": 4.866987298107781
+      },
+      "nextControl": {
         "x": 5.9,
-        "y": 5.5
-      },
-      "prevControl": {
-        "x": 6.9,
-        "y": 5.5
-      },
-      "nextControl": {
-        "x": 4.9,
-        "y": 5.5
+        "y": 7.638268590217985
       },
       "isLocked": false,
-      "linkedName": "bump-left-center"
+      "linkedName": "fuel-mid-left-exit"
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 5.5
+        "x": 4.3752352941176476,
+        "y": 7.3962352941176475
       },
       "prevControl": {
-        "x": 2.25,
-        "y": 5.5
+        "x": 5.3752352941176476,
+        "y": 7.3962352941176475
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "bump-left-alliance"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.95,
-      "rotationDegrees": 100.0
+      "rotationDegrees": -100.0
     },
     {
-      "waypointRelativePos": 3.0,
-      "rotationDegrees": 135.0
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": -119.99999999999999
+    },
+    {
+      "waypointRelativePos": 2.5,
+      "rotationDegrees": 125.00000000000001
+    },
+    {
+      "waypointRelativePos": 3.5,
+      "rotationDegrees": 105.00000000000001
     }
   ],
   "constraintZones": [],
@@ -91,7 +99,7 @@
   "eventMarkers": [
     {
       "name": "deploy-intake",
-      "waypointRelativePos": 0.2,
+      "waypointRelativePos": 0.1,
       "endWaypointRelativePos": null,
       "command": null
     },
@@ -103,7 +111,7 @@
     },
     {
       "name": "stop-intake",
-      "waypointRelativePos": 3.2,
+      "waypointRelativePos": 4,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -118,7 +126,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 145.83495451575692
+    "rotation": 95.0
   },
   "reversed": false,
   "folder": "Center Collection",

@@ -24,19 +24,13 @@ public class ShooterCommands {
   public static final ShooterSetpoint[] SETPOINTS =
       Arrays.stream(
               new ShooterSetpoint[] {
-                new ShooterSetpoint(Feet.of(6.8), RotationsPerSecond.of(37), Seconds.of(0.8166)),
-                new ShooterSetpoint(Feet.of(8.2), RotationsPerSecond.of(38), Seconds.of(0.8416)),
-                new ShooterSetpoint(Feet.of(10.5), RotationsPerSecond.of(42.5), Seconds.of(0.9459)),
-                new ShooterSetpoint(Feet.of(13.3), RotationsPerSecond.of(44.5), Seconds.of(1.225)),
-                new ShooterSetpoint(Feet.of(15.3), RotationsPerSecond.of(50.5), Seconds.of(1.3668)),
-                new ShooterSetpoint(Feet.of(17.2), RotationsPerSecond.of(55), Seconds.of(1.4333)),
-                // time is not actually measured for any below here
-                new ShooterSetpoint(Feet.of(14.1), RotationsPerSecond.of(48.5), Seconds.of(1.2504)),
-                new ShooterSetpoint(Feet.of(9), RotationsPerSecond.of(40), Seconds.of(0.916)),
-                new ShooterSetpoint(Feet.of(11.1), RotationsPerSecond.of(43.25), Seconds.of(1.053)),
-                new ShooterSetpoint(Feet.of(7), RotationsPerSecond.of(36.5), Seconds.of(0.7843)),
-                // extrapolated using linear regression
-                new ShooterSetpoint(Feet.of(23.9), RotationsPerSecond.of(65), Seconds.of(1.8936)),
+                new ShooterSetpoint(Meters.of(2.94), RotationsPerSecond.of(39), Seconds.of(0.82)),
+                new ShooterSetpoint(Meters.of(3.42), RotationsPerSecond.of(41), Seconds.of(0.93)),
+                new ShooterSetpoint(Meters.of(4), RotationsPerSecond.of(43.25), Seconds.of(0.95)),
+                new ShooterSetpoint(Meters.of(4.5), RotationsPerSecond.of(46), Seconds.of(1.09)),
+                new ShooterSetpoint(Meters.of(5.04), RotationsPerSecond.of(49.5), Seconds.of(1.1)),
+                new ShooterSetpoint(Meters.of(5.5), RotationsPerSecond.of(62), Seconds.of(1.11)),
+                new ShooterSetpoint(Meters.of(6), RotationsPerSecond.of(65), Seconds.of(1.37))
               })
           .sorted()
           .toArray(ShooterSetpoint[]::new);

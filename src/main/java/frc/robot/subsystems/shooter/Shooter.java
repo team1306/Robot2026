@@ -42,13 +42,15 @@ public class Shooter extends SubsystemBase {
   public void setVelocity(AngularVelocity velocity) {
     double multiplier = Math.signum(velocity.in(RotationsPerSecond));
 
-    shooterIO.setVelocity(velocity.plus(speedOverride.times(multiplier)));
-    Logger.recordOutput("Shooter/Velocity Setpoint", velocity);
+    AngularVelocity setpoint = velocity.plus(speedOverride.times(multiplier));
+
+    shooterIO.setVelocity(setpoint);
+    Logger.recordOutput("Shooter/Velocity Setpoint", setpoint);
   }
 
   public void changeVelocityOverride(AngularVelocity velocity) {
     speedOverride = speedOverride.plus(velocity);
-    Logger.recordOutput("Shooter/Velocity Override", velocity);
+    Logger.recordOutput("Shooter/Velocity Override", speedOverride);
   }
 
   public void resetVelocityOverride() {

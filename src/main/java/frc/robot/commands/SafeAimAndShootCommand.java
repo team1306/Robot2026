@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -23,6 +24,7 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       Supplier<Translation2d> positionSupplier,
+      Rotation2d angleTolerance,
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive) {
@@ -35,6 +37,7 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
             intake,
             leds,
             positionSupplier,
+            angleTolerance,
             overrideAngleSafeguard,
             overrideVelocitySafeguard,
             overrideHubActive);

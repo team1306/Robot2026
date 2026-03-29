@@ -7,5 +7,9 @@ public interface LedsIO {
 
   default void setBlink(int red, int green, int blue, int speed) {}
 
+  default void setRainbow(int speed) {}
+
+  default void setBounce(int red, int green, int blue, int speed) {}
+
   default void clearAnimation() {}
 }

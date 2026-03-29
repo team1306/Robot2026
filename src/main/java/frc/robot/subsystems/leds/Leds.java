@@ -1,6 +1,7 @@
 package frc.robot.subsystems.leds;
 
-import badgerutils.triggers.AllianceTriggers;
+import badgerutils.statemachine.Edges;
+import badgerutils.statemachine.StateMachine;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
@@ -10,6 +11,16 @@ public class Leds extends SubsystemBase {
   public final LedsIO LedsIO;
   public boolean isShooting = false;
   public boolean isInShootingTolerance = false;
+  private StateMachine<LedState> stateMachine;
+
+  public enum LedState {
+    DISABLED,
+    AUTO,
+    AIMING,
+    SHOOTING,
+    OTHER,
+    NONE,
+  }
 
   public Leds(LedsIO LedsIO) {
     this.LedsIO = LedsIO;
@@ -17,27 +28,27 @@ public class Leds extends SubsystemBase {
 
   @Override
   public void periodic() {
+    Edges<LedState> edges =
+        new Edges<LedState>()
+            .anyToState(LedState.DISABLED, state -> LedsIO.setRainbow(100))
+            .anyToState(LedState.AUTO, state -> LedsIO.setSolid(255, 0, 255))
+            .anyToState(LedState.AIMING, state -> LedsIO.setSolid(0, 255, 0))
+            .anyToState(LedState.SHOOTING, state -> LedsIO.setBounce(0, 255, 0, 80))
+            .anyToState(LedState.OTHER, state -> LedsIO.setSolid(255, 255, 255));
+
+    stateMachine = new StateMachine<>(LedState.NONE, edges);
     if (DriverStation.isDisabled()) {
-
-      LedsIO.setSolid(
-          AllianceTriggers.isRedAlliance() ? 255 : 0,
-          0,
-          AllianceTriggers.isRedAlliance() ? 0 : 255);
-
+      stateMachine.tryChangeState(LedState.DISABLED);
     } else if (DriverStation.isAutonomous()) {
-      LedsIO.setSolid(255, 0, 255);
+      stateMachine.tryChangeState(LedState.AUTO);
     } else if (isShooting && !isInShootingTolerance) {
-
-      LedsIO.setSolid(0, 255, 0);
+      stateMachine.tryChangeState(LedState.AIMING);
     } else if (isShooting) {
-      LedsIO.setBlink(0, 255, 0, 4);
+      stateMachine.tryChangeState(LedState.SHOOTING);
     } else {
-      LedsIO.setSolid(
-          AllianceTriggers.isRedAlliance() ? 255 : 0,
-          0,
-          AllianceTriggers.isRedAlliance() ? 0 : 255);
+      stateMachine.tryChangeState(LedState.OTHER);
     }
-
+    Logger.recordOutput("Leds/state", stateMachine.getCurrentState());
     Logger.recordOutput("Leds/isShooting", isShooting);
     Logger.recordOutput("Leds/isInShootingTolerance", isInShootingTolerance);
   }

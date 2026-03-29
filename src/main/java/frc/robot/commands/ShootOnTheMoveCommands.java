@@ -30,6 +30,7 @@ public class ShootOnTheMoveCommands {
       Intake intake,
       Leds leds,
       Supplier<Translation2d> target,
+      Rotation2d angleTolerance,
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive) {
@@ -40,6 +41,7 @@ public class ShootOnTheMoveCommands {
         intake,
         leds,
         () -> calculateLeadTarget(drive, target),
+        angleTolerance,
         overrideAngleSafeguard,
         overrideVelocitySafeguard,
         overrideHubActive);
@@ -54,6 +56,7 @@ public class ShootOnTheMoveCommands {
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       Supplier<Translation2d> target,
+      Rotation2d angleTolerance,
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive) {
@@ -66,6 +69,7 @@ public class ShootOnTheMoveCommands {
         () -> xSupplier.getAsDouble() * SLOWDOWN_FACTOR,
         () -> ySupplier.getAsDouble() * SLOWDOWN_FACTOR,
         () -> calculateLeadTarget(drive, target),
+        angleTolerance,
         overrideAngleSafeguard,
         overrideVelocitySafeguard,
         overrideHubActive);

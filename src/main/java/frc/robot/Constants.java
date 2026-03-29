@@ -1,8 +1,12 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import com.pathplanner.lib.util.FlippingUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -33,6 +37,13 @@ public final class Constants {
       leftCornerRedLocation = FlippingUtil.flipFieldPosition(leftCornerBlueLocation);
       rightCornerRedLocation = FlippingUtil.flipFieldPosition(rightCornerBlueLocation);
     }
+  }
+
+  public static class Tolerances {
+    public static final Rotation2d SCORING_ANGLE_TOLERANCE = Rotation2d.fromDegrees(5);
+    public static final Rotation2d PASSING_ANGLE_TOLERANCE = Rotation2d.fromDegrees(15);
+    public static final AngularVelocity INITIAL_SPEED_TOLERANCE = RotationsPerSecond.of(0.5);
+    public static final AngularVelocity NORMAL_SPEED_TOLERANCE = RotationsPerSecond.of(2);
   }
 
   public static class CanIds {
