@@ -157,7 +157,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     drive,
                     shooter,
                     indexer,
-                    intake,
+                    deploy,
                     leds,
                     () -> -driverController.getLeftY(),
                     () -> -driverController.getLeftX(),

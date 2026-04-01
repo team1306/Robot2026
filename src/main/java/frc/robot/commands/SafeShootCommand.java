@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
-import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.RebuiltUtils;
@@ -29,7 +29,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
       Drive drive,
       Shooter shooter,
       Indexer indexer,
-      Intake intake,
+      Deploy deploy,
       Leds leds,
       Supplier<Translation2d> positionSupplier,
       Rotation2d angleTolerance,
@@ -55,6 +55,11 @@ public class SafeShootCommand extends ParallelCommandGroup {
                 && (driveAngleCondition.getAsBoolean() || overrideAngleSafeguard.getAsBoolean())
                 && (hubActiveCondition.getAsBoolean() || overrideHubActive.getAsBoolean());
 
+    BooleanSupplier movingCondition =
+        () ->
+            drive.getChassisSpeeds().vxMetersPerSecond < 0.025
+                && drive.getChassisSpeeds().vyMetersPerSecond < 0.025;
+
     Command guardedIndexerCommand =
         new GuardedCommand(
             Commands.waitUntil(
@@ -66,6 +71,11 @@ public class SafeShootCommand extends ParallelCommandGroup {
                 .andThen(indexer.indexUntilCancelledCommand(INDEXER_SPEED)),
             combinedCondition);
 
+    Command guardedDeployCommand =
+        new GuardedCommand(
+            deploy.crunchCommand(),
+            () -> combinedCondition.getAsBoolean() && movingCondition.getAsBoolean());
+
     Command shootAtDistanceCommand =
         ShooterCommands.shootAtDistanceCommand(
                 shooter,
@@ -73,16 +83,6 @@ public class SafeShootCommand extends ParallelCommandGroup {
                     Meters.of(drive.getPose().getTranslation().getDistance(positionSupplier.get())))
             .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
-    Command intakeCommand = intake.shakeIntake();
-
-    @SuppressWarnings("unused")
-    Trigger intakeRescheduler =
-        new Trigger(
-                () ->
-                    this.isActive
-                        && (intake.getCurrentCommand() == null
-                            || intake.getCurrentCommand() == intake.getDefaultCommand()))
-            .onTrue(intakeCommand);
     @SuppressWarnings("unused")
     Trigger indexerRescheduler =
         new Trigger(
@@ -98,7 +98,6 @@ public class SafeShootCommand extends ParallelCommandGroup {
             .onTrue(
                 Commands.runOnce(
                     () -> {
-                      intakeCommand.cancel();
                       guardedIndexerCommand.cancel();
                     }));
 
@@ -120,8 +119,8 @@ public class SafeShootCommand extends ParallelCommandGroup {
         activityTracker,
         shootAtDistanceCommand,
         guardedIndexerCommand.asProxy(),
-        loggedGuardCommand,
-        intakeCommand.asProxy());
+        guardedDeployCommand,
+        loggedGuardCommand);
   }
 
   private void logConditions(
