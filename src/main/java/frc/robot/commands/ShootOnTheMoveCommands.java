@@ -33,7 +33,8 @@ public class ShootOnTheMoveCommands {
       Rotation2d angleTolerance,
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
-      BooleanSupplier overrideHubActive) {
+      BooleanSupplier overrideHubActive,
+      BooleanSupplier overrideAutoRanging) {
     return new SafeShootCommand(
         drive,
         shooter,
@@ -44,7 +45,8 @@ public class ShootOnTheMoveCommands {
         angleTolerance,
         overrideAngleSafeguard,
         overrideVelocitySafeguard,
-        overrideHubActive);
+        overrideHubActive,
+        overrideAutoRanging);
   }
 
   public static Command aimAndShootOnTheMoveCommand(
@@ -59,7 +61,8 @@ public class ShootOnTheMoveCommands {
       Rotation2d angleTolerance,
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
-      BooleanSupplier overrideHubActive) {
+      BooleanSupplier overrideHubActive,
+      BooleanSupplier overrideAutoRanging) {
     return new SafeAimAndShootCommand(
         drive,
         shooter,
@@ -72,7 +75,8 @@ public class ShootOnTheMoveCommands {
         angleTolerance,
         overrideAngleSafeguard,
         overrideVelocitySafeguard,
-        overrideHubActive);
+        overrideHubActive,
+        overrideAutoRanging);
   }
 
   private static Translation2d calculateLeadTarget(Drive drive, Supplier<Translation2d> target) {

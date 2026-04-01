@@ -116,7 +116,8 @@ public class Autos {
                     Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
                     () -> false,
                     () -> false,
-                    () -> true),
+                    () -> true,
+                    () -> false),
                 Commands.none(),
                 inAllianceZoneSupplier)
             .withDeadline(Commands.waitTime(STARTING_FUEL_SHOOT_DURATION)));
@@ -153,7 +154,8 @@ public class Autos {
                 Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
                 () -> false,
                 () -> false,
-                () -> true),
+                () -> true,
+                () -> false),
             Commands.none(),
             inAllianceZoneSupplier));
 
@@ -172,7 +174,8 @@ public class Autos {
                     Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
                     () -> false,
                     () -> false,
-                    () -> true),
+                    () -> true,
+                    () -> false),
                 Commands.none(),
                 inAllianceZoneSupplier)
             .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)));
@@ -194,7 +197,8 @@ public class Autos {
                     Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
                     () -> true,
                     () -> false,
-                    () -> true),
+                    () -> true,
+                    () -> false),
                 Commands.none(),
                 inAllianceZoneSupplier));
 
@@ -211,7 +215,8 @@ public class Autos {
                         Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
                         () -> true,
                         () -> false,
-                        () -> true),
+                        () -> true,
+                        () -> false),
                     Commands.none(),
                     inAllianceZoneSupplier)
                 .withDeadline(Commands.waitTime(STARTING_FUEL_SHOOT_DURATION)));
@@ -246,7 +251,8 @@ public class Autos {
                         Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
                         () -> true,
                         () -> false,
-                        () -> true),
+                        () -> true,
+                        () -> false),
                     Commands.none(),
                     inAllianceZoneSupplier)
                 .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)));
