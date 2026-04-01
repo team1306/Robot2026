@@ -53,6 +53,8 @@ public class ModuleIOTalonFX implements ModuleIO {
   private final TalonFX turnTalon;
   private final CANcoder cancoder;
 
+  private final TalonFXConfiguration driveConfig;
+
   // Voltage control requests
   private final VoltageOut voltageRequest = new VoltageOut(0);
   private final PositionVoltage positionVoltageRequest = new PositionVoltage(0.0);
@@ -100,7 +102,7 @@ public class ModuleIOTalonFX implements ModuleIO {
     cancoder = new CANcoder(constants.EncoderId, TunerConstants.kCANBus);
 
     // Configure drive motor
-    var driveConfig = constants.DriveMotorInitialConfigs;
+    driveConfig = constants.DriveMotorInitialConfigs;
     driveConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     driveConfig.Slot0 = constants.DriveMotorGains;
     driveConfig.Feedback.SensorToMechanismRatio = constants.DriveMotorGearRatio;
@@ -260,5 +262,35 @@ public class ModuleIOTalonFX implements ModuleIO {
           case TorqueCurrentFOC -> positionTorqueCurrentRequest.withPosition(
               rotation.getRotations());
         });
+  }
+
+  @Override
+  public void setBrakeMode() {
+    driveTalon
+        .getConfigurator()
+        .apply(
+            driveConfig
+                .clone()
+                .MotorOutput
+                .withNeutralMode(NeutralModeValue.Brake)
+                .withInverted(
+                    constants.DriveMotorInverted
+                        ? InvertedValue.Clockwise_Positive
+                        : InvertedValue.CounterClockwise_Positive));
+  }
+
+  @Override
+  public void setCoastMode() {
+    driveTalon
+        .getConfigurator()
+        .apply(
+            driveConfig
+                .clone()
+                .MotorOutput
+                .withNeutralMode(NeutralModeValue.Coast)
+                .withInverted(
+                    constants.DriveMotorInverted
+                        ? InvertedValue.Clockwise_Positive
+                        : InvertedValue.CounterClockwise_Positive));
   }
 }
