@@ -3,61 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0,
-        "y": 1.5
+        "x": 4.375,
+        "y": 7.4
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.175615939454235,
-        "y": 0.8420706011938615
+        "x": 5.375,
+        "y": 7.4
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.375,
-        "y": 0.5999999999999996
+        "x": 8.25,
+        "y": 6.5
       },
       "prevControl": {
-        "x": 3.375,
-        "y": 0.5999999999999996
+        "x": 7.542893218813452,
+        "y": 7.207106781186547
       },
       "nextControl": {
-        "x": 7.375,
-        "y": 0.5999999999999996
-      },
-      "isLocked": false,
-      "linkedName": "start-trench-right"
-    },
-    {
-      "anchor": {
-        "x": 7.0,
-        "y": 4.0
-      },
-      "prevControl": {
-        "x": 4.5,
-        "y": 4.0
-      },
-      "nextControl": {
-        "x": 8.0,
-        "y": 4.0
+        "x": 8.603553390593273,
+        "y": 6.146446609406726
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.0,
-        "y": 2.5
+        "x": 8.25,
+        "y": 4.029
       },
       "prevControl": {
-        "x": 8.0,
-        "y": 2.5
+        "x": 9.006665048489923,
+        "y": 4.55882257085246
       },
       "nextControl": {
-        "x": 6.0000000000000036,
-        "y": 2.5
+        "x": 7.430847955711012,
+        "y": 3.4554235636489565
       },
       "isLocked": false,
       "linkedName": null
@@ -65,15 +49,15 @@
     {
       "anchor": {
         "x": 5.75,
-        "y": 2.5
+        "y": 5.5
       },
       "prevControl": {
         "x": 6.75,
-        "y": 2.5
+        "y": 5.5
       },
       "nextControl": {
         "x": 4.75,
-        "y": 2.5
+        "y": 5.5
       },
       "isLocked": false,
       "linkedName": null
@@ -81,15 +65,15 @@
     {
       "anchor": {
         "x": 3.5,
-        "y": 2.5
+        "y": 5.5
       },
       "prevControl": {
         "x": 4.5,
-        "y": 2.5
+        "y": 5.5
       },
       "nextControl": {
         "x": 3.0,
-        "y": 2.5
+        "y": 5.5
       },
       "isLocked": false,
       "linkedName": null
@@ -97,11 +81,11 @@
     {
       "anchor": {
         "x": 3.0,
-        "y": 1.5
+        "y": 6.5
       },
       "prevControl": {
         "x": 2.75,
-        "y": 1.9330127018922194
+        "y": 6.066987298107781
       },
       "nextControl": null,
       "isLocked": false,
@@ -111,30 +95,18 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": 0.0
+      "rotationDegrees": -110.0
     },
     {
-      "waypointRelativePos": 1.5,
-      "rotationDegrees": 90.0
+      "waypointRelativePos": 2.5,
+      "rotationDegrees": 119.99999999999999
     },
     {
-      "waypointRelativePos": 2,
-      "rotationDegrees": 0.0
-    },
-    {
-      "waypointRelativePos": 3.0,
-      "rotationDegrees": -178.61823274432507
-    },
-    {
-      "waypointRelativePos": 3.4682889344262278,
+      "waypointRelativePos": 3,
       "rotationDegrees": 180.0
     },
     {
-      "waypointRelativePos": 4.0,
-      "rotationDegrees": 180.0
-    },
-    {
-      "waypointRelativePos": 5.0,
+      "waypointRelativePos": 4,
       "rotationDegrees": 180.0
     }
   ],
@@ -143,28 +115,28 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 4.20105049435028,
+      "waypointRelativePos": 0.25,
+      "endWaypointRelativePos": 3.0011917372881354,
       "command": null
     }
   ],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": true
+    "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 119.99999999999999
   },
   "reversed": false,
   "folder": "CitrusAutos",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

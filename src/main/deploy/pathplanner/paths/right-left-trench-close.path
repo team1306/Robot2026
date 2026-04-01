@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 4.375,
-        "y": 0.6
+        "y": 0.5999999999999996
       },
       "prevControl": {
         "x": 2.875,
-        "y": 0.6000000000000002
+        "y": 0.6000000000000005
       },
       "nextControl": {
         "x": 5.875,
-        "y": 0.6
+        "y": 0.5999999999999996
       },
       "isLocked": false,
       "linkedName": "start-trench-right"

@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 3.0,
-        "y": 1.5
+        "y": 6.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.175615939454235,
-        "y": 0.8420706011938615
+        "x": 3.1762464679468763,
+        "y": 7.157760773032301
       },
       "isLocked": false,
       "linkedName": null
@@ -17,18 +17,18 @@
     {
       "anchor": {
         "x": 4.375,
-        "y": 0.5999999999999996
+        "y": 7.4
       },
       "prevControl": {
         "x": 3.375,
-        "y": 0.5999999999999996
+        "y": 7.4
       },
       "nextControl": {
         "x": 7.375,
-        "y": 0.5999999999999996
+        "y": 7.4
       },
       "isLocked": false,
-      "linkedName": "start-trench-right"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -49,15 +49,15 @@
     {
       "anchor": {
         "x": 7.0,
-        "y": 2.5
+        "y": 5.5
       },
       "prevControl": {
         "x": 8.0,
-        "y": 2.5
+        "y": 5.5
       },
       "nextControl": {
         "x": 6.0000000000000036,
-        "y": 2.5
+        "y": 5.5
       },
       "isLocked": false,
       "linkedName": null
@@ -65,15 +65,15 @@
     {
       "anchor": {
         "x": 5.75,
-        "y": 2.5
+        "y": 5.5
       },
       "prevControl": {
         "x": 6.75,
-        "y": 2.5
+        "y": 5.5
       },
       "nextControl": {
         "x": 4.75,
-        "y": 2.5
+        "y": 5.5
       },
       "isLocked": false,
       "linkedName": null
@@ -81,15 +81,15 @@
     {
       "anchor": {
         "x": 3.5,
-        "y": 2.5
+        "y": 5.5
       },
       "prevControl": {
         "x": 4.5,
-        "y": 2.5
+        "y": 5.5
       },
       "nextControl": {
         "x": 3.0,
-        "y": 2.5
+        "y": 5.5
       },
       "isLocked": false,
       "linkedName": null
@@ -97,11 +97,11 @@
     {
       "anchor": {
         "x": 3.0,
-        "y": 1.5
+        "y": 6.5
       },
       "prevControl": {
         "x": 2.75,
-        "y": 1.9330127018922194
+        "y": 6.06698729810778
       },
       "nextControl": null,
       "isLocked": false,
@@ -115,15 +115,11 @@
     },
     {
       "waypointRelativePos": 1.5,
-      "rotationDegrees": 90.0
+      "rotationDegrees": -90.0
     },
     {
       "waypointRelativePos": 2,
       "rotationDegrees": 0.0
-    },
-    {
-      "waypointRelativePos": 3.0,
-      "rotationDegrees": -178.61823274432507
     },
     {
       "waypointRelativePos": 3.4682889344262278,
@@ -158,13 +154,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 119.99999999999999
   },
   "reversed": false,
   "folder": "CitrusAutos",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }
