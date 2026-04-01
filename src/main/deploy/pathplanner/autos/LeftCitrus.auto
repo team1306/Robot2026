@@ -5,12 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "deploy-intake"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "LeftCitrusPartOne"
