@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.4727349397590364,
+        "x": 3.353907563025211,
         "y": 5.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.4727349397590395,
+        "x": 4.3539075630252135,
         "y": 5.5
       },
       "isLocked": false,
@@ -16,15 +16,15 @@
     },
     {
       "anchor": {
-        "x": 5.9,
+        "x": 6.0,
         "y": 5.5
       },
       "prevControl": {
-        "x": 5.866258375063874,
+        "x": 5.966258375063874,
         "y": 5.252287459448114
       },
       "nextControl": {
-        "x": 6.090433734939759,
+        "x": 6.1904337349397585,
         "y": 6.898060240963855
       },
       "isLocked": false,
@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 8.2,
-        "y": 6.4
+        "x": 8.4,
+        "y": 6.5
       },
       "prevControl": {
-        "x": 8.181636434462986,
-        "y": 8.399915693088271
+        "x": 8.381636434462987,
+        "y": 8.49991569308827
       },
       "nextControl": {
-        "x": 8.209181782768507,
-        "y": 5.400042153455865
+        "x": 8.409181782768508,
+        "y": 5.500042153455865
       },
       "isLocked": false,
       "linkedName": "fuel-far-left-entrance"
@@ -57,38 +57,38 @@
       },
       "nextControl": {
         "x": 8.2,
-        "y": 4.25
+        "y": 3.75
       },
       "isLocked": false,
       "linkedName": "fuel-halfway-left"
     },
     {
       "anchor": {
-        "x": 7.25,
-        "y": 5.3
+        "x": 7.3,
+        "y": 4.75
       },
       "prevControl": {
-        "x": 7.5367882181755235,
-        "y": 4.890423977855504
+        "x": 7.3,
+        "y": 3.75
       },
       "nextControl": {
-        "x": 6.819817672736715,
-        "y": 5.914364033216743
+        "x": 7.3,
+        "y": 6.25
       },
       "isLocked": false,
       "linkedName": "fuel-mid-left-exit"
     },
     {
       "anchor": {
-        "x": 5.9,
+        "x": 6.0,
         "y": 5.5
       },
       "prevControl": {
-        "x": 6.9,
+        "x": 7.0,
         "y": 5.5
       },
       "nextControl": {
-        "x": 4.9,
+        "x": 5.0,
         "y": 5.5
       },
       "isLocked": false,
@@ -119,11 +119,11 @@
     },
     {
       "waypointRelativePos": 3.0,
-      "rotationDegrees": -119.99999999999999
+      "rotationDegrees": -100.0
     },
     {
-      "waypointRelativePos": 3.5,
-      "rotationDegrees": 125.00000000000001
+      "waypointRelativePos": 4.0,
+      "rotationDegrees": 90.0
     },
     {
       "waypointRelativePos": 5.0,
@@ -146,7 +146,7 @@
       "command": null
     },
     {
-      "name": "stop-intake",
+      "name": "",
       "waypointRelativePos": 5.2,
       "endWaypointRelativePos": null,
       "command": null
@@ -162,13 +162,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 145.83495451575692
+    "rotation": 148.372381067324
   },
   "reversed": false,
   "folder": "Center Collection",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -45.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

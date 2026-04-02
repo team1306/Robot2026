@@ -3,16 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 5.5
+        "x": 1.2,
+        "y": 5.849
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.999999999999999,
+        "x": 1.6999999999999997,
+        "y": 5.849
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.353907563025211,
+        "y": 5.5
+      },
+      "prevControl": {
+        "x": 2.853907563025211,
+        "y": 5.5
+      },
+      "nextControl": {
+        "x": 4.35390756302521,
         "y": 5.5
       },
       "isLocked": false,
-      "linkedName": "bump-left-alliance"
+      "linkedName": "start-bump-left-alliance"
     },
     {
       "anchor": {
@@ -20,56 +36,24 @@
         "y": 5.5
       },
       "prevControl": {
-        "x": 5.930413449519968,
-        "y": 5.0048659656292145
+        "x": 5.0,
+        "y": 5.5
       },
       "nextControl": {
-        "x": 6.208759651440099,
-        "y": 6.985402103112356
+        "x": 6.25,
+        "y": 5.5
       },
       "isLocked": false,
       "linkedName": "bump-left-center"
     },
     {
       "anchor": {
-        "x": 6.43271041369472,
-        "y": 7.340827389443652
-      },
-      "prevControl": {
-        "x": 6.334361016104358,
-        "y": 6.608670762937628
-      },
-      "nextControl": {
-        "x": 6.531059811285083,
-        "y": 8.072984015949677
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.0,
-        "y": 7.340827389443652
-      },
-      "prevControl": {
-        "x": 4.867056296512727,
-        "y": 7.713375032225909
-      },
-      "nextControl": {
-        "x": 1.132943703487273,
-        "y": 6.968279746661396
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.0,
+        "x": 6.890445378151262,
         "y": 5.5
       },
       "prevControl": {
-        "x": 2.096835617792139,
-        "y": 6.258248289878487
+        "x": 6.342445378151262,
+        "y": 5.5
       },
       "nextControl": null,
       "isLocked": false,
@@ -82,8 +66,8 @@
       "rotationDegrees": 135.0
     },
     {
-      "waypointRelativePos": 2,
-      "rotationDegrees": 90.0
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": 135.0
     }
   ],
   "constraintZones": [],
@@ -99,13 +83,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 136.19348942398202
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Testing",
+  "folder": "Alliance Side",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 148.372381067324
+    "rotation": 158.58703052512834
   },
   "useDefaultConstraints": true
 }
