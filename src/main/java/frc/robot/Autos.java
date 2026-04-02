@@ -37,7 +37,6 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 public class Autos {
-  private static final Time STARTING_FUEL_SHOOT_DURATION = Seconds.of(1);
   private static final Time SMALL_HOPPER_SHOOT_DURATION = Seconds.of(3);
 
   private final BooleanSupplier inAllianceZoneSupplier;
@@ -194,6 +193,10 @@ public class Autos {
     NamedCommands.registerCommand("shoot-small-hopper", shootSmallHopperCommand);
 
     NamedCommands.registerCommand("sotm-small-hopper", sotmSmallHopperCommand);
+
+    NamedCommands.registerCommand("coast", Commands.runOnce(() -> drive.setCoastMode()));
+
+    RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> drive.setBrakeMode()));
   }
 
   private void bindEventMarkers() {

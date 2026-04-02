@@ -3,38 +3,70 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.9484337349397589,
-        "y": 7.411662650602409
+        "x": 0.7,
+        "y": 5.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9484337349397582,
-        "y": 7.411662650602409
+        "x": 1.4071067811865468,
+        "y": 6.507106781186548
+      },
+      "isLocked": false,
+      "linkedName": "depot-gather-bump"
+    },
+    {
+      "anchor": {
+        "x": 2.0,
+        "y": 7.4
+      },
+      "prevControl": {
+        "x": 0.5,
+        "y": 7.4
+      },
+      "nextControl": {
+        "x": 2.25,
+        "y": 7.4
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 9.690602409638554,
-        "y": 7.411662650602409
+        "x": 8.3,
+        "y": 7.4
       },
       "prevControl": {
-        "x": 8.69060240963855,
-        "y": 7.411662650602409
+        "x": 4.137025742033086,
+        "y": 7.4
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "intake",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 2.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "intake"
+        }
+      }
+    },
+    {
       "name": "coast",
-      "waypointRelativePos": 0.05,
+      "waypointRelativePos": 0.5,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -54,13 +86,13 @@
   },
   "goalEndState": {
     "velocity": 5.0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Testing",
+  "folder": "Alliance Side",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 167.69200000000004
   },
   "useDefaultConstraints": true
 }
