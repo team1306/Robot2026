@@ -36,7 +36,6 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 public class Autos {
-  private static final Time STARTING_FUEL_SHOOT_DURATION = Seconds.of(1);
   private static final Time SMALL_HOPPER_SHOOT_DURATION = Seconds.of(3);
 
   private final BooleanSupplier inAllianceZoneSupplier;
@@ -82,7 +81,8 @@ public class Autos {
                     Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
                     () -> false,
                     () -> false,
-                    () -> true)
+                    () -> true,
+                    () -> false)
                 .alongWith(intake.intakeUntilInterruptedCommand(1).asProxy())
                 .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)),
             Commands.none(),
@@ -118,7 +118,8 @@ public class Autos {
                 Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
                 () -> false,
                 () -> false,
-                () -> true),
+                () -> true,
+                () -> false),
             Commands.none(),
             inAllianceZoneSupplier);
 
@@ -136,7 +137,8 @@ public class Autos {
                     Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
                     () -> false,
                     () -> false,
-                    () -> true),
+                    () -> true,
+                    () -> false),
                 Commands.none(),
                 inAllianceZoneSupplier)
             .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION));
