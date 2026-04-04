@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
 import java.util.function.DoubleSupplier;
 
+import badgerutils.triggers.AllianceTriggers;
+
 public class FaceforwardCommand extends Command {
 
   private final Command driveAtAngleCommand;
@@ -35,7 +37,7 @@ public class FaceforwardCommand extends Command {
 
               lastRotation =
                   Rotation2d.fromRadians(
-                      Math.atan2(y, x) + Math.PI); // may need to add PI, depending on orientation
+                      Math.atan2(y, x) + (AllianceTriggers.isRedAlliance() ? Math.PI : 0)); // may need to add PI, depending on orientation
 
               return lastRotation;
             });
