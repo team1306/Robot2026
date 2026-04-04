@@ -27,6 +27,7 @@ import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.deploy.DeployerPosition;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.fueldetection.FuelDetection;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.Leds;
@@ -42,6 +43,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
   private final Shooter shooter;
   private final Indexer indexer;
   private final Booster booster;
+  private final Hood hood;
   private final FuelDetection fuelDetection;
   private final Leds leds;
   private final Deploy deploy;
@@ -54,6 +56,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
       Shooter shooter,
       Indexer indexer,
       Booster booster,
+      Hood hood,
       FuelDetection fuelDetection,
       Leds leds,
       Deploy deploy) {
@@ -63,6 +66,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
     this.shooter = shooter;
     this.indexer = indexer;
     this.booster = booster;
+    this.hood = hood;
     this.fuelDetection = fuelDetection;
     this.leds = leds;
     this.deploy = deploy;
@@ -164,6 +168,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     indexer,
                     deploy,
                     booster,
+                    hood,
                     leds,
                     () -> -driverController.getLeftY(),
                     () -> -driverController.getLeftX(),

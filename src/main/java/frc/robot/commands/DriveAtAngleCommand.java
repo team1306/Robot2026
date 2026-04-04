@@ -111,7 +111,6 @@ public class DriveAtAngleCommand extends Command {
 
   public double getPIDOutput(boolean flipped) {
     Logger.recordOutput("Drive/Angle Setpoint Error", angleController.getPositionError());
-    
 
     return angleController.calculate(
         drive.getRotation().getRadians(),

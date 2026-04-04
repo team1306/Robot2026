@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
@@ -24,6 +25,7 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
       Indexer indexer,
       Deploy deploy,
       Booster booster,
+      Hood hood,
       Leds leds,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
@@ -41,6 +43,7 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
             indexer,
             deploy,
             booster,
+            hood,
             leds,
             positionSupplier,
             angleTolerance,

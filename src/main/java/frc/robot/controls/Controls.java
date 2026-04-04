@@ -8,6 +8,7 @@ import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.fueldetection.FuelDetection;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.Leds;
@@ -37,6 +38,7 @@ public class Controls {
       Shooter shooter,
       Indexer indexer,
       Booster booster,
+      Hood hood,
       FuelDetection fuelDetection,
       Leds leds,
       Deploy deploy) {
@@ -54,6 +56,7 @@ public class Controls {
             shooter,
             indexer,
             booster,
+            hood,
             fuelDetection,
             leds,
             deploy));

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
@@ -32,6 +33,7 @@ public class ShootOnTheMoveCommands {
       Indexer indexer,
       Deploy deploy,
       Booster booster,
+      Hood hood,
       Leds leds,
       Supplier<Translation2d> target,
       Rotation2d angleTolerance,
@@ -46,6 +48,7 @@ public class ShootOnTheMoveCommands {
             indexer,
             deploy,
             booster,
+            hood,
             leds,
             () -> calculateLeadTarget(drive, target),
             angleTolerance,
@@ -74,6 +77,7 @@ public class ShootOnTheMoveCommands {
       Indexer indexer,
       Deploy deploy,
       Booster booster,
+      Hood hood,
       Leds leds,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
@@ -89,6 +93,7 @@ public class ShootOnTheMoveCommands {
         indexer,
         deploy,
         booster,
+        hood,
         leds,
         () -> xSupplier.getAsDouble() * SLOWDOWN_FACTOR,
         () -> ySupplier.getAsDouble() * SLOWDOWN_FACTOR,

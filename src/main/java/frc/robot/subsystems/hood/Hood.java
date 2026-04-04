@@ -3,9 +3,12 @@ package frc.robot.subsystems.hood;
 import static edu.wpi.first.units.Units.Rotations;
 
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.ShooterCommands;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Hood extends SubsystemBase {
@@ -29,7 +32,19 @@ public class Hood extends SubsystemBase {
   }
 
   public Command moveToAngle(Angle angle) {
-    return Commands.runEnd(
+    return Commands.startEnd(
         () -> setAngle(angle), () -> setAngle(HoodConstants.ZERO_POSITION), this);
+  }
+
+  public Command moveToAngle(Supplier<Angle> angleSupplier) {
+    return Commands.runEnd(
+        () -> setAngle(angleSupplier.get()), () -> setAngle(HoodConstants.ZERO_POSITION), this);
+  }
+
+  public Command angleFromDistance(Supplier<Distance> distanceSupplier) {
+    return moveToAngle(
+        () ->
+            ShooterCommands.interpolateSetpoints(ShooterCommands.SETPOINTS, distanceSupplier.get())
+                .hoodAngle());
   }
 }

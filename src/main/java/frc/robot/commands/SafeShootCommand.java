@@ -15,6 +15,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
@@ -40,6 +41,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
       Indexer indexer,
       Deploy deploy,
       Booster booster,
+      Hood hood,
       Leds leds,
       Supplier<Translation2d> positionSupplier,
       Rotation2d angleTolerance,
@@ -101,16 +103,20 @@ public class SafeShootCommand extends ParallelCommandGroup {
     //                 () -> combinedCondition.getAsBoolean() &&
     // notMovingCondition.getAsBoolean()));
 
+    Supplier<Distance> distanceSupplier =
+        () -> Meters.of(drive.getPose().getTranslation().getDistance(positionSupplier.get()));
+
     Command shootAtDistanceCommand =
-        ShooterCommands.shootAtDistanceCommand(
-                shooter,
-                () ->
-                    Meters.of(drive.getPose().getTranslation().getDistance(positionSupplier.get())))
+        ShooterCommands.shootAtDistanceCommand(shooter, distanceSupplier)
             .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
     Command boosterCommand =
         booster
             .boostCommand(BOOSTER_SPEED)
+            .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+
+    Command hoodCommand =
+        hood.angleFromDistance(distanceSupplier)
             .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
     @SuppressWarnings("unused")
@@ -157,6 +163,8 @@ public class SafeShootCommand extends ParallelCommandGroup {
         guardedIndexerCommand.asProxy(),
         // guardedDeployCommand.asProxy(),
         boosterCommand.asProxy(),
+        loggedGuardCommand,
+        hoodCommand,
         loggedGuardCommand);
   }
 
