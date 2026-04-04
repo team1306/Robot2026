@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
+import frc.robot.commands.DriveAimLockedCommand;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.GuardedCommand;
 import frc.robot.commands.ShooterCommands;
@@ -123,7 +124,7 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
                             shooter.isAtRequestedSpeed(Constants.Tolerances.NORMAL_SPEED_TOLERANCE))
                         .alongWith(intake.shakeIntake())
                         .alongWith(
-                            DriveCommands.driveAimLockedCommand(
+                            new DriveAimLockedCommand(
                                 drive,
                                 () -> -driverController.getLeftY(),
                                 () -> -driverController.getLeftX(),

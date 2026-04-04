@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 0.7609411764705891,
-        "y": 0.7804705882352936
+        "y": 0.7804705882352937
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,7 +39,7 @@
       "command": null
     },
     {
-      "name": "shoot-8",
+      "name": "",
       "waypointRelativePos": 0.2,
       "endWaypointRelativePos": null,
       "command": null
@@ -57,7 +57,7 @@
       "command": null
     },
     {
-      "name": "stop-intake",
+      "name": "",
       "waypointRelativePos": 0.5,
       "endWaypointRelativePos": null,
       "command": null

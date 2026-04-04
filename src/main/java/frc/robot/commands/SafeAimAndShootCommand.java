@@ -15,6 +15,8 @@ import java.util.function.Supplier;
 
 public class SafeAimAndShootCommand extends ParallelCommandGroup {
 
+  private final DriveAimLockedCommand driveCommand;
+
   public SafeAimAndShootCommand(
       Drive drive,
       Shooter shooter,
@@ -27,7 +29,8 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
       Rotation2d angleTolerance,
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
-      BooleanSupplier overrideHubActive) {
+      BooleanSupplier overrideHubActive,
+      BooleanSupplier overrideAutoRanging) {
 
     Command safeShootCommand =
         new SafeShootCommand(
@@ -40,11 +43,15 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
             angleTolerance,
             overrideAngleSafeguard,
             overrideVelocitySafeguard,
-            overrideHubActive);
+            overrideHubActive,
+            overrideAutoRanging);
 
-    Command driveAtAngleCommand =
-        DriveCommands.driveAimLockedCommand(drive, xSupplier, ySupplier, positionSupplier, true);
+    driveCommand = new DriveAimLockedCommand(drive, xSupplier, ySupplier, positionSupplier, true);
 
-    addCommands(safeShootCommand, driveAtAngleCommand);
+    addCommands(safeShootCommand, driveCommand);
+  }
+
+  public double getPIDOutput(boolean flipped) {
+    return driveCommand.getPIDOutput(flipped);
   }
 }

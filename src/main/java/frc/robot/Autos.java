@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -36,7 +37,6 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 public class Autos {
-  private static final Time STARTING_FUEL_SHOOT_DURATION = Seconds.of(1);
   private static final Time SMALL_HOPPER_SHOOT_DURATION = Seconds.of(3);
 
   private final BooleanSupplier inAllianceZoneSupplier;
@@ -47,6 +47,12 @@ public class Autos {
   private final Shooter shooter;
   private final Leds leds;
   private final Deploy deploy;
+
+  private final Command sotmSmallHopperCommand;
+  private final Command shootSmallHopperCommand;
+  private final Command shootUntilDoneCommand;
+  private final Command spoolShooterCommand;
+  private final Command intakeCommand;
 
   // Prefer to construct autos lazily to save limited memory. Required with many auto files
   private final LoggedDashboardChooser<Auto> autoChooser;
@@ -66,6 +72,80 @@ public class Autos {
     this.deploy = deploy;
 
     inAllianceZoneSupplier = () -> RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
+
+    sotmSmallHopperCommand =
+        new ConditionalCommand(
+            ShootOnTheMoveCommands.shootOnTheMoveAutoCommand(
+                    drive,
+                    shooter,
+                    indexer,
+                    deploy,
+                    leds,
+                    () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                    Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
+                    () -> false,
+                    () -> false,
+                    () -> true,
+                    () -> false)
+                .alongWith(intake.intakeUntilInterruptedCommand(1).asProxy())
+                .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)),
+            Commands.none(),
+            inAllianceZoneSupplier);
+
+    spoolShooterCommand =
+        ShooterCommands.shootAtDistanceCommand(
+                shooter,
+                () ->
+                    Meters.of(
+                        drive
+                            .getPose()
+                            .getTranslation()
+                            .getDistance(RebuiltUtils.getCurrentHubLocation().toTranslation2d())))
+            .asProxy();
+
+    intakeCommand =
+        intake
+            .intakeUntilInterruptedCommand(1)
+            .asProxy()
+            .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    shootUntilDoneCommand =
+        new ConditionalCommand(
+            new SafeAimAndShootCommand(
+                drive,
+                shooter,
+                indexer,
+                deploy,
+                leds,
+                () -> 0,
+                () -> 0,
+                () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
+                () -> false,
+                () -> false,
+                () -> true,
+                () -> false),
+            Commands.none(),
+            inAllianceZoneSupplier);
+
+    shootSmallHopperCommand =
+        new ConditionalCommand(
+                new SafeAimAndShootCommand(
+                    drive,
+                    shooter,
+                    indexer,
+                    deploy,
+                    leds,
+                    () -> 0,
+                    () -> 0,
+                    () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                    Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
+                    () -> false,
+                    () -> false,
+                    () -> true,
+                    () -> false),
+                Commands.none(),
+                inAllianceZoneSupplier)
+            .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION));
 
     autoWaitTime.set(0);
 
@@ -88,7 +168,10 @@ public class Autos {
 
   public Command createCommandFromSelectedAuto() {
     Auto auto = autoChooser.get();
-    return new WaitCommand(autoWaitTime.get()).andThen(auto.getCommand()).withName(auto.getName());
+    return new WaitCommand(autoWaitTime.get())
+        .andThen(auto.getCommand())
+        .andThen(Commands.print("Auto Complete"))
+        .withName(auto.getName());
   }
 
   private void resetAutoOdometry() {
@@ -105,155 +188,30 @@ public class Autos {
   }
 
   private void bindNamedCommands() {
-    NamedCommands.registerCommand(
-        "shoot-8",
-        new ConditionalCommand(
-                new SafeAimAndShootCommand(
-                    drive,
-                    shooter,
-                    indexer,
-                    deploy,
-                    leds,
-                    () -> 0,
-                    () -> 0,
-                    () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                    Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
-                    () -> false,
-                    () -> false,
-                    () -> true),
-                Commands.none(),
-                inAllianceZoneSupplier)
-            .withDeadline(Commands.waitTime(STARTING_FUEL_SHOOT_DURATION)));
+    NamedCommands.registerCommand("intake", intakeCommand);
 
-    NamedCommands.registerCommand("intake", intake.intakeAtDutyCycleCommand(1));
+    NamedCommands.registerCommand("spool-shooter", spoolShooterCommand);
 
-    NamedCommands.registerCommand("stop-intake", intake.intakeAtDutyCycleCommand(0));
+    NamedCommands.registerCommand("deploy-intake", deploy.deployCommand().asProxy());
 
-    NamedCommands.registerCommand(
-        "spool-shooter",
-        ShooterCommands.shootAtDistanceCommand(
-            shooter,
-            () ->
-                Meters.of(
-                    drive
-                        .getPose()
-                        .getTranslation()
-                        .getDistance(RebuiltUtils.getCurrentHubLocation().toTranslation2d()))));
+    NamedCommands.registerCommand("shoot-until-done", shootUntilDoneCommand);
 
-    NamedCommands.registerCommand("deploy-intake", deploy.deployCommand());
+    NamedCommands.registerCommand("shoot-small-hopper", shootSmallHopperCommand);
 
-    NamedCommands.registerCommand(
-        "shoot-until-done",
-        new ConditionalCommand(
-            new SafeAimAndShootCommand(
-                drive,
-                shooter,
-                indexer,
-                deploy,
-                leds,
-                () -> 0,
-                () -> 0,
-                () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
-                () -> false,
-                () -> false,
-                () -> true),
-            Commands.none(),
-            inAllianceZoneSupplier));
-
-    NamedCommands.registerCommand(
-        "shoot-small-hopper",
-        new ConditionalCommand(
-                new SafeAimAndShootCommand(
-                    drive,
-                    shooter,
-                    indexer,
-                    deploy,
-                    leds,
-                    () -> 0,
-                    () -> 0,
-                    () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                    Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
-                    () -> false,
-                    () -> false,
-                    () -> true),
-                Commands.none(),
-                inAllianceZoneSupplier)
-            .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)));
+    NamedCommands.registerCommand("sotm-small-hopper", sotmSmallHopperCommand);
   }
 
   private void bindEventMarkers() {
-    // NONE OF THESE SHOULD REQUIRE THE DRIVE SUBSYSTEM
-
     new EventTrigger("shoot-until-done")
-        .onTrue(
-            new ConditionalCommand(
-                ShootOnTheMoveCommands.shootOnTheMoveCommand(
-                    drive,
-                    shooter,
-                    indexer,
-                    deploy,
-                    leds,
-                    () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                    Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
-                    () -> true,
-                    () -> false,
-                    () -> true),
-                Commands.none(),
-                inAllianceZoneSupplier));
+        .onFalse(Commands.runOnce(() -> shootUntilDoneCommand.cancel()));
 
-    new EventTrigger("shoot-8")
-        .onTrue(
-            new ConditionalCommand(
-                    ShootOnTheMoveCommands.shootOnTheMoveCommand(
-                        drive,
-                        shooter,
-                        indexer,
-                        deploy,
-                        leds,
-                        () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                        Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
-                        () -> true,
-                        () -> false,
-                        () -> true),
-                    Commands.none(),
-                    inAllianceZoneSupplier)
-                .withDeadline(Commands.waitTime(STARTING_FUEL_SHOOT_DURATION)));
-
-    new EventTrigger("intake").onTrue(intake.intakeAtDutyCycleCommand(1));
-
-    new EventTrigger("stop-intake").onTrue(intake.intakeAtDutyCycleCommand(0));
-
-    new EventTrigger("spool-shooter")
-        .onTrue(
-            ShooterCommands.shootAtDistanceCommand(
-                shooter,
-                () ->
-                    Meters.of(
-                        drive
-                            .getPose()
-                            .getTranslation()
-                            .getDistance(RebuiltUtils.getCurrentHubLocation().toTranslation2d()))));
-
-    new EventTrigger("deploy-intake").onTrue(deploy.deployCommand());
+    new EventTrigger("intake").onFalse(Commands.runOnce(() -> intakeCommand.cancel()));
 
     new EventTrigger("shoot-small-hopper")
-        .onTrue(
-            new ConditionalCommand(
-                    ShootOnTheMoveCommands.shootOnTheMoveCommand(
-                        drive,
-                        shooter,
-                        indexer,
-                        deploy,
-                        leds,
-                        () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                        Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
-                        () -> true,
-                        () -> false,
-                        () -> true),
-                    Commands.none(),
-                    inAllianceZoneSupplier)
-                .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)));
+        .onFalse(Commands.runOnce(() -> shootSmallHopperCommand.cancel()));
+
+    new EventTrigger("sotm-small-hopper")
+        .onFalse(Commands.runOnce(() -> sotmSmallHopperCommand.cancel()));
   }
 
   public static final class Auto {

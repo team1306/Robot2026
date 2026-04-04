@@ -31,7 +31,6 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
-import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -105,22 +104,10 @@ public class RobotContainer {
         vision =
             new Vision(
                 drive::addVisionMeasurement,
-                new VisionIOPhotonVisionSim(
-                    VisionConstants.LEFT_BACK_CAMERA_NAME,
-                    VisionConstants.LEFT_BACK_CAMERA_POSITION,
-                    () -> drive.getPose()),
-                new VisionIOPhotonVisionSim(
-                    VisionConstants.LEFT_SIDE_CAMERA_NAME,
-                    VisionConstants.LEFT_SIDE_CAMERA_POSITION,
-                    () -> drive.getPose()),
-                new VisionIOPhotonVisionSim(
-                    VisionConstants.RIGHT_BACK_CAMERA_NAME,
-                    VisionConstants.RIGHT_BACK_CAMERA_POSITION,
-                    () -> drive.getPose()),
-                new VisionIOPhotonVisionSim(
-                    VisionConstants.RIGHT_SIDE_CAMERA_NAME,
-                    VisionConstants.RIGHT_SIDE_CAMERA_POSITION,
-                    () -> drive.getPose()));
+                new VisionIO() {},
+                new VisionIO() {},
+                new VisionIO() {},
+                new VisionIO() {});
 
         fuelDetection = new FuelDetection(new FuelDetectionIO() {});
         leds = new Leds(new LedsReal());

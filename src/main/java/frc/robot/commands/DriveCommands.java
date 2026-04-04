@@ -14,13 +14,11 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.util.LocationUtils;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 
 public class DriveCommands {
   public static final double DEADBAND = 0.1;
@@ -43,21 +41,6 @@ public class DriveCommands {
     return new Pose2d(Translation2d.kZero, linearDirection)
         .transformBy(new Transform2d(linearMagnitude, 0.0, Rotation2d.kZero))
         .getTranslation();
-  }
-
-  public static Command driveAimLockedCommand(
-      Drive drive,
-      DoubleSupplier xSupplier,
-      DoubleSupplier ySupplier,
-      Supplier<Translation2d> pose,
-      boolean isBackward) {
-    return new DriveAtAngleCommand(
-        drive,
-        xSupplier,
-        ySupplier,
-        () ->
-            LocationUtils.getDirectionToLocation(drive.getPose().getTranslation(), pose.get())
-                .plus(isBackward ? Rotation2d.k180deg : Rotation2d.kZero));
   }
 
   /**

@@ -57,23 +57,23 @@
       },
       "nextControl": {
         "x": 8.2,
-        "y": 3.749999999999999
+        "y": 4.25
       },
       "isLocked": false,
       "linkedName": "fuel-halfway-right"
     },
     {
       "anchor": {
-        "x": 7.25,
-        "y": 2.7
+        "x": 7.3,
+        "y": 3.3
       },
       "prevControl": {
-        "x": 7.5367882181755235,
-        "y": 3.109576022144496
+        "x": 7.3,
+        "y": 4.3
       },
       "nextControl": {
-        "x": 6.819817672736716,
-        "y": 2.0856359667832565
+        "x": 7.3,
+        "y": 1.7999999999999998
       },
       "isLocked": false,
       "linkedName": "fuel-mid-right-exit"
@@ -119,11 +119,11 @@
     },
     {
       "waypointRelativePos": 3,
-      "rotationDegrees": 119.99999999999999
+      "rotationDegrees": 100.0
     },
     {
-      "waypointRelativePos": 3.5,
-      "rotationDegrees": -125.00000000000001
+      "waypointRelativePos": 4.0,
+      "rotationDegrees": -90.0
     },
     {
       "waypointRelativePos": 5.0,
@@ -146,7 +146,7 @@
       "command": null
     },
     {
-      "name": "stop-intake",
+      "name": "",
       "waypointRelativePos": 5.2,
       "endWaypointRelativePos": null,
       "command": null

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.3752352941176476,
-        "y": 7.3962352941176475
+        "x": 4.4,
+        "y": 7.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.3752352941176476,
-        "y": 7.3962352941176475
+        "x": 5.4,
+        "y": 7.5
       },
       "isLocked": false,
       "linkedName": "start-trench-left"
@@ -116,7 +116,7 @@
       "command": null
     },
     {
-      "name": "stop-intake",
+      "name": "",
       "waypointRelativePos": 3.2,
       "endWaypointRelativePos": null,
       "command": null
@@ -138,7 +138,7 @@
   "folder": "Center Collection",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

@@ -15,25 +15,19 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "left-left-trench-far-trench"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "shoot-small-hopper"
+                        "pathName": "SHOP left-left-trench-far-SOTM"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "left-left-trench-close-trench"
+                        "pathName": "SHOP left-left-trench-close-SOTM"
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "path",
                       "data": {
-                        "name": "shoot-until-done"
+                        "pathName": "SHOP depot-bump"
                       }
                     }
                   ]

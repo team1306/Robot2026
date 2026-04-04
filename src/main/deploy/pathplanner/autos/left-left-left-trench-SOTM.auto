@@ -23,6 +23,30 @@
                       "data": {
                         "pathName": "left-left-trench-close-SOTM"
                       }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "depot-bump"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": null
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "depot-transition-SOTM"
+                      }
                     }
                   ]
                 }

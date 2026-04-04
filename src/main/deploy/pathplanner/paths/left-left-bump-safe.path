@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.4727349397590364,
+        "x": 3.353907563025211,
         "y": 5.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.4727349397590395,
+        "x": 4.3539075630252135,
         "y": 5.5
       },
       "isLocked": false,
@@ -16,15 +16,15 @@
     },
     {
       "anchor": {
-        "x": 5.9,
+        "x": 6.0,
         "y": 5.5
       },
       "prevControl": {
-        "x": 5.866258375063874,
+        "x": 5.966258375063874,
         "y": 5.252287459448114
       },
       "nextControl": {
-        "x": 6.090433734939759,
+        "x": 6.1904337349397585,
         "y": 6.898060240963855
       },
       "isLocked": false,
@@ -64,15 +64,15 @@
     },
     {
       "anchor": {
-        "x": 5.9,
+        "x": 6.0,
         "y": 5.5
       },
       "prevControl": {
-        "x": 6.9,
+        "x": 7.0,
         "y": 5.5
       },
       "nextControl": {
-        "x": 4.9,
+        "x": 5.0,
         "y": 5.5
       },
       "isLocked": false,
@@ -126,7 +126,7 @@
       "command": null
     },
     {
-      "name": "stop-intake",
+      "name": "",
       "waypointRelativePos": 4.2,
       "endWaypointRelativePos": null,
       "command": null
@@ -142,13 +142,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 145.83495451575692
+    "rotation": 148.372381067324
   },
   "reversed": false,
   "folder": "Center Collection",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -45.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

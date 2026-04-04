@@ -1,9 +1,11 @@
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -22,6 +24,7 @@ import org.littletonrobotics.junction.Logger;
 public class SafeShootCommand extends ParallelCommandGroup {
 
   private static double INDEXER_SPEED = 1;
+  private static final Distance MINIMUM_SHOT_DISTANCE = Feet.of(7.5);
 
   private boolean isActive;
 
@@ -35,7 +38,8 @@ public class SafeShootCommand extends ParallelCommandGroup {
       Rotation2d angleTolerance,
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
-      BooleanSupplier overrideHubActive) {
+      BooleanSupplier overrideHubActive,
+      BooleanSupplier overrideAutoRanging) {
 
     BooleanSupplier shooterVelocityCondition =
         shooter.isAtRequestedSpeed(Constants.Tolerances.NORMAL_SPEED_TOLERANCE);
@@ -49,11 +53,15 @@ public class SafeShootCommand extends ParallelCommandGroup {
                 || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
     Logger.recordOutput("Controls/Hub Active Condition", hubActiveCondition.getAsBoolean());
 
+    BooleanSupplier autoRangeCondition =
+        () -> drive.fartherThan(positionSupplier.get(), MINIMUM_SHOT_DISTANCE);
+
     BooleanSupplier combinedCondition =
         () ->
             (shooterVelocityCondition.getAsBoolean() || overrideVelocitySafeguard.getAsBoolean())
                 && (driveAngleCondition.getAsBoolean() || overrideAngleSafeguard.getAsBoolean())
-                && (hubActiveCondition.getAsBoolean() || overrideHubActive.getAsBoolean());
+                && (hubActiveCondition.getAsBoolean() || overrideHubActive.getAsBoolean())
+                && (autoRangeCondition.getAsBoolean() || overrideAutoRanging.getAsBoolean());
 
     BooleanSupplier movingCondition =
         () ->
@@ -92,20 +100,23 @@ public class SafeShootCommand extends ParallelCommandGroup {
                             || indexer.getCurrentCommand() == indexer.getDefaultCommand()))
             .onTrue(guardedIndexerCommand);
 
-    @SuppressWarnings("unused")
-    Trigger commandCanceler =
-        new Trigger(() -> !this.isActive)
-            .onTrue(
-                Commands.runOnce(
-                    () -> {
-                      guardedIndexerCommand.cancel();
-                    }));
-
     Command loggedGuardCommand =
         Commands.run(
-            () -> logConditions(shooterVelocityCondition, driveAngleCondition, hubActiveCondition));
+            () ->
+                logConditions(
+                    shooterVelocityCondition,
+                    driveAngleCondition,
+                    hubActiveCondition,
+                    autoRangeCondition));
 
-    Command activityTracker = Commands.startEnd(() -> isActive = true, () -> isActive = false);
+    Command activityTracker =
+        Commands.startEnd(
+            () -> isActive = true,
+            () -> {
+              isActive = false;
+              guardedIndexerCommand.cancel();
+              shootAtDistanceCommand.cancel();
+            });
 
     Trigger isShooting = new Trigger(() -> isActive);
     Trigger combinedTrigger = new Trigger(combinedCondition);
@@ -117,7 +128,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
         Commands.runEnd(() -> leds.isShooting = true, () -> leds.isShooting = false));
     addCommands(
         activityTracker,
-        shootAtDistanceCommand,
+        shootAtDistanceCommand.asProxy(),
         guardedIndexerCommand.asProxy(),
         guardedDeployCommand,
         loggedGuardCommand);
@@ -126,7 +137,8 @@ public class SafeShootCommand extends ParallelCommandGroup {
   private void logConditions(
       BooleanSupplier shooterVelocityCondition,
       BooleanSupplier driveAngleCondition,
-      BooleanSupplier hubActiveCondition) {
+      BooleanSupplier hubActiveCondition,
+      BooleanSupplier withinRangeCondition) {
     Logger.recordOutput(
         "Controls/Ready To Shoot",
         shooterVelocityCondition.getAsBoolean() && driveAngleCondition.getAsBoolean());
@@ -134,5 +146,6 @@ public class SafeShootCommand extends ParallelCommandGroup {
         "Controls/Shooter Velocity Condition", shooterVelocityCondition.getAsBoolean());
     Logger.recordOutput("Controls/Drive Angle Condition", driveAngleCondition.getAsBoolean());
     Logger.recordOutput("Controls/HubActive", hubActiveCondition.getAsBoolean());
+    Logger.recordOutput("Controls/Within Range Condition", withinRangeCondition.getAsBoolean());
   }
 }
