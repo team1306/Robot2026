@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.Leds;
@@ -22,6 +23,7 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
       Shooter shooter,
       Indexer indexer,
       Intake intake,
+      Hood hood,
       Leds leds,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
@@ -38,6 +40,7 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
             shooter,
             indexer,
             intake,
+            hood,
             leds,
             positionSupplier,
             angleTolerance,

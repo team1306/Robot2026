@@ -11,6 +11,9 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.fueldetection.FuelDetection;
 import frc.robot.subsystems.fueldetection.FuelDetectionIO;
+import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.hood.HoodIO;
+import frc.robot.subsystems.hood.HoodIOReal;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIOReal;
@@ -42,6 +45,7 @@ public class RobotContainer {
   private final Intake intake;
   private final Indexer indexer;
   private final Shooter shooter;
+  private final Hood hood;
   private final FuelDetection fuelDetection;
   private final Leds leds;
 
@@ -82,7 +86,7 @@ public class RobotContainer {
                     VisionConstants.RIGHT_SIDE_CAMERA_POSITION));
         fuelDetection = new FuelDetection(new FuelDetectionIO() {});
         leds = new Leds(new LedsReal());
-
+        hood = new Hood(new HoodIOReal());
         break;
 
       case SIM:
@@ -107,6 +111,7 @@ public class RobotContainer {
 
         fuelDetection = new FuelDetection(new FuelDetectionIO() {});
         leds = new Leds(new LedsReal());
+        hood = new Hood(new HoodIOReal());
         break;
 
       default:
@@ -130,11 +135,13 @@ public class RobotContainer {
                 new VisionIO() {});
         fuelDetection = new FuelDetection(new FuelDetectionIO() {});
         leds = new Leds(new LedsIO() {});
+        hood = new Hood(new HoodIO() {});
+
         break;
     }
 
-    controls = new Controls(drive, intake, shooter, indexer, fuelDetection, leds);
-    autos = new Autos(drive, indexer, intake, shooter, leds);
+    controls = new Controls(drive, intake, shooter, indexer, hood, fuelDetection, leds);
+    autos = new Autos(drive, indexer, intake, shooter, hood, leds);
   }
 
   public Command getAutonomousCommand() {

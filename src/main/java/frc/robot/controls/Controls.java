@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.fueldetection.FuelDetection;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.Leds;
@@ -34,6 +35,7 @@ public class Controls {
       Intake intake,
       Shooter shooter,
       Indexer indexer,
+      Hood hood,
       FuelDetection fuelDetection,
       Leds leds) {
     DriverStation.silenceJoystickConnectionWarning(true);
@@ -49,6 +51,7 @@ public class Controls {
             intake,
             shooter,
             indexer,
+            hood,
             fuelDetection,
             leds));
     mappings.put(

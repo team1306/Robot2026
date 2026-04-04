@@ -12,6 +12,7 @@ import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.Leds;
@@ -30,6 +31,7 @@ public class ShootOnTheMoveCommands {
       Shooter shooter,
       Indexer indexer,
       Intake intake,
+      Hood hood,
       Leds leds,
       Supplier<Translation2d> target,
       Rotation2d angleTolerance,
@@ -43,6 +45,7 @@ public class ShootOnTheMoveCommands {
             shooter,
             indexer,
             intake,
+            hood,
             leds,
             () -> calculateLeadTarget(drive, target),
             angleTolerance,
@@ -70,6 +73,7 @@ public class ShootOnTheMoveCommands {
       Shooter shooter,
       Indexer indexer,
       Intake intake,
+      Hood hood,
       Leds leds,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
@@ -84,6 +88,7 @@ public class ShootOnTheMoveCommands {
         shooter,
         indexer,
         intake,
+        hood,
         leds,
         () -> xSupplier.getAsDouble() * SLOWDOWN_FACTOR,
         () -> ySupplier.getAsDouble() * SLOWDOWN_FACTOR,

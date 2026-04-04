@@ -24,6 +24,7 @@ import frc.robot.commands.ShootOnTheMoveCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.controls.Controls;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.Leds;
@@ -44,6 +45,7 @@ public class Autos {
   private final Indexer indexer;
   private final Intake intake;
   private final Shooter shooter;
+  private final Hood hood;
   private final Leds leds;
 
   private final Command sotmSmallHopperCommand;
@@ -60,11 +62,12 @@ public class Autos {
 
   private static final List<String> autoNames = AutoBuilder.getAllAutoNames();
 
-  public Autos(Drive drive, Indexer indexer, Intake intake, Shooter shooter, Leds leds) {
+  public Autos(Drive drive, Indexer indexer, Intake intake, Shooter shooter, Hood hood, Leds leds) {
     this.drive = drive;
     this.indexer = indexer;
     this.intake = intake;
     this.shooter = shooter;
+    this.hood = hood;
     this.leds = leds;
 
     inAllianceZoneSupplier = () -> RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
@@ -76,6 +79,7 @@ public class Autos {
                     shooter,
                     indexer,
                     intake,
+                    hood,
                     leds,
                     () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
                     Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
@@ -111,6 +115,7 @@ public class Autos {
                 shooter,
                 indexer,
                 intake,
+                hood,
                 leds,
                 () -> 0,
                 () -> 0,
@@ -130,6 +135,7 @@ public class Autos {
                     shooter,
                     indexer,
                     intake,
+                    hood,
                     leds,
                     () -> 0,
                     () -> 0,

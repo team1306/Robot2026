@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.Leds;
@@ -33,6 +34,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
       Shooter shooter,
       Indexer indexer,
       Intake intake,
+      Hood hood,
       Leds leds,
       Supplier<Translation2d> positionSupplier,
       Rotation2d angleTolerance,
@@ -74,14 +76,18 @@ public class SafeShootCommand extends ParallelCommandGroup {
                 .andThen(indexer.indexUntilCancelledCommand(INDEXER_SPEED)),
             combinedCondition);
 
+    Supplier<Distance> distanceSupplier =
+        () -> Meters.of(drive.getPose().getTranslation().getDistance(positionSupplier.get()));
+
     Command shootAtDistanceCommand =
-        ShooterCommands.shootAtDistanceCommand(
-                shooter,
-                () ->
-                    Meters.of(drive.getPose().getTranslation().getDistance(positionSupplier.get())))
+        ShooterCommands.shootAtDistanceCommand(shooter, distanceSupplier)
             .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
     Command intakeCommand = intake.shakeIntake();
+
+    Command hoodCommand =
+        hood.angleFromDistance(distanceSupplier)
+            .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
     @SuppressWarnings("unused")
     Trigger intakeRescheduler =
@@ -131,6 +137,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
         activityTracker,
         shootAtDistanceCommand.asProxy(),
         guardedIndexerCommand.asProxy(),
+        hoodCommand,
         loggedGuardCommand,
         intakeCommand.asProxy());
   }
