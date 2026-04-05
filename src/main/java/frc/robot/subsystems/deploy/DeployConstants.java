@@ -8,9 +8,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class DeployConstants {
-  // Tuning doens't need to be perfect. We're only deploying once per match.
   public static final double KP = 0;
-  public static final double KI = 0;
   public static final double KD = 0;
 
   public static final TalonFXConfiguration DEPLOYER_MOTOR_CONFIGS =
@@ -24,5 +22,5 @@ public class DeployConstants {
                   .withSupplyCurrentLimitEnable(false))
           .withSlot0(
               MotorConfigUtils.createPidConfig(
-                  KP, KI, KD, 0, 0, 0, 0, GravityTypeValue.Arm_Cosine));
+                  KP, 0, KD, 0, 0, 0, 0, GravityTypeValue.Arm_Cosine));
 }
