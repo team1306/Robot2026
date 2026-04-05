@@ -33,6 +33,12 @@
           "data": {
             "pathName": "right-trench-fast"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot-until-done"
+          }
         }
       ]
     }

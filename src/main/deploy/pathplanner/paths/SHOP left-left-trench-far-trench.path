@@ -146,7 +146,7 @@
   },
   "goalEndState": {
     "velocity": 1.0,
-    "rotation": 90.0
+    "rotation": 95.0
   },
   "reversed": false,
   "folder": "1st Pass",

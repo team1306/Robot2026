@@ -25,7 +25,7 @@
       },
       "nextControl": {
         "x": 6.0,
-        "y": 1.4499999999999997
+        "y": 1.45
       },
       "isLocked": false,
       "linkedName": "trench-exit-spin-right"
@@ -180,13 +180,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -95.0
   },
   "reversed": false,
   "folder": "2nd Pass",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": -90.0
+    "rotation": -95.0
   },
   "useDefaultConstraints": true
 }
