@@ -3,115 +3,111 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 2.5
+        "x": 4.4,
+        "y": 7.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0,
-        "y": 1.4999999999999964
+        "x": 5.400000000000004,
+        "y": 7.5
       },
       "isLocked": false,
-      "linkedName": "bump-right-alliance"
+      "linkedName": "start-trench-left"
     },
     {
       "anchor": {
-        "x": 4.3752352941176476,
-        "y": 0.6
+        "x": 8.4,
+        "y": 6.5
       },
       "prevControl": {
-        "x": 2.8752352941176476,
-        "y": 0.6000000000000002
+        "x": 8.4,
+        "y": 7.5
       },
       "nextControl": {
-        "x": 5.8752352941176476,
-        "y": 0.6
+        "x": 8.4,
+        "y": 5.5000000000000036
       },
       "isLocked": false,
-      "linkedName": "start-trench-right"
+      "linkedName": "fuel-far-left-entrance"
     },
     {
       "anchor": {
-        "x": 5.8,
-        "y": 1.2
+        "x": 8.4,
+        "y": 5.0
       },
       "prevControl": {
-        "x": 5.8,
-        "y": 0.7
-      },
-      "nextControl": {
-        "x": 5.8,
-        "y": 1.45
-      },
-      "isLocked": false,
-      "linkedName": "trench-right-wall"
-    },
-    {
-      "anchor": {
-        "x": 5.768,
-        "y": 4.7
-      },
-      "prevControl": {
-        "x": 5.768,
-        "y": 4.45
-      },
-      "nextControl": {
-        "x": 5.768,
-        "y": 5.2
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 6.0,
+        "x": 8.4,
         "y": 5.5
+      },
+      "nextControl": {
+        "x": 8.4,
+        "y": 4.0
+      },
+      "isLocked": false,
+      "linkedName": "fuel-mid-exit-1-left"
+    },
+    {
+      "anchor": {
+        "x": 7.3,
+        "y": 5.0
+      },
+      "prevControl": {
+        "x": 7.3,
+        "y": 4.0
+      },
+      "nextControl": {
+        "x": 7.3,
+        "y": 5.5
+      },
+      "isLocked": false,
+      "linkedName": "fuel-mid-exit-2-left"
+    },
+    {
+      "anchor": {
+        "x": 5.5,
+        "y": 7.3
       },
       "prevControl": {
         "x": 7.0,
-        "y": 5.5
+        "y": 7.3
       },
       "nextControl": {
-        "x": 5.0,
-        "y": 5.5
+        "x": 4.5,
+        "y": 7.3
       },
       "isLocked": false,
-      "linkedName": "bump-left-center"
+      "linkedName": "trench-shooting-align-left"
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 5.5
+        "x": 4.3,
+        "y": 7.3
       },
       "prevControl": {
-        "x": 2.25,
-        "y": 5.5
+        "x": 4.55,
+        "y": 7.3
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "bump-left-alliance"
+      "linkedName": "trench-shooting-left"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 0.0
-    },
-    {
-      "waypointRelativePos": 1.1,
-      "rotationDegrees": 0.0
+      "waypointRelativePos": 0.95,
+      "rotationDegrees": -100.0
     },
     {
       "waypointRelativePos": 2.0,
-      "rotationDegrees": 90.0
+      "rotationDegrees": -100.0
     },
     {
-      "waypointRelativePos": 3,
+      "waypointRelativePos": 3.0,
       "rotationDegrees": 90.0
     },
     {
       "waypointRelativePos": 4.0,
-      "rotationDegrees": 135.0
+      "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [],
@@ -120,14 +116,24 @@
     {
       "name": "intake",
       "waypointRelativePos": 0.5,
-      "endWaypointRelativePos": null,
-      "command": null
+      "endWaypointRelativePos": 5.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "intake"
+        }
+      }
     },
     {
-      "name": "",
-      "waypointRelativePos": 4.2,
+      "name": "spool-shooter",
+      "waypointRelativePos": 3.5,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "spool-shooter"
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -139,14 +145,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 148.372381067324
+    "velocity": 1.0,
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": "Close Collection",
+  "folder": "1st Pass",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": -149.80886395523967
+    "velocity": 0.0,
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

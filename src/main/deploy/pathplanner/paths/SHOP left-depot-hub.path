@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.4,
+        "x": 4.3,
         "y": 7.3
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.15,
+        "x": 6.05,
         "y": 7.3
       },
       "isLocked": false,
@@ -214,7 +214,7 @@
     "rotation": 167.69198418257204
   },
   "reversed": false,
-  "folder": "Close Collection",
+  "folder": "2nd Pass",
   "idealStartingState": {
     "velocity": 0.0,
     "rotation": 90.0

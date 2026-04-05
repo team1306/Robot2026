@@ -15,7 +15,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "right-right-trench-far"
+                        "pathName": null
                       }
                     },
                     {
@@ -27,7 +27,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "right-left-trench-close"
+                        "pathName": null
                       }
                     },
                     {

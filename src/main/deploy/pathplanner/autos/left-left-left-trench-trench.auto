@@ -15,7 +15,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "left-left-trench-far-trench"
+                        "pathName": "left-trench-far"
                       }
                     },
                     {
@@ -27,7 +27,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "left-left-trench-close-trench"
+                        "pathName": "left-depot-hub"
                       }
                     },
                     {
