@@ -21,4 +21,6 @@ public interface DeployIO {
   public default void updateInputs(DeployIOInputs inputs) {}
 
   public default void setPosition(Angle angle) {}
+
+  public default void adjustTarget(Angle angle) {}
 }

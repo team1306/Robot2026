@@ -21,6 +21,5 @@ public class DeployConstants {
                   .withStatorCurrentLimitEnable(false)
                   .withSupplyCurrentLimitEnable(false))
           .withSlot0(
-              MotorConfigUtils.createPidConfig(
-                  KP, 0, KD, 0, 0, 0, 0, GravityTypeValue.Arm_Cosine));
+              MotorConfigUtils.createPidConfig(KP, 0, KD, 0, 0, 0, 0, GravityTypeValue.Arm_Cosine));
 }
