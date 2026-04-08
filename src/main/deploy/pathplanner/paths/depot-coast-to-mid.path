@@ -37,7 +37,7 @@
       },
       "prevControl": {
         "x": 4.137025742033086,
-        "y": 7.4
+        "y": 7.400000000000001
       },
       "nextControl": null,
       "isLocked": false,
@@ -92,7 +92,7 @@
   "folder": "Alliance Side",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 167.69200000000004
+    "rotation": 152.82189699922478
   },
   "useDefaultConstraints": true
 }
