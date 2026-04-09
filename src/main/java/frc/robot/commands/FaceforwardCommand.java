@@ -36,10 +36,7 @@ public class FaceforwardCommand extends Command {
 
               lastRotation =
                   Rotation2d.fromRadians(
-                      Math.atan2(y, x)
-                          + (AllianceTriggers.isRedAlliance()
-                              ? Math.PI
-                              : 0)); // may need to add PI, depending on orientation
+                      Math.atan2(y, x) + (AllianceTriggers.isRedAlliance() ? Math.PI : 0));
 
               return lastRotation;
             });

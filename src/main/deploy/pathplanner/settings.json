@@ -3,17 +3,14 @@
   "robotLength": 0.775,
   "holonomicMode": true,
   "pathFolders": [
-    "Alliance Side",
-    "Center Collection",
-    "Close Collection",
-    "Transition Prep",
-    "Sussex",
+    "1st Pass",
+    "2nd Pass",
+    "Depot",
+    "3rd Pass",
     "Testing"
   ],
   "autoFolders": [
-    "Double Pass",
     "New Autos",
-    "Sussex",
     "Testing"
   ],
   "defaultMaxVel": 5.0,
