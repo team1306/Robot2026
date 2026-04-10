@@ -1,13 +1,13 @@
 package frc.robot.subsystems.deploy;
 
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Rotations;
 
 import badgerutils.motor.MotorConfigUtils;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.units.measure.Angle;
@@ -28,29 +28,34 @@ public class DeployIOReal implements DeployIO {
   private static final LoggedNetworkNumberPlus KD_SUPPLIER =
       new LoggedNetworkNumberPlus("/Tuning/Deploy KD", DeployConstants.KD);
 
-  // motors
+  // devices
   private final TalonFX motor;
+  private final CANcoder encoder;
 
   // status signals
   private final StatusSignal<Current> deployerSupplyCurrent;
 
   private final StatusSignal<Temperature> deployerTemperature;
 
-  private final StatusSignal<Angle> deployerPosition;
+  private final StatusSignal<Angle> deployerMotorPosition;
+
+  private final StatusSignal<Angle> deployerEncoderPosition;
 
   // control
   private final PositionTorqueCurrentFOC positionRequest;
 
   public DeployIOReal() {
-    // motors
+    // devices
     motor = new TalonFX(Constants.CanIds.DEPLOYER_MOTOR_ID);
+    encoder = new CANcoder(Constants.CanIds.DEPLOYER_ENCODER_ID);
 
     // configs
     motor.getConfigurator().apply(DeployConstants.DEPLOYER_MOTOR_CONFIGS);
 
     deployerSupplyCurrent = motor.getSupplyCurrent();
     deployerTemperature = motor.getDeviceTemp();
-    deployerPosition = motor.getPosition();
+    deployerMotorPosition = motor.getPosition();
+    deployerEncoderPosition = encoder.getPosition();
 
     // control
     positionRequest = new PositionTorqueCurrentFOC(Degrees.of(0));
@@ -78,7 +83,8 @@ public class DeployIOReal implements DeployIO {
   @Override
   public void updateInputs(DeployIOInputs inputs) {
     StatusCode motorStatus =
-        BaseStatusSignal.refreshAll(deployerSupplyCurrent, deployerTemperature, deployerPosition);
+        BaseStatusSignal.refreshAll(
+            deployerSupplyCurrent, deployerTemperature, deployerMotorPosition);
 
     inputs.isDeployerMotorConnected = motorStatus.isOK();
 
@@ -86,7 +92,11 @@ public class DeployIOReal implements DeployIO {
 
     inputs.deployerTemp = deployerTemperature.getValue();
 
-    inputs.deployerPosition = deployerPosition.getValue();
+    inputs.deployerPosition = deployerMotorPosition.getValue();
+
+    StatusCode encoderStatus = BaseStatusSignal.refreshAll(deployerEncoderPosition);
+    inputs.isDeployerEncoderConnected = encoderStatus.isOK();
+    inputs.deployerEncoderPosition = deployerEncoderPosition.getValue();
   }
 
   @Override
@@ -95,7 +105,5 @@ public class DeployIOReal implements DeployIO {
   }
 
   @Override
-  public void adjustTarget(Angle angle) {
-    
-  }
+  public void adjustTarget(Angle angle) {}
 }

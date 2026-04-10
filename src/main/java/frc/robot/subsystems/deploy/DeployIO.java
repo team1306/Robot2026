@@ -13,9 +13,11 @@ public interface DeployIO {
   @AutoLog
   public static class DeployIOInputs {
     public boolean isDeployerMotorConnected = false;
+    public boolean isDeployerEncoderConnected = false;
     public Angle deployerPosition = Degrees.of(0);
     public Temperature deployerTemp = Celsius.of(0);
     public Current deployerSupplyCurrent = Amps.of(0);
+    public Angle deployerEncoderPosition = Degrees.of(0);
   }
 
   public default void updateInputs(DeployIOInputs inputs) {}
