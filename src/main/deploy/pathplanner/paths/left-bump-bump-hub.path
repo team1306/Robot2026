@@ -28,7 +28,7 @@
         "y": 7.5
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "trench-pass-left"
     },
     {
       "anchor": {
@@ -182,13 +182,13 @@
   },
   "goalEndState": {
     "velocity": 1.0,
-    "rotation": 140.0
+    "rotation": 145.0
   },
   "reversed": false,
   "folder": "2nd Pass",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": 140.0
+    "rotation": 145.0
   },
   "useDefaultConstraints": true
 }
