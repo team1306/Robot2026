@@ -21,11 +21,11 @@
       },
       "prevControl": {
         "x": 8.4,
-        "y": 7.5
+        "y": 7.6
       },
       "nextControl": {
         "x": 8.4,
-        "y": 5.5000000000000036
+        "y": 5.5
       },
       "isLocked": false,
       "linkedName": "fuel-far-left-entrance"

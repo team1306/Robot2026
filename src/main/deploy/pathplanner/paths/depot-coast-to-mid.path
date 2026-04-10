@@ -8,23 +8,23 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4071067811865468,
-        "y": 6.507106781186548
+        "x": 1.336396103067892,
+        "y": 6.436396103067893
       },
       "isLocked": false,
       "linkedName": "depot-gather-bump"
     },
     {
       "anchor": {
-        "x": 2.0,
+        "x": 2.1,
         "y": 7.4
       },
       "prevControl": {
-        "x": 0.5,
+        "x": 0.6000000000000001,
         "y": 7.4
       },
       "nextControl": {
-        "x": 2.25,
+        "x": 2.35,
         "y": 7.4
       },
       "isLocked": false,
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 8.3,
+        "x": 8.0,
         "y": 7.4
       },
       "prevControl": {
-        "x": 4.137025742033086,
-        "y": 7.400000000000001
+        "x": 7.75,
+        "y": 7.4
       },
       "nextControl": null,
       "isLocked": false,
@@ -92,7 +92,7 @@
   "folder": "Depot",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 152.82189699922478
+    "rotation": 152.822
   },
   "useDefaultConstraints": true
 }
