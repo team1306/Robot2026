@@ -4,40 +4,40 @@
     {
       "anchor": {
         "x": 2.75,
-        "y": 5.5
+        "y": 2.55
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.75,
-        "y": 7.45
+        "y": 0.5999999999999996
       },
       "isLocked": false,
-      "linkedName": "bump-left-alliance"
+      "linkedName": "bump-alliance-right"
     },
     {
       "anchor": {
         "x": 4.4,
-        "y": 7.5
+        "y": 0.55
       },
       "prevControl": {
         "x": 3.9000000000000004,
-        "y": 7.5
+        "y": 0.55
       },
       "nextControl": {
         "x": 4.9,
-        "y": 7.499999999999999
+        "y": 0.5499999999999992
       },
       "isLocked": false,
-      "linkedName": "trench-pass-left"
+      "linkedName": "trench-pass-right"
     },
     {
       "anchor": {
         "x": 8.41481512605042,
-        "y": 7.5
+        "y": 0.55
       },
       "prevControl": {
         "x": 7.414815126050421,
-        "y": 7.5
+        "y": 0.5499999999999998
       },
       "nextControl": null,
       "isLocked": false,
@@ -92,7 +92,7 @@
   "folder": "3rd Pass",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 145.0
+    "rotation": -145.0
   },
   "useDefaultConstraints": true
 }

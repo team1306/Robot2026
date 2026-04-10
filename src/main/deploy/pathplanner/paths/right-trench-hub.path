@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 6.0,
-        "y": 1.2
+        "y": 1.35
       },
       "prevControl": {
         "x": 6.0,
-        "y": 0.9499999999999997
+        "y": 1.0999999999999999
       },
       "nextControl": {
         "x": 6.0,
-        "y": 1.45
+        "y": 1.6
       },
       "isLocked": false,
       "linkedName": "trench-exit-spin-right"
@@ -33,15 +33,15 @@
     {
       "anchor": {
         "x": 5.8,
-        "y": 2.0
+        "y": 2.05
       },
       "prevControl": {
         "x": 5.8,
-        "y": 1.5
+        "y": 1.5499999999999998
       },
       "nextControl": {
         "x": 5.8,
-        "y": 2.5
+        "y": 2.55
       },
       "isLocked": false,
       "linkedName": "trench-exit-2-spin-right"
@@ -49,15 +49,15 @@
     {
       "anchor": {
         "x": 5.8,
-        "y": 4.0
+        "y": 4.05
       },
       "prevControl": {
         "x": 5.8,
-        "y": 3.75
+        "y": 3.8
       },
       "nextControl": {
         "x": 5.8,
-        "y": 5.0
+        "y": 5.05
       },
       "isLocked": false,
       "linkedName": "hub-right-close"
@@ -65,15 +65,15 @@
     {
       "anchor": {
         "x": 6.8,
-        "y": 4.0
+        "y": 4.05
       },
       "prevControl": {
         "x": 6.8,
-        "y": 5.0
+        "y": 5.05
       },
       "nextControl": {
         "x": 6.8,
-        "y": 1.0
+        "y": 1.0499999999999998
       },
       "isLocked": false,
       "linkedName": "hub-right-center"

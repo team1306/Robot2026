@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 6.0,
-        "y": 6.8
+        "y": 6.7
       },
       "prevControl": {
         "x": 6.0,
-        "y": 7.050000000000001
+        "y": 6.950000000000001
       },
       "nextControl": {
         "x": 6.0,
-        "y": 6.55
+        "y": 6.45
       },
       "isLocked": false,
       "linkedName": "trench-exit-spin-left"

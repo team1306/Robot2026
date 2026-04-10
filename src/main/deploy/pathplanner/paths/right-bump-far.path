@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 5.400000000000004,
-        "y": 0.5499999999999997
+        "y": 0.55
       },
       "isLocked": false,
       "linkedName": "start-trench-right"
@@ -21,11 +21,11 @@
       },
       "prevControl": {
         "x": 8.4,
-        "y": 0.5500000000000005
+        "y": 0.4500000000000006
       },
       "nextControl": {
         "x": 8.4,
-        "y": 2.549999999999997
+        "y": 2.55
       },
       "isLocked": false,
       "linkedName": "fuel-far-right-entrance"
@@ -64,32 +64,32 @@
     },
     {
       "anchor": {
-        "x": 5.5,
-        "y": 0.8
+        "x": 6.0,
+        "y": 2.55
       },
       "prevControl": {
-        "x": 7.0,
-        "y": 0.7999999999999998
+        "x": 6.5,
+        "y": 2.55
       },
       "nextControl": {
-        "x": 5.0,
-        "y": 0.8000000000000002
+        "x": 5.5,
+        "y": 2.55
       },
       "isLocked": false,
-      "linkedName": "trench-shooting-align-right"
+      "linkedName": "bump-center-right"
     },
     {
       "anchor": {
-        "x": 4.3,
-        "y": 0.7
+        "x": 2.75,
+        "y": 2.55
       },
       "prevControl": {
-        "x": 4.55,
-        "y": 0.7
+        "x": 3.0,
+        "y": 2.55
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "trench-shooting-right"
+      "linkedName": "bump-alliance-right"
     }
   ],
   "rotationTargets": [
@@ -107,7 +107,7 @@
     },
     {
       "waypointRelativePos": 4.0,
-      "rotationDegrees": -90.0
+      "rotationDegrees": -135.0
     }
   ],
   "constraintZones": [],
@@ -146,7 +146,7 @@
   },
   "goalEndState": {
     "velocity": 1.0,
-    "rotation": -95.0
+    "rotation": -145.0
   },
   "reversed": false,
   "folder": "1st Pass",
