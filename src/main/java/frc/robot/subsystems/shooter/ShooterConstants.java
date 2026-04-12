@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter;
 
+import static edu.wpi.first.units.Units.Amps;
+
 import badgerutils.motor.MotorConfigUtils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
@@ -20,7 +22,7 @@ public class ShooterConstants {
 
   public static final double ROTOR_TO_SENSOR_RATIO = 1.5;
 
-  public static final double SUPPLY_CURRENT_LIMIT = 60;
+  public static final double KICKER_SPEED = 1;
 
   // CONFIGS
   public static final TalonFXConfiguration CW_SHOOTER_MOTOR_CONFIGS =
@@ -36,7 +38,7 @@ public class ShooterConstants {
           .withCurrentLimits(
               new CurrentLimitsConfigs()
                   .withStatorCurrentLimitEnable(false)
-                  .withSupplyCurrentLimit(SUPPLY_CURRENT_LIMIT)
+                  .withSupplyCurrentLimit(Amps.of(60))
                   .withSupplyCurrentLimitEnable(true))
           .withMotorOutput(
               MotorConfigUtils.createMotorOutputConfig(
@@ -48,4 +50,14 @@ public class ShooterConstants {
           .withMotorOutput(
               MotorConfigUtils.createMotorOutputConfig(
                   InvertedValue.CounterClockwise_Positive, NeutralModeValue.Coast));
+
+  public static final TalonFXConfiguration KICKER_MOTOR_CONFIGS =
+      new TalonFXConfiguration()
+          .withMotorOutput(
+              MotorConfigUtils.createMotorOutputConfig(
+                  InvertedValue.Clockwise_Positive, NeutralModeValue.Coast))
+          .withCurrentLimits(
+              new CurrentLimitsConfigs()
+                  .withSupplyCurrentLimit(Amps.of(60))
+                  .withSupplyCurrentLimitEnable(true));
 }

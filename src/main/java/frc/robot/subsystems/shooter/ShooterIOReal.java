@@ -5,6 +5,7 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -42,21 +43,25 @@ public class ShooterIOReal implements ShooterIO {
   private final StatusSignal<Current> leftBottomMotorSupplyCurrent;
   private final StatusSignal<Current> rightTopMotorSupplyCurrent;
   private final StatusSignal<Current> rightBottomMotorSupplyCurrent;
+  private final StatusSignal<Current> kickerSupplyCurrent;
 
   private final StatusSignal<AngularVelocity> leftTopMotorVelocity;
   private final StatusSignal<AngularVelocity> leftBottomMotorVelocity;
   private final StatusSignal<AngularVelocity> rightTopMotorVelocity;
   private final StatusSignal<AngularVelocity> rightBottomMotorVelocity;
+  private final StatusSignal<AngularVelocity> kickerVelocity;
 
   private final StatusSignal<Temperature> leftTopMotorTemperature;
   private final StatusSignal<Temperature> leftBottomMotorTemperature;
   private final StatusSignal<Temperature> rightTopMotorTemperature;
   private final StatusSignal<Temperature> rightBottomMotorTemperature;
+  private final StatusSignal<Temperature> kickerTemperature;
 
   private final StatusSignal<Voltage> leftTopMotorVoltage;
   private final StatusSignal<Voltage> leftBottomMotorVoltage;
   private final StatusSignal<Voltage> rightTopMotorVoltage;
   private final StatusSignal<Voltage> rightBottomMotorVoltage;
+  private final StatusSignal<Voltage> kickerMotorVoltage;
 
   private final StatusSignal<Angle> leftTopMotorAngle;
   private final StatusSignal<Angle> leftBottomMotorAngle;
@@ -74,12 +79,14 @@ public class ShooterIOReal implements ShooterIO {
   private final TalonFX leftBottomMotor;
   private final TalonFX rightTopMotor;
   private final TalonFX rightBottomMotor;
+  private final TalonFX kickerMotor;
 
   private final CANcoder encoder;
 
   private final VelocityTorqueCurrentFOC velocityRequest;
   private final NeutralOut neutralRequest;
   private final VoltageOut voltageRequest;
+  private final DutyCycleOut kickerRequest;
 
   public ShooterIOReal() {
     KP_SUPPLIER.addSubscriber(value -> updatePIDFromTunables());
@@ -91,13 +98,14 @@ public class ShooterIOReal implements ShooterIO {
     velocityRequest = new VelocityTorqueCurrentFOC(0);
     neutralRequest = new NeutralOut();
     voltageRequest = new VoltageOut(0).withEnableFOC(true);
+    kickerRequest = new DutyCycleOut(0).withEnableFOC(true);
 
     // CAN Device Initialization
     leftTopMotor = new TalonFX(Constants.CanIds.SHOOTER_LEFT_TOP_MOTOR_ID);
     leftBottomMotor = new TalonFX(Constants.CanIds.SHOOTER_LEFT_BOTTOM_MOTOR_ID);
-
     rightTopMotor = new TalonFX(Constants.CanIds.SHOOTER_RIGHT_TOP_MOTOR_ID);
     rightBottomMotor = new TalonFX(Constants.CanIds.SHOOTER_RIGHT_BOTTOM_MOTOR_ID);
+    kickerMotor = new TalonFX(Constants.CanIds.KICKER_MOTOR_ID);
 
     encoder = new CANcoder(Constants.CanIds.SHOOTER_ENCODER_ID);
     encoderVelocity = encoder.getVelocity();
@@ -114,16 +122,19 @@ public class ShooterIOReal implements ShooterIO {
     leftBottomMotorSupplyCurrent = leftBottomMotor.getSupplyCurrent();
     rightTopMotorSupplyCurrent = rightTopMotor.getSupplyCurrent();
     rightBottomMotorSupplyCurrent = rightBottomMotor.getSupplyCurrent();
+    kickerSupplyCurrent = kickerMotor.getSupplyCurrent();
 
     leftTopMotorVelocity = leftTopMotor.getVelocity();
     leftBottomMotorVelocity = leftBottomMotor.getVelocity();
     rightTopMotorVelocity = rightTopMotor.getVelocity();
     rightBottomMotorVelocity = rightBottomMotor.getVelocity();
+    kickerVelocity = kickerMotor.getVelocity();
 
     leftTopMotorTemperature = leftTopMotor.getDeviceTemp();
     leftBottomMotorTemperature = leftBottomMotor.getDeviceTemp();
     rightTopMotorTemperature = rightTopMotor.getDeviceTemp();
     rightBottomMotorTemperature = rightBottomMotor.getDeviceTemp();
+    kickerTemperature = kickerMotor.getDeviceTemp();
 
     leftTopMotorError = leftTopMotor.getClosedLoopError();
     leftBottomMotorError = leftBottomMotor.getClosedLoopError();
@@ -134,6 +145,7 @@ public class ShooterIOReal implements ShooterIO {
     leftBottomMotorVoltage = leftBottomMotor.getMotorVoltage();
     rightTopMotorVoltage = rightTopMotor.getMotorVoltage();
     rightBottomMotorVoltage = rightBottomMotor.getMotorVoltage();
+    kickerMotorVoltage = kickerMotor.getMotorVoltage();
 
     leftTopMotorAngle = leftTopMotor.getPosition();
     leftBottomMotorAngle = leftBottomMotor.getPosition();
@@ -177,26 +189,34 @@ public class ShooterIOReal implements ShooterIO {
             rightBottomMotorVoltage,
             rightBottomMotorAngle);
 
+    StatusCode kickerStatus =
+        BaseStatusSignal.refreshAll(
+            kickerMotorVoltage, kickerSupplyCurrent, kickerTemperature, kickerVelocity);
+
     // Motor Inputs
     inputs.isShooterLeftTopMotorConnected = leftTopShooterStatus.isOK();
     inputs.isShooterLeftBottomMotorConnected = leftBottomShooterStatus.isOK();
     inputs.isShooterRightTopMotorConnected = rightTopShooterStatus.isOK();
     inputs.isShooterRightBottomMotorConnected = rightBottomShooterStatus.isOK();
+    inputs.isKickerMotorConnected = kickerStatus.isOK();
 
     inputs.shooterLeftTopMotorSupplyCurrent = leftTopMotorSupplyCurrent.getValue();
     inputs.shooterLeftBottomMotorSupplyCurrent = leftBottomMotorSupplyCurrent.getValue();
     inputs.shooterRightTopMotorSupplyCurrent = rightTopMotorSupplyCurrent.getValue();
     inputs.shooterRightBottomMotorSupplyCurrent = rightBottomMotorSupplyCurrent.getValue();
+    inputs.kickerMotorSupplyCurrent = kickerSupplyCurrent.getValue();
 
     inputs.shooterLeftTopMotorSpeed = leftTopMotorVelocity.getValue();
     inputs.shooterLeftBottomMotorSpeed = leftBottomMotorVelocity.getValue();
     inputs.shooterRightTopMotorSpeed = rightTopMotorVelocity.getValue();
     inputs.shooterRightBottomMotorSpeed = rightBottomMotorVelocity.getValue();
+    inputs.kickerMotorSpeed = kickerVelocity.getValue();
 
     inputs.shooterLeftTopTemperature = leftTopMotorTemperature.getValue();
     inputs.shooterLeftBottomTemperature = leftBottomMotorTemperature.getValue();
     inputs.shooterRightTopTemperature = rightTopMotorTemperature.getValue();
     inputs.shooterRightBottomTemperature = rightBottomMotorTemperature.getValue();
+    inputs.kickerMotorTemperature = kickerTemperature.getValue();
 
     inputs.shooterLeftTopClosedLoopError = leftTopMotorError.getValue();
     inputs.shooterLeftBottomClosedLoopError = leftBottomMotorError.getValue();
@@ -207,6 +227,7 @@ public class ShooterIOReal implements ShooterIO {
     inputs.shooterLeftBottomMotorVoltage = leftBottomMotorVoltage.getValue();
     inputs.shooterRightTopMotorVoltage = rightTopMotorVoltage.getValue();
     inputs.shooterRightBottomMotorVoltage = rightBottomMotorVoltage.getValue();
+    inputs.kickerMotorVoltage = kickerMotorVoltage.getValue();
 
     inputs.shooterLeftTopMotorAngle = leftTopMotorAngle.getValue();
     inputs.shooterLeftBottomMotorAngle = leftBottomMotorAngle.getValue();
@@ -225,6 +246,8 @@ public class ShooterIOReal implements ShooterIO {
     leftBottomMotor.setControl(velocityRequest.withVelocity(velocity));
     rightTopMotor.setControl(velocityRequest.withVelocity(velocity));
     rightBottomMotor.setControl(velocityRequest.withVelocity(velocity));
+
+    kickerMotor.setControl(kickerRequest.withOutput(ShooterConstants.KICKER_SPEED));
   }
 
   @Override
@@ -233,6 +256,8 @@ public class ShooterIOReal implements ShooterIO {
     leftBottomMotor.setControl(neutralRequest);
     rightTopMotor.setControl(neutralRequest);
     rightBottomMotor.setControl(neutralRequest);
+
+    kickerMotor.setControl(neutralRequest);
   }
 
   @Override

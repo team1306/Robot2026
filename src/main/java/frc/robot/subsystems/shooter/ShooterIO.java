@@ -21,27 +21,32 @@ public interface ShooterIO {
     public AngularVelocity shooterRightTopMotorSpeed = RotationsPerSecond.of(0);
     public AngularVelocity shooterRightBottomMotorSpeed = RotationsPerSecond.of(0);
     public AngularVelocity encoderSpeed = RotationsPerSecond.of(0);
+    public AngularVelocity kickerMotorSpeed = RotationsPerSecond.of(0);
 
     public boolean isShooterLeftTopMotorConnected = false;
     public boolean isShooterLeftBottomMotorConnected = false;
     public boolean isShooterRightTopMotorConnected = false;
     public boolean isShooterRightBottomMotorConnected = false;
     public boolean isEncoderConnected = false;
+    public boolean isKickerMotorConnected = false;
 
     public Current shooterLeftTopMotorSupplyCurrent = Amps.of(0);
     public Current shooterLeftBottomMotorSupplyCurrent = Amps.of(0);
     public Current shooterRightTopMotorSupplyCurrent = Amps.of(0);
     public Current shooterRightBottomMotorSupplyCurrent = Amps.of(0);
+    public Current kickerMotorSupplyCurrent = Amps.of(0);
 
     public Temperature shooterRightTopTemperature = Celsius.of(0);
     public Temperature shooterRightBottomTemperature = Celsius.of(0);
     public Temperature shooterLeftTopTemperature = Celsius.of(0);
     public Temperature shooterLeftBottomTemperature = Celsius.of(0);
+    public Temperature kickerMotorTemperature = Celsius.of(0);
 
     public Voltage shooterLeftTopMotorVoltage = Volts.of(0);
     public Voltage shooterLeftBottomMotorVoltage = Volts.of(0);
     public Voltage shooterRightTopMotorVoltage = Volts.of(0);
     public Voltage shooterRightBottomMotorVoltage = Volts.of(0);
+    public Voltage kickerMotorVoltage = Volts.of(0);
 
     public Angle shooterLeftTopMotorAngle = Radian.of(0);
     public Angle shooterLeftBottomMotorAngle = Radian.of(0);
