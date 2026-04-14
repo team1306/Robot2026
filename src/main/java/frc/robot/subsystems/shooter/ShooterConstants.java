@@ -22,8 +22,6 @@ public class ShooterConstants {
 
   public static final double ROTOR_TO_SENSOR_RATIO = 1.5;
 
-  public static final double KICKER_SPEED = 1;
-
   // CONFIGS
   public static final TalonFXConfiguration CW_SHOOTER_MOTOR_CONFIGS =
       new TalonFXConfiguration()
@@ -50,14 +48,4 @@ public class ShooterConstants {
           .withMotorOutput(
               MotorConfigUtils.createMotorOutputConfig(
                   InvertedValue.CounterClockwise_Positive, NeutralModeValue.Coast));
-
-  public static final TalonFXConfiguration KICKER_MOTOR_CONFIGS =
-      new TalonFXConfiguration()
-          .withMotorOutput(
-              MotorConfigUtils.createMotorOutputConfig(
-                  InvertedValue.Clockwise_Positive, NeutralModeValue.Coast))
-          .withCurrentLimits(
-              new CurrentLimitsConfigs()
-                  .withSupplyCurrentLimit(Amps.of(60))
-                  .withSupplyCurrentLimitEnable(true));
 }

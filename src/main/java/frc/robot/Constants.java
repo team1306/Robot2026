@@ -52,7 +52,7 @@ public final class Constants {
     public static final int SHOOTER_LEFT_BOTTOM_MOTOR_ID = 14;
     public static final int SHOOTER_RIGHT_TOP_MOTOR_ID = 15;
     public static final int SHOOTER_RIGHT_BOTTOM_MOTOR_ID = 16;
-    public static final int KICKER_MOTOR_ID = 28;
+    public static final int BOOSTER_MOTOR_ID = 28;
 
     public static final int SHOOTER_ENCODER_ID = 19;
 
