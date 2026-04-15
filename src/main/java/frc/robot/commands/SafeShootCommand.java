@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
@@ -23,7 +24,8 @@ import org.littletonrobotics.junction.Logger;
 
 public class SafeShootCommand extends ParallelCommandGroup {
 
-  private static double INDEXER_SPEED = 1;
+  private static final double INDEXER_SPEED = 1;
+  private static final double BOOSTER_SPEED = 1;
   private static final Distance MINIMUM_SHOT_DISTANCE = Feet.of(7.5);
 
   private boolean isActive;
@@ -33,6 +35,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
       Shooter shooter,
       Indexer indexer,
       Intake intake,
+      Booster booster,
       Leds leds,
       Supplier<Translation2d> positionSupplier,
       Rotation2d angleTolerance,
@@ -79,6 +82,11 @@ public class SafeShootCommand extends ParallelCommandGroup {
                 shooter,
                 () ->
                     Meters.of(drive.getPose().getTranslation().getDistance(positionSupplier.get())))
+            .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+
+    Command boosterCommand =
+        booster
+            .boostCommand(BOOSTER_SPEED)
             .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
     Command intakeCommand = intake.shakeIntake();
@@ -131,6 +139,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
         activityTracker,
         shootAtDistanceCommand.asProxy(),
         guardedIndexerCommand.asProxy(),
+        boosterCommand.asProxy(),
         loggedGuardCommand,
         intakeCommand.asProxy());
   }

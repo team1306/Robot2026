@@ -17,6 +17,7 @@ import frc.robot.commands.DriveAimLockedCommand;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.GuardedCommand;
 import frc.robot.commands.ShooterCommands;
+import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
@@ -33,10 +34,15 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
   private final Intake intake;
   private final Shooter shooter;
   private final Indexer indexer;
+  private final Booster booster;
 
   @AutoLogOutput
   private final LoggedNetworkNumberPlus targetSpeed =
       new LoggedNetworkNumberPlus("/Tuning/Shooter RPS", 0.75);
+
+  @AutoLogOutput
+  private final LoggedNetworkNumberPlus boosterPower =
+      new LoggedNetworkNumberPlus("/Tuning/Booster Duty Cycle", 1);
 
   public ShooterTestingControllerMapping(
       CommandXboxController driverController,
@@ -44,12 +50,14 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
       Drive drive,
       Intake intake,
       Shooter shooter,
-      Indexer indexer) {
+      Indexer indexer,
+      Booster booster) {
     super(driverController, operatorController);
     this.drive = drive;
     this.intake = intake;
     this.shooter = shooter;
     this.indexer = indexer;
+    this.booster = booster;
   }
 
   @Override
@@ -112,6 +120,17 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
             intake
                 .intakeUntilInterruptedCommand(1)
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
+
+    driverController
+        .leftBumper()
+        .whileTrue(
+            ShooterCommands.shootAtSpeedCommand(
+                    shooter, () -> RotationsPerSecond.of(targetSpeed.get()))
+                .alongWith(
+                    new GuardedCommand(
+                        indexer.indexUntilCancelledCommand(1),
+                        shooter.isAtRequestedSpeed(Constants.Tolerances.NORMAL_SPEED_TOLERANCE))));
+    driverController.a().whileTrue(booster.boostCommand(1));
 
     driverController
         .rightBumper()
