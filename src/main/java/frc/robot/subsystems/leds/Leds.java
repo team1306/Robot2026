@@ -2,6 +2,7 @@ package frc.robot.subsystems.leds;
 
 import badgerutils.statemachine.Edges;
 import badgerutils.statemachine.StateMachine;
+import badgerutils.triggers.AllianceTriggers;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
@@ -34,7 +35,7 @@ public class Leds extends SubsystemBase {
             .anyToState(LedState.AUTO, state -> LedsIO.setSolid(255, 0, 255))
             .anyToState(LedState.AIMING, state -> LedsIO.setSolid(0, 255, 0))
             .anyToState(LedState.SHOOTING, state -> LedsIO.setBounce(0, 255, 0, 80))
-            .anyToState(LedState.OTHER, state -> LedsIO.setSolid(255, 255, 255));
+            .anyToState(LedState.OTHER, AllianceTriggers.isRedAlliance() ? state -> LedsIO.setSolid(255, 0, 0) : state -> LedsIO.setSolid(0, 0, 255));
 
     stateMachine = new StateMachine<>(LedState.NONE, edges);
     if (DriverStation.isDisabled()) {
