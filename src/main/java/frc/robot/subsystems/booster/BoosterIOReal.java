@@ -45,6 +45,6 @@ public class BoosterIOReal implements BoosterIO {
 
   @Override
   public void setDutyCycle(double dutyCycle) {
-    motor.setControl(dutyCycle == 0 ? neutralRequest : dutyCycleRequest.withOutput(0));
+    motor.setControl(dutyCycle == 0 ? neutralRequest : dutyCycleRequest.withOutput(dutyCycle));
   }
 }

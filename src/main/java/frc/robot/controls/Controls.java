@@ -65,7 +65,7 @@ public class Controls {
     mappings.put(
         ControlStates.SHOOTER_TESTING,
         new ShooterTestingControllerMapping(
-            driverController, operatorController, drivetrain, intake, shooter, indexer));
+            driverController, operatorController, drivetrain, intake, shooter, indexer, booster));
 
     Consumer<Enum<ControlStates>> onChange =
         (nextState) -> {
