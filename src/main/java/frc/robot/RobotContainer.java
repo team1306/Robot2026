@@ -3,6 +3,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.controls.Controls;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.booster.Booster;
+import frc.robot.subsystems.booster.BoosterIO;
+import frc.robot.subsystems.booster.BoosterIOReal;
 import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.deploy.DeployIO;
 import frc.robot.subsystems.deploy.DeployIOReal;
@@ -45,6 +48,7 @@ public class RobotContainer {
   private final Intake intake;
   private final Indexer indexer;
   private final Shooter shooter;
+  private final Booster booster;
   private final FuelDetection fuelDetection;
   private final Leds leds;
   private final Deploy deploy;
@@ -69,6 +73,7 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOReal());
         indexer = new Indexer(new IndexerIOReal());
         shooter = new Shooter(new ShooterIOReal());
+        booster = new Booster(new BoosterIOReal());
         vision =
             new Vision(
                 drive::addVisionMeasurement,
@@ -101,6 +106,7 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOReal());
         indexer = new Indexer(new IndexerIOReal());
         shooter = new Shooter(new ShooterIOReal());
+        booster = new Booster(new BoosterIOReal());
         vision =
             new Vision(
                 drive::addVisionMeasurement,
@@ -126,6 +132,7 @@ public class RobotContainer {
         intake = new Intake(new IntakeIO() {});
         indexer = new Indexer(new IndexerIO() {});
         shooter = new Shooter(new ShooterIO() {});
+        booster = new Booster(new BoosterIO() {});
         vision =
             new Vision(
                 drive::addVisionMeasurement,
@@ -139,8 +146,8 @@ public class RobotContainer {
         break;
     }
 
-    controls = new Controls(drive, intake, shooter, indexer, fuelDetection, leds, deploy);
-    autos = new Autos(drive, indexer, intake, shooter, leds, deploy);
+    controls = new Controls(drive, intake, shooter, indexer, booster, fuelDetection, leds, deploy);
+    autos = new Autos(drive, indexer, intake, shooter, booster, leds, deploy);
   }
 
   public Command getAutonomousCommand() {

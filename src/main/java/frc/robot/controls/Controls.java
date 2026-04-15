@@ -4,6 +4,7 @@ import badgerutils.networktables.LoggedNetworkTablesBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.fueldetection.FuelDetection;
@@ -35,6 +36,7 @@ public class Controls {
       Intake intake,
       Shooter shooter,
       Indexer indexer,
+      Booster booster,
       FuelDetection fuelDetection,
       Leds leds,
       Deploy deploy) {
@@ -51,6 +53,7 @@ public class Controls {
             intake,
             shooter,
             indexer,
+            booster,
             fuelDetection,
             leds,
             deploy));
@@ -65,7 +68,7 @@ public class Controls {
     mappings.put(
         ControlStates.SHOOTER_TESTING,
         new ShooterTestingControllerMapping(
-            driverController, operatorController, drivetrain, intake, shooter, indexer));
+            driverController, operatorController, drivetrain, intake, shooter, indexer, booster));
 
     Consumer<Enum<ControlStates>> onChange =
         (nextState) -> {
