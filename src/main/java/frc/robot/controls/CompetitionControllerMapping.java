@@ -189,21 +189,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
     /* ---P2--- */
 
-    // Jumble Indexer
-    operatorController
-        .leftTrigger(0.1)
-        .whileTrue(
-            indexer
-                .jumbleIndexer(() -> operatorController.getLeftTriggerAxis())
-                .alongWith(
-                    new InstantCommand(
-                        () ->
-                            operatorController.setRumble(
-                                RumbleType.kBothRumble, operatorController.getLeftTriggerAxis()))))
-        .onFalse(
-            new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0))
-                .ignoringDisable(true));
-
     // Spool Shooter
     operatorController
         .rightTrigger()
@@ -225,13 +210,13 @@ public class CompetitionControllerMapping extends ControllerMapping {
             new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0))
                 .ignoringDisable(true));
 
-    // Deploy Intake
-    operatorController.x().whileTrue(deploy.deployCommand());
+    //DEPLOY
+    operatorController.x().onTrue(deploy.deployCommand());
+    operatorController.leftTrigger(0.5).whileTrue(deploy.crunchCommand());
+    operatorController.povLeft().whileTrue(deploy.deployManuallyCommand(0.5));
+    operatorController.povRight().whileTrue(deploy.deployManuallyCommand(-0.5));
 
-    // Retract Intake
-    operatorController.a().whileTrue(deploy.crunchCommand());
-
-    // Overides
+    // OVERRIDES
 
     // Force Indexer
     operatorController.rightBumper().whileTrue(indexer.indexUntilCancelledCommand(1));

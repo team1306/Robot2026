@@ -32,11 +32,7 @@ public class Deploy extends SubsystemBase {
   }
 
   public Command deployManuallyCommand(double dutyCycle) {
-    return Commands.startEnd(() -> setDutyCycle(0.5), () -> setDutyCycle(0), this);
-  }
-
-  public Command retractManuallyCommand(double dutyCycle) {
-    return Commands.startEnd(() -> setDutyCycle(-.5), () -> setDutyCycle(0), this);
+    return Commands.startEnd(() -> setDutyCycle(dutyCycle), () -> setDutyCycle(0), this);
   }
 
   public Command deployCommand() {
