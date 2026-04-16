@@ -26,6 +26,15 @@ public class Deploy extends SubsystemBase {
     Logger.recordOutput("Deploy/Angle Setpoint", position.getAngle().in(Rotations));
   }
 
+  public void setDutyCycle(double dutyCycle) {
+    deployIO.setDutyCycle(dutyCycle);
+    Logger.recordOutput("Deploy/Duty Cycle", dutyCycle);
+  }
+
+  public Command deployManuallyCommand(double dutyCycle) {
+    return Commands.startEnd(() -> setDutyCycle(dutyCycle), () -> setDutyCycle(0), this);
+  }
+
   public Command deployCommand() {
     return Commands.runOnce(() -> setDeployerPosition(DeployerPosition.EXTENDED), this);
   }
