@@ -16,7 +16,7 @@ public class DeployConstants {
   public static final double KP = 12;
   public static final double KD = 0;
 
-  private static final double ROTOR_TO_SENSOR_RATIO = (15D / 1D) * (20D / 20D);
+  private static final double ROTOR_TO_SENSOR_RATIO = (15D / 1D) * (21D / 20D);
 
   public static final TalonFXConfiguration DEPLOYER_MOTOR_CONFIGS =
       new TalonFXConfiguration()
