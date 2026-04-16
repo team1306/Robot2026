@@ -5,8 +5,8 @@ import static edu.wpi.first.units.Units.Rotations;
 import edu.wpi.first.units.measure.Angle;
 
 public enum DeployerPosition {
-  RETRACTED(Rotations.of(0)),
-  EXTENDED(Rotations.of(0)),
+  RETRACTED(Rotations.of(-1)),
+  EXTENDED(Rotations.of(-.29)),
   ;
   private Angle angle;
 

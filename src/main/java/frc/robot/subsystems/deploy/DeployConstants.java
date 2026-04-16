@@ -13,16 +13,16 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Constants;
 
 public class DeployConstants {
-  public static final double KP = 0;
+  public static final double KP = 12;
   public static final double KD = 0;
 
-  private static final double ROTOR_TO_SENSOR_RATIO = (1 / 21) * (20 / 21);
+  private static final double ROTOR_TO_SENSOR_RATIO = (15D / 1D) * (20D / 20D);
 
   public static final TalonFXConfiguration DEPLOYER_MOTOR_CONFIGS =
       new TalonFXConfiguration()
           .withMotorOutput(
               MotorConfigUtils.createMotorOutputConfig(
-                  InvertedValue.Clockwise_Positive, NeutralModeValue.Coast))
+                  InvertedValue.Clockwise_Positive, NeutralModeValue.Brake))
           .withCurrentLimits(
               new CurrentLimitsConfigs()
                   .withStatorCurrentLimitEnable(false)
@@ -33,6 +33,6 @@ public class DeployConstants {
           .withFeedback(
               new FeedbackConfigs()
                   .withFeedbackRemoteSensorID(Constants.CanIds.DEPLOYER_ENCODER_ID)
-                  .withFeedbackSensorSource(FeedbackSensorSourceValue.FusedCANcoder)
+                  .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
                   .withRotorToSensorRatio(ROTOR_TO_SENSOR_RATIO));
 }

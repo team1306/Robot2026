@@ -229,7 +229,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
     operatorController.x().whileTrue(deploy.deployCommand());
 
     // Retract Intake
-    operatorController.a().whileTrue(deploy.crunchCommand());
+    operatorController.povRight().whileTrue(deploy.retractCommand());
 
     // Overides
 
