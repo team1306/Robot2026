@@ -6,6 +6,7 @@ import badgerutils.motor.MotorConfigUtils;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -43,6 +44,7 @@ public class DeployIOReal implements DeployIO {
 
   // control
   private final PositionTorqueCurrentFOC positionRequest;
+  private final DutyCycleOut dutyCycleRequest;
 
   public DeployIOReal() {
     // devices
@@ -59,6 +61,7 @@ public class DeployIOReal implements DeployIO {
 
     // control
     positionRequest = new PositionTorqueCurrentFOC(Degrees.of(0));
+    dutyCycleRequest = new DutyCycleOut(0).withEnableFOC(true);
 
     DoubleConsumer applyConfigs =
         value ->
@@ -102,6 +105,11 @@ public class DeployIOReal implements DeployIO {
   @Override
   public void setPosition(Angle angle) {
     motor.setControl(positionRequest.withPosition(angle));
+  }
+
+  @Override
+  public void setDutyCycle(double dutyCycle) {
+    motor.setControl(dutyCycleRequest.withOutput(dutyCycle));
   }
 
   @Override
