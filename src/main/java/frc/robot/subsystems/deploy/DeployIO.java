@@ -17,6 +17,7 @@ public interface DeployIO {
     public Angle deployerPosition = Degrees.of(0);
     public Temperature deployerTemp = Celsius.of(0);
     public Current deployerSupplyCurrent = Amps.of(0);
+    public Current deployerStatorCurrent = Amps.of(0);
     public Angle deployerEncoderPosition = Degrees.of(0);
     public double positionError = 0;
   }
