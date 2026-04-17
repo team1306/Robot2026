@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SHOP left-trench-far"
+            "pathName": "right-trench-far"
           }
         },
         {
@@ -19,13 +19,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SHOP left-trench-hub"
+            "pathName": "SHOP right-trench-trench-hub"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "left-trench-collect"
+            "pathName": "right-trench-collect"
           }
         }
       ]
