@@ -24,6 +24,7 @@ import frc.robot.commands.ShootOnTheMoveCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.deploy.Deploy;
+import frc.robot.subsystems.deploy.DeployerPosition;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.fueldetection.FuelDetection;
 import frc.robot.subsystems.indexer.Indexer;
@@ -210,11 +211,15 @@ public class CompetitionControllerMapping extends ControllerMapping {
             new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0))
                 .ignoringDisable(true));
 
-    //DEPLOY
+    // DEPLOY
     operatorController.x().onTrue(deploy.deployCommand());
     operatorController.leftTrigger(0.5).whileTrue(deploy.crunchCommand());
     operatorController.povLeft().whileTrue(deploy.deployManuallyCommand(0.5));
     operatorController.povRight().whileTrue(deploy.deployManuallyCommand(-0.5));
+
+    operatorController
+        .back()
+        .onTrue(Commands.runOnce(() -> deploy.setDeployerPosition(DeployerPosition.TEST), deploy));
 
     // OVERRIDES
 

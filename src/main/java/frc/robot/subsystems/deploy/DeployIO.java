@@ -18,6 +18,7 @@ public interface DeployIO {
     public Temperature deployerTemp = Celsius.of(0);
     public Current deployerSupplyCurrent = Amps.of(0);
     public Angle deployerEncoderPosition = Degrees.of(0);
+    public double positionError = 0;
   }
 
   public default void updateInputs(DeployIOInputs inputs) {}

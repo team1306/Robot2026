@@ -29,6 +29,14 @@ public class DeployIOReal implements DeployIO {
   private static final LoggedNetworkNumberPlus KD_SUPPLIER =
       new LoggedNetworkNumberPlus("/Tuning/Deploy KD", DeployConstants.KD);
 
+  @AutoLogOutput
+  private static final LoggedNetworkNumberPlus KS_SUPPLIER =
+      new LoggedNetworkNumberPlus("/Tuning/Deploy KS", DeployConstants.KS);
+
+  @AutoLogOutput
+  private static final LoggedNetworkNumberPlus KG_SUPPLIER =
+      new LoggedNetworkNumberPlus("/Tuning/Deploy KG", DeployConstants.KG);
+
   // devices
   private final TalonFX motor;
   private final CANcoder encoder;
@@ -41,6 +49,7 @@ public class DeployIOReal implements DeployIO {
   private final StatusSignal<Angle> deployerMotorPosition;
 
   private final StatusSignal<Angle> deployerEncoderPosition;
+  private final StatusSignal<Double> positionError;
 
   // control
   private final PositionTorqueCurrentFOC positionRequest;
@@ -58,6 +67,7 @@ public class DeployIOReal implements DeployIO {
     deployerTemperature = motor.getDeviceTemp();
     deployerMotorPosition = motor.getPosition();
     deployerEncoderPosition = encoder.getPosition();
+    positionError = motor.getClosedLoopError();
 
     // control
     positionRequest = new PositionTorqueCurrentFOC(Degrees.of(0));
@@ -73,21 +83,23 @@ public class DeployIOReal implements DeployIO {
                             KP_SUPPLIER.get(),
                             0,
                             KD_SUPPLIER.get(),
+                            KS_SUPPLIER.get(),
                             0,
-                            0,
-                            0,
+                            KG_SUPPLIER.get(),
                             0,
                             GravityTypeValue.Arm_Cosine)));
 
     KP_SUPPLIER.addSubscriber(applyConfigs);
     KD_SUPPLIER.addSubscriber(applyConfigs);
+    KS_SUPPLIER.addSubscriber(applyConfigs);
+    KG_SUPPLIER.addSubscriber(applyConfigs);
   }
 
   @Override
   public void updateInputs(DeployIOInputs inputs) {
     StatusCode motorStatus =
         BaseStatusSignal.refreshAll(
-            deployerSupplyCurrent, deployerTemperature, deployerMotorPosition);
+            deployerSupplyCurrent, deployerTemperature, deployerMotorPosition, positionError);
 
     inputs.isDeployerMotorConnected = motorStatus.isOK();
 
@@ -96,6 +108,7 @@ public class DeployIOReal implements DeployIO {
     inputs.deployerTemp = deployerTemperature.getValue();
 
     inputs.deployerPosition = deployerMotorPosition.getValue();
+    inputs.positionError = positionError.getValue();
 
     StatusCode encoderStatus = BaseStatusSignal.refreshAll(deployerEncoderPosition);
     inputs.isDeployerEncoderConnected = encoderStatus.isOK();

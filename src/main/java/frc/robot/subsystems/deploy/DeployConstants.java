@@ -13,8 +13,10 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Constants;
 
 public class DeployConstants {
-  public static final double KP = 12;
-  public static final double KD = 0;
+  public static final double KP = 110;
+  public static final double KD = 5;
+  public static final double KS = 5;
+  public static final double KG = 0;
 
   private static final double ROTOR_TO_SENSOR_RATIO = (15D / 1D) * (21D / 20D);
 
