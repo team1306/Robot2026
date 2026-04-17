@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left-bump-far"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot-small-hopper"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SHOP left-bump-bump-hub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coast"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left-bump-collect"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "New Autos",
+  "choreoAuto": false
+}
