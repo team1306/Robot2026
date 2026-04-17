@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "right-trench-far"
+            "pathName": "left-trench-safe"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "right-trench-hub"
+            "pathName": "SHOP left-trench-trench-hub"
           }
         },
         {
@@ -37,7 +37,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "right-trench-collect"
+            "pathName": "left-trench-collect"
           }
         }
       ]

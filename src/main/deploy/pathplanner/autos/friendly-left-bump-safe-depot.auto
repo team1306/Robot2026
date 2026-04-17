@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "right-trench-far"
+            "pathName": "left-bump-safe"
           }
         },
         {
@@ -19,25 +19,38 @@
         {
           "type": "path",
           "data": {
-            "pathName": "right-trench-hub"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot-small-hopper"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "coast"
+            "pathName": "SHOP left-bump-bump-hub"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "right-trench-collect"
+            "pathName": "depot-bump"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot-small-hopper"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "depot-coast-to-mid"
           }
         }
       ]

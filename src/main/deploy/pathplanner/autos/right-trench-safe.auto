@@ -29,15 +29,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "right-trench-collect"
+            "name": "coast"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "shoot-until-done"
+            "pathName": "right-trench-collect"
           }
         }
       ]
