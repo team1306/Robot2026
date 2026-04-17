@@ -13,7 +13,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Constants;
 
 public class DeployConstants {
-  public static final double KP = 110;
+  public static final double KP = 130;
   public static final double KD = 5;
   public static final double KS = 5;
   public static final double KG = 0;
@@ -24,10 +24,11 @@ public class DeployConstants {
       new TalonFXConfiguration()
           .withMotorOutput(
               MotorConfigUtils.createMotorOutputConfig(
-                  InvertedValue.Clockwise_Positive, NeutralModeValue.Brake))
+                  InvertedValue.CounterClockwise_Positive, NeutralModeValue.Brake))
           .withCurrentLimits(
               new CurrentLimitsConfigs()
-                  .withStatorCurrentLimitEnable(false)
+                  .withStatorCurrentLimitEnable(true)
+                  .withStatorCurrentLimit(Amps.of(50))
                   .withSupplyCurrentLimitEnable(true)
                   .withSupplyCurrentLimit(Amps.of(40)))
           .withSlot0(

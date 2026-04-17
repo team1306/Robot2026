@@ -43,7 +43,7 @@ public class DeployIOReal implements DeployIO {
 
   // status signals
   private final StatusSignal<Current> deployerSupplyCurrent;
-
+  private final StatusSignal<Current> deployerStatorCurrent;
   private final StatusSignal<Temperature> deployerTemperature;
 
   private final StatusSignal<Angle> deployerMotorPosition;
@@ -68,6 +68,7 @@ public class DeployIOReal implements DeployIO {
     deployerMotorPosition = motor.getPosition();
     deployerEncoderPosition = encoder.getPosition();
     positionError = motor.getClosedLoopError();
+    deployerStatorCurrent = motor.getStatorCurrent();
 
     // control
     positionRequest = new PositionTorqueCurrentFOC(Degrees.of(0));
@@ -104,7 +105,7 @@ public class DeployIOReal implements DeployIO {
     inputs.isDeployerMotorConnected = motorStatus.isOK();
 
     inputs.deployerSupplyCurrent = deployerSupplyCurrent.getValue();
-
+    inputs.deployerStatorCurrent = deployerStatorCurrent.getValue();
     inputs.deployerTemp = deployerTemperature.getValue();
 
     inputs.deployerPosition = deployerMotorPosition.getValue();
