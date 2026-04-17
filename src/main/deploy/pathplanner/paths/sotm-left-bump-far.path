@@ -87,9 +87,25 @@
         "x": 2.75,
         "y": 5.5
       },
-      "nextControl": null,
+      "nextControl": {
+        "x": 1.5,
+        "y": 5.5
+      },
       "isLocked": false,
       "linkedName": "bump-left-alliance"
+    },
+    {
+      "anchor": {
+        "x": 4.3,
+        "y": 7.3
+      },
+      "prevControl": {
+        "x": 2.3,
+        "y": 7.3
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "trench-shooting-left"
     }
   ],
   "rotationTargets": [
@@ -108,14 +124,43 @@
     {
       "waypointRelativePos": 4.0,
       "rotationDegrees": 135.0
+    },
+    {
+      "waypointRelativePos": 4.994190871369291,
+      "rotationDegrees": 135.0
     }
   ],
-  "constraintZones": [],
-  "pointTowardsZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 5.0,
+      "maxWaypointRelativePos": 6.0,
+      "constraints": {
+        "maxVelocity": 0.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 4.6,
+        "y": 4.06
+      },
+      "rotationOffset": 180.0,
+      "minWaypointRelativePos": 5.0,
+      "maxWaypointRelativePos": 6.0,
+      "name": "Point Towards Zone"
+    }
+  ],
   "eventMarkers": [
     {
       "name": "deploy",
-      "waypointRelativePos": 0.15,
+      "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -145,6 +190,17 @@
           "name": "spool-shooter"
         }
       }
+    },
+    {
+      "name": "sotm-small-hopper",
+      "waypointRelativePos": 5.0,
+      "endWaypointRelativePos": 6.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "sotm-small-hopper"
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -157,7 +213,7 @@
   },
   "goalEndState": {
     "velocity": 1.0,
-    "rotation": 145.0
+    "rotation": 95.0
   },
   "reversed": false,
   "folder": "1st Pass",

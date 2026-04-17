@@ -89,39 +89,39 @@
       },
       "nextControl": {
         "x": 6.8,
-        "y": 5.45
+        "y": 7.6
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.0,
-        "y": 5.5
+        "x": 5.5,
+        "y": 7.2
       },
       "prevControl": {
-        "x": 7.0,
-        "y": 5.5
+        "x": 6.5,
+        "y": 7.2
       },
       "nextControl": {
-        "x": 5.5,
-        "y": 5.5
+        "x": 5.0,
+        "y": 7.2
       },
       "isLocked": false,
-      "linkedName": "bump-left-center"
+      "linkedName": "trench-shooting-align-left"
     },
     {
       "anchor": {
-        "x": 2.5,
-        "y": 5.5
+        "x": 4.3,
+        "y": 7.3
       },
       "prevControl": {
-        "x": 3.5,
-        "y": 5.499999999999999
+        "x": 5.3,
+        "y": 7.299999999999999
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "bump-left-alliance"
+      "linkedName": "trench-shooting-left"
     }
   ],
   "rotationTargets": [
@@ -140,10 +140,6 @@
     {
       "waypointRelativePos": 5.0,
       "rotationDegrees": 90.0
-    },
-    {
-      "waypointRelativePos": 6.0,
-      "rotationDegrees": 135.0
     }
   ],
   "constraintZones": [],
@@ -182,7 +178,7 @@
   },
   "goalEndState": {
     "velocity": 1.0,
-    "rotation": 145.0
+    "rotation": 95.0
   },
   "reversed": false,
   "folder": "2nd Pass",

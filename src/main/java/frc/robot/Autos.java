@@ -56,6 +56,7 @@ public class Autos {
   private final Command shootUntilDoneCommand;
   private final Command spoolShooterCommand;
   private final Command intakeCommand;
+  private final Command deployCommand;
 
   // Prefer to construct autos lazily to save limited memory. Required with many auto files
   private final LoggedDashboardChooser<Auto> autoChooser;
@@ -82,6 +83,8 @@ public class Autos {
     this.deploy = deploy;
 
     inAllianceZoneSupplier = () -> RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
+
+    deployCommand = deploy.deployCommand().asProxy();
 
     sotmSmallHopperCommand =
         new ConditionalCommand(
@@ -203,9 +206,9 @@ public class Autos {
   private void bindNamedCommands() {
     NamedCommands.registerCommand("intake", intakeCommand);
 
-    NamedCommands.registerCommand("spool-shooter", spoolShooterCommand);
+    NamedCommands.registerCommand("deploy", deployCommand);
 
-    NamedCommands.registerCommand("deploy-intake", deploy.deployCommand().asProxy());
+    NamedCommands.registerCommand("spool-shooter", spoolShooterCommand);
 
     NamedCommands.registerCommand("shoot-until-done", shootUntilDoneCommand);
 
