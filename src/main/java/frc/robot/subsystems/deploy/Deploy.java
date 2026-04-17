@@ -39,13 +39,9 @@ public class Deploy extends SubsystemBase {
     return Commands.runOnce(() -> setDeployerPosition(DeployerPosition.EXTENDED), this);
   }
 
-  public Command retractCommand() {
-    return Commands.runOnce(() -> setDeployerPosition(DeployerPosition.RETRACTED), this);
-  }
-
   public Command crunchCommand() {
     return Commands.startEnd(
-        () -> setDeployerPosition(DeployerPosition.RETRACTED),
+        () -> setDeployerPosition(DeployerPosition.DUMP),
         () -> setDeployerPosition(DeployerPosition.EXTENDED),
         this);
   }
