@@ -3,64 +3,96 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.4,
-        "y": 7.5
+        "x": 2.5,
+        "y": 5.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.400000000000004,
-        "y": 7.5
+        "x": 2.5,
+        "y": 7.449999999999999
       },
       "isLocked": false,
-      "linkedName": "start-trench-left"
+      "linkedName": "bump-left-alliance"
     },
     {
       "anchor": {
-        "x": 8.4,
+        "x": 4.4,
+        "y": 7.5
+      },
+      "prevControl": {
+        "x": 3.9000000000000004,
+        "y": 7.5
+      },
+      "nextControl": {
+        "x": 5.9,
+        "y": 7.5
+      },
+      "isLocked": false,
+      "linkedName": "trench-pass-left"
+    },
+    {
+      "anchor": {
+        "x": 6.0,
+        "y": 6.7
+      },
+      "prevControl": {
+        "x": 6.0,
+        "y": 6.95
+      },
+      "nextControl": {
+        "x": 6.0,
+        "y": 6.45
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.8,
+        "y": 6.0
+      },
+      "prevControl": {
+        "x": 5.8,
         "y": 6.5
       },
-      "prevControl": {
-        "x": 8.4,
-        "y": 7.5
-      },
       "nextControl": {
-        "x": 8.4,
-        "y": 5.5000000000000036
-      },
-      "isLocked": false,
-      "linkedName": "fuel-far-left-entrance"
-    },
-    {
-      "anchor": {
-        "x": 8.4,
-        "y": 5.0
-      },
-      "prevControl": {
-        "x": 8.4,
-        "y": 5.5
-      },
-      "nextControl": {
-        "x": 8.4,
-        "y": 4.0
-      },
-      "isLocked": false,
-      "linkedName": "fuel-mid-exit-1-left"
-    },
-    {
-      "anchor": {
-        "x": 7.3,
-        "y": 5.0
-      },
-      "prevControl": {
-        "x": 7.3,
-        "y": 4.0
-      },
-      "nextControl": {
-        "x": 7.3,
+        "x": 5.8,
         "y": 5.5
       },
       "isLocked": false,
-      "linkedName": "fuel-mid-exit-2-left"
+      "linkedName": "trench-exit-2-spin-left"
+    },
+    {
+      "anchor": {
+        "x": 5.8,
+        "y": 4.0
+      },
+      "prevControl": {
+        "x": 5.8,
+        "y": 4.25
+      },
+      "nextControl": {
+        "x": 5.8,
+        "y": 3.0
+      },
+      "isLocked": false,
+      "linkedName": "hub-left-close"
+    },
+    {
+      "anchor": {
+        "x": 6.8,
+        "y": 4.0
+      },
+      "prevControl": {
+        "x": 6.8,
+        "y": 3.0
+      },
+      "nextControl": {
+        "x": 6.8,
+        "y": 6.8999999999999995
+      },
+      "isLocked": false,
+      "linkedName": "hub-left-center"
     },
     {
       "anchor": {
@@ -68,7 +100,7 @@
         "y": 7.2
       },
       "prevControl": {
-        "x": 7.0,
+        "x": 6.5,
         "y": 7.2
       },
       "nextControl": {
@@ -84,8 +116,8 @@
         "y": 7.3
       },
       "prevControl": {
-        "x": 4.55,
-        "y": 7.3
+        "x": 5.3,
+        "y": 7.299999999999999
       },
       "nextControl": null,
       "isLocked": false,
@@ -94,19 +126,19 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.95,
-      "rotationDegrees": -100.0
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 0.0
     },
     {
       "waypointRelativePos": 2.0,
-      "rotationDegrees": -100.0
-    },
-    {
-      "waypointRelativePos": 3.0,
-      "rotationDegrees": 90.0
+      "rotationDegrees": -90.0
     },
     {
       "waypointRelativePos": 4.0,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 5.0,
       "rotationDegrees": 90.0
     }
   ],
@@ -114,20 +146,9 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "deploy",
-      "waypointRelativePos": 0.15,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "deploy"
-        }
-      }
-    },
-    {
       "name": "intake",
-      "waypointRelativePos": 0.5,
-      "endWaypointRelativePos": 5.0,
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": 7.0,
       "command": {
         "type": "named",
         "data": {
@@ -137,7 +158,7 @@
     },
     {
       "name": "spool-shooter",
-      "waypointRelativePos": 3.5,
+      "waypointRelativePos": 6.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -160,10 +181,10 @@
     "rotation": 95.0
   },
   "reversed": false,
-  "folder": "1st Pass",
+  "folder": "2nd Pass",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": -90.0
+    "rotation": 145.0
   },
   "useDefaultConstraints": true
 }

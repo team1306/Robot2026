@@ -114,6 +114,17 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "deploy",
+      "waypointRelativePos": 0.15,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "deploy"
+        }
+      }
+    },
+    {
       "name": "intake",
       "waypointRelativePos": 0.5,
       "endWaypointRelativePos": 5.0,

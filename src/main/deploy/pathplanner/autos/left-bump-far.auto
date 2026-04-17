@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "sotm-left-bump-far"
+            "pathName": "left-bump-far"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left-bump-bump-hub"
+            "pathName": "left-bump-trench-hub"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left-bump-collect"
+            "pathName": "left-trench-collect"
           }
         }
       ]
