@@ -11,9 +11,10 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.booster.Booster;
+import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
-import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.LocationUtils;
@@ -29,7 +30,8 @@ public class ShootOnTheMoveCommands {
       Drive drive,
       Shooter shooter,
       Indexer indexer,
-      Intake intake,
+      Deploy deploy,
+      Booster booster,
       Leds leds,
       Supplier<Translation2d> target,
       Rotation2d angleTolerance,
@@ -42,7 +44,8 @@ public class ShootOnTheMoveCommands {
             drive,
             shooter,
             indexer,
-            intake,
+            deploy,
+            booster,
             leds,
             () -> calculateLeadTarget(drive, target),
             angleTolerance,
@@ -69,7 +72,8 @@ public class ShootOnTheMoveCommands {
       Drive drive,
       Shooter shooter,
       Indexer indexer,
-      Intake intake,
+      Deploy deploy,
+      Booster booster,
       Leds leds,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
@@ -83,7 +87,8 @@ public class ShootOnTheMoveCommands {
         drive,
         shooter,
         indexer,
-        intake,
+        deploy,
+        booster,
         leds,
         () -> xSupplier.getAsDouble() * SLOWDOWN_FACTOR,
         () -> ySupplier.getAsDouble() * SLOWDOWN_FACTOR,

@@ -95,7 +95,6 @@ public class ShooterIOReal implements ShooterIO {
     // CAN Device Initialization
     leftTopMotor = new TalonFX(Constants.CanIds.SHOOTER_LEFT_TOP_MOTOR_ID);
     leftBottomMotor = new TalonFX(Constants.CanIds.SHOOTER_LEFT_BOTTOM_MOTOR_ID);
-
     rightTopMotor = new TalonFX(Constants.CanIds.SHOOTER_RIGHT_TOP_MOTOR_ID);
     rightBottomMotor = new TalonFX(Constants.CanIds.SHOOTER_RIGHT_BOTTOM_MOTOR_ID);
 
@@ -103,11 +102,11 @@ public class ShooterIOReal implements ShooterIO {
     encoderVelocity = encoder.getVelocity();
 
     // Apply configurations
-    leftTopMotor.getConfigurator().apply(ShooterConstants.CCW_SHOOTER_MOTOR_CONFIGS);
-    leftBottomMotor.getConfigurator().apply(ShooterConstants.CCW_SHOOTER_MOTOR_CONFIGS);
+    leftTopMotor.getConfigurator().apply(ShooterConstants.CW_SHOOTER_MOTOR_CONFIGS);
+    leftBottomMotor.getConfigurator().apply(ShooterConstants.CW_SHOOTER_MOTOR_CONFIGS);
 
-    rightTopMotor.getConfigurator().apply(ShooterConstants.CW_SHOOTER_MOTOR_CONFIGS);
-    rightBottomMotor.getConfigurator().apply(ShooterConstants.CW_SHOOTER_MOTOR_CONFIGS);
+    rightTopMotor.getConfigurator().apply(ShooterConstants.CCW_SHOOTER_MOTOR_CONFIGS);
+    rightBottomMotor.getConfigurator().apply(ShooterConstants.CCW_SHOOTER_MOTOR_CONFIGS);
 
     // Status Signals
     leftTopMotorSupplyCurrent = leftTopMotor.getSupplyCurrent();

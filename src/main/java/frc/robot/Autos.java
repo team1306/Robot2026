@@ -24,6 +24,8 @@ import frc.robot.commands.SafeAimAndShootCommand;
 import frc.robot.commands.ShootOnTheMoveCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.controls.Controls;
+import frc.robot.subsystems.booster.Booster;
+import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
@@ -45,7 +47,9 @@ public class Autos {
   private final Indexer indexer;
   private final Intake intake;
   private final Shooter shooter;
+  private final Booster booster;
   private final Leds leds;
+  private final Deploy deploy;
 
   private final Command sotmSmallHopperCommand;
   private final Command shootSmallHopperCommand;
@@ -61,12 +65,21 @@ public class Autos {
 
   private static final List<String> autoNames = AutoBuilder.getAllAutoNames();
 
-  public Autos(Drive drive, Indexer indexer, Intake intake, Shooter shooter, Leds leds) {
+  public Autos(
+      Drive drive,
+      Indexer indexer,
+      Intake intake,
+      Shooter shooter,
+      Booster booster,
+      Leds leds,
+      Deploy deploy) {
     this.drive = drive;
     this.indexer = indexer;
     this.intake = intake;
     this.shooter = shooter;
+    this.booster = booster;
     this.leds = leds;
+    this.deploy = deploy;
 
     inAllianceZoneSupplier = () -> RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
 
@@ -76,7 +89,8 @@ public class Autos {
                     drive,
                     shooter,
                     indexer,
-                    intake,
+                    deploy,
+                    booster,
                     leds,
                     () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
                     Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
@@ -111,7 +125,8 @@ public class Autos {
                 drive,
                 shooter,
                 indexer,
-                intake,
+                deploy,
+                booster,
                 leds,
                 () -> 0,
                 () -> 0,
@@ -130,7 +145,8 @@ public class Autos {
                     drive,
                     shooter,
                     indexer,
-                    intake,
+                    deploy,
+                    booster,
                     leds,
                     () -> 0,
                     () -> 0,
@@ -189,7 +205,7 @@ public class Autos {
 
     NamedCommands.registerCommand("spool-shooter", spoolShooterCommand);
 
-    NamedCommands.registerCommand("deploy-intake", intake.deployCommand().asProxy());
+    NamedCommands.registerCommand("deploy-intake", deploy.deployCommand().asProxy());
 
     NamedCommands.registerCommand("shoot-until-done", shootUntilDoneCommand);
 

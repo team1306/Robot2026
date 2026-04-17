@@ -42,8 +42,6 @@ public class CleaningControllerMapping extends ControllerMapping {
         .whileTrue(
             ShooterCommands.shootAtSpeedCommand(
                 shooter, () -> RotationsPerSecond.of(targetSpeed.get())));
-
-    driverController.y().whileTrue(intake.deployAtDutyCycleCommand(-0.25));
   }
 
   @Override
