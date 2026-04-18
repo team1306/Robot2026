@@ -24,7 +24,7 @@ public interface DeployIO {
 
   public default void updateInputs(DeployIOInputs inputs) {}
 
-  public default void setPosition(Angle angle) {}
+  public default void setPosition(DeployerPosition position) {}
 
   public default void setDutyCycle(double dutyCycle) {}
 

@@ -22,8 +22,9 @@ public class Deploy extends SubsystemBase {
   }
 
   public void setDeployerPosition(DeployerPosition position) {
-    deployIO.setPosition(position.getAngle());
+    deployIO.setPosition(position);
     Logger.recordOutput("Deploy/Angle Setpoint", position.getAngle().in(Rotations));
+    Logger.recordOutput("Deploy/Duty Cycle", 0); // seems to not work atm
   }
 
   public void setDutyCycle(double dutyCycle) {
@@ -40,9 +41,18 @@ public class Deploy extends SubsystemBase {
   }
 
   public Command crunchCommand() {
-    return Commands.startEnd(
-        () -> setDeployerPosition(DeployerPosition.DUMP),
-        () -> setDeployerPosition(DeployerPosition.EXTENDED),
-        this);
+    // return Commands.startEnd(
+    //     () -> setDeployerPosition(DeployerPosition.DUMP),
+    //     () -> setDeployerPosition(DeployerPosition.EXTENDED),
+    //     this);
+
+    return (Commands.runOnce(() -> setDutyCycle(0.2), this)
+            .andThen(Commands.waitSeconds(.5))
+            .andThen(
+                Commands.runEnd(
+                    () -> setDeployerPosition(DeployerPosition.DUMP),
+                    () -> setDeployerPosition(DeployerPosition.EXTENDED),
+                    this)))
+        .finallyDo(() -> setDeployerPosition(DeployerPosition.EXTENDED));
   }
 }
