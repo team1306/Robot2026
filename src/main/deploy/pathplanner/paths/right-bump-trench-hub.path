@@ -89,7 +89,7 @@
       },
       "nextControl": {
         "x": 6.8,
-        "y": 1.1000000000000005
+        "y": 1.5
       },
       "isLocked": false,
       "linkedName": "hub-left-center"

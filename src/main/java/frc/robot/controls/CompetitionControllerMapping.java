@@ -214,8 +214,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
     // DEPLOY
     operatorController.x().onTrue(deploy.deployCommand());
     operatorController.leftTrigger(0.5).whileTrue(deploy.crunchCommand());
-    operatorController.povLeft().whileTrue(deploy.deployManuallyCommand(0.25));
-    operatorController.povRight().whileTrue(deploy.deployManuallyCommand(-0.25));
+    operatorController.povLeft().whileTrue(deploy.deployManuallyCommand(0.2));
+    operatorController.povRight().whileTrue(deploy.deployManuallyCommand(-0.2));
 
     operatorController
         .back()
