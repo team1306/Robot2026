@@ -31,7 +31,7 @@ public class ShooterCommands {
                 new ShooterSetpoint(Meters.of(4.16), RotationsPerSecond.of(29.5), Seconds.of(0)),
                 new ShooterSetpoint(Meters.of(4.7), RotationsPerSecond.of(30.75), Seconds.of(0)),
                 new ShooterSetpoint(Meters.of(5.9), RotationsPerSecond.of(33.5), Seconds.of(0)),
-                new ShooterSetpoint(Feet.of(35), RotationsPerSecond.of(60), Seconds.of(0))
+                new ShooterSetpoint(Feet.of(35), RotationsPerSecond.of(45), Seconds.of(0))
               })
           .sorted()
           .toArray(ShooterSetpoint[]::new);
