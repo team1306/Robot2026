@@ -18,6 +18,7 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.util.LocationUtils;
 import frc.robot.util.RebuiltUtils;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
@@ -46,6 +47,11 @@ public class SafeShootCommand extends ParallelCommandGroup {
       BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive,
       BooleanSupplier overrideAutoRanging) {
+
+    Logger.recordOutput(
+        "Shooter/Distance to Target",
+        LocationUtils.getDistanceToLocation(
+            drive.getPose().getTranslation(), positionSupplier.get()));
 
     BooleanSupplier shooterVelocityCondition =
         shooter.isAtRequestedSpeed(Constants.Tolerances.NORMAL_SPEED_TOLERANCE);

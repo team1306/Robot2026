@@ -211,7 +211,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 152.82189699922478
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "2nd Pass",

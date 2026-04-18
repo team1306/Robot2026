@@ -92,7 +92,7 @@
   "folder": "Depot",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 152.822
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

@@ -65,15 +65,15 @@
     {
       "anchor": {
         "x": 5.5,
-        "y": 7.2
+        "y": 7.25
       },
       "prevControl": {
         "x": 7.0,
-        "y": 7.2
+        "y": 7.25
       },
       "nextControl": {
         "x": 5.0,
-        "y": 7.2
+        "y": 7.25
       },
       "isLocked": false,
       "linkedName": "trench-shooting-align-left"

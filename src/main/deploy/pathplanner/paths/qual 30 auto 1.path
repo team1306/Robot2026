@@ -4,110 +4,110 @@
     {
       "anchor": {
         "x": 4.4,
-        "y": 0.55
+        "y": 7.5
       },
       "prevControl": null,
       "nextControl": {
         "x": 5.400000000000004,
-        "y": 0.5499999999999997
+        "y": 7.5
       },
       "isLocked": false,
-      "linkedName": "start-trench-right"
+      "linkedName": "start-trench-left"
     },
     {
       "anchor": {
-        "x": 8.0,
-        "y": 1.5
+        "x": 8.7,
+        "y": 6.5
       },
       "prevControl": {
-        "x": 8.0,
-        "y": 0.5000000000000004
+        "x": 8.700000000000005,
+        "y": 7.5
       },
       "nextControl": {
-        "x": 8.0,
-        "y": 2.499999999999997
+        "x": 8.700000000000005,
+        "y": 5.5000000000000036
       },
       "isLocked": false,
-      "linkedName": "fuel-safe-entrance-right"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.0,
-        "y": 3.0
+        "x": 8.7,
+        "y": 5.0
       },
       "prevControl": {
-        "x": 8.0,
-        "y": 2.5
+        "x": 8.7,
+        "y": 4.5
       },
       "nextControl": {
-        "x": 8.0,
-        "y": 4.0
+        "x": 8.7,
+        "y": 5.25
       },
       "isLocked": false,
-      "linkedName": "fuel-safe-exit-1-right"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.9,
-        "y": 3.0
+        "x": 8.7,
+        "y": 6.5
       },
       "prevControl": {
-        "x": 6.9,
-        "y": 4.0
+        "x": 8.7,
+        "y": 5.5
       },
       "nextControl": {
-        "x": 6.9,
-        "y": 2.5
+        "x": 8.7,
+        "y": 7.0
       },
       "isLocked": false,
-      "linkedName": "fuel-safe-exit-2-right"
+      "linkedName": null
     },
     {
       "anchor": {
         "x": 5.5,
-        "y": 0.75
+        "y": 7.25
       },
       "prevControl": {
         "x": 7.0,
-        "y": 0.7499999999999998
+        "y": 7.25
       },
       "nextControl": {
         "x": 5.0,
-        "y": 0.7500000000000001
+        "y": 7.25
       },
       "isLocked": false,
-      "linkedName": "trench-shooting-align-right"
+      "linkedName": "trench-shooting-align-left"
     },
     {
       "anchor": {
         "x": 4.3,
-        "y": 0.7
+        "y": 7.3
       },
       "prevControl": {
         "x": 4.55,
-        "y": 0.7
+        "y": 7.3
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "trench-shooting-right"
+      "linkedName": "trench-shooting-left"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.95,
-      "rotationDegrees": 100.0
+      "rotationDegrees": -100.0
     },
     {
       "waypointRelativePos": 2.0,
-      "rotationDegrees": 100.0
+      "rotationDegrees": -100.0
     },
     {
       "waypointRelativePos": 3.0,
-      "rotationDegrees": -90.0
+      "rotationDegrees": -100.0
     },
     {
       "waypointRelativePos": 4.0,
-      "rotationDegrees": -90.0
+      "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [],
@@ -157,13 +157,13 @@
   },
   "goalEndState": {
     "velocity": 1.0,
-    "rotation": -95.0
+    "rotation": 95.0
   },
   "reversed": false,
   "folder": "1st Pass",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": 90.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }
