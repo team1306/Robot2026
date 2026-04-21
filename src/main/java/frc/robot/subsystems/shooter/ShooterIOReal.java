@@ -224,6 +224,15 @@ public class ShooterIOReal implements ShooterIO {
     leftBottomMotor.setControl(velocityRequest.withVelocity(velocity));
     rightTopMotor.setControl(velocityRequest.withVelocity(velocity));
     rightBottomMotor.setControl(velocityRequest.withVelocity(velocity));
+    // leftBottomMotor.setControl(
+    //     new Follower(leftTopMotor.getDeviceID(), MotorAlignmentValue.Aligned));
+
+    //     rightTopMotor.setControl(
+    //     new Follower(leftTopMotor.getDeviceID(), MotorAlignmentValue.Opposed));
+
+    //     rightBottomMotor.setControl(
+    //     new Follower(leftTopMotor.getDeviceID(), MotorAlignmentValue.Opposed));
+
   }
 
   @Override

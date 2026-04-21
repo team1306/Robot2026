@@ -4,115 +4,126 @@
     {
       "anchor": {
         "x": 4.4,
-        "y": 7.5
+        "y": 0.55
       },
       "prevControl": null,
       "nextControl": {
         "x": 5.400000000000004,
-        "y": 7.5
+        "y": 0.55
       },
       "isLocked": false,
-      "linkedName": "start-trench-left"
+      "linkedName": "start-trench-right"
     },
     {
       "anchor": {
         "x": 8.4,
-        "y": 6.5
+        "y": 1.55
       },
       "prevControl": {
         "x": 8.4,
-        "y": 7.5
+        "y": 0.4500000000000006
       },
       "nextControl": {
         "x": 8.4,
-        "y": 5.5000000000000036
+        "y": 2.55
       },
       "isLocked": false,
-      "linkedName": "fuel-far-left-entrance"
+      "linkedName": "fuel-far-right-entrance"
     },
     {
       "anchor": {
         "x": 8.4,
-        "y": 5.3
+        "y": 3.05
       },
       "prevControl": {
         "x": 8.4,
-        "y": 5.8
+        "y": 2.55
       },
       "nextControl": {
         "x": 8.4,
-        "y": 4.3
+        "y": 4.05
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "fuel-mid-exit-1-right"
     },
     {
       "anchor": {
         "x": 7.3,
-        "y": 5.3
+        "y": 3.05
       },
       "prevControl": {
         "x": 7.3,
-        "y": 4.3
+        "y": 4.05
       },
       "nextControl": {
         "x": 7.3,
-        "y": 5.8
+        "y": 2.55
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "fuel-mid-exit-2-right"
     },
     {
       "anchor": {
+        "x": 6.0,
+        "y": 2.55
+      },
+      "prevControl": {
+        "x": 6.5,
+        "y": 2.55
+      },
+      "nextControl": {
         "x": 5.5,
-        "y": 7.2
-      },
-      "prevControl": {
-        "x": 7.0,
-        "y": 7.2
-      },
-      "nextControl": {
-        "x": 5.0,
-        "y": 7.2
+        "y": 2.55
       },
       "isLocked": false,
-      "linkedName": "trench-shooting-align-left"
+      "linkedName": "bump-center-right"
     },
     {
       "anchor": {
-        "x": 4.3,
-        "y": 7.3
+        "x": 2.75,
+        "y": 2.55
       },
       "prevControl": {
-        "x": 4.55,
-        "y": 7.3
+        "x": 3.0,
+        "y": 2.55
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "trench-shooting-left"
+      "linkedName": "bump-alliance-right"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.95,
-      "rotationDegrees": -100.0
+      "rotationDegrees": 100.0
     },
     {
       "waypointRelativePos": 2.0,
-      "rotationDegrees": -100.0
+      "rotationDegrees": 100.0
     },
     {
       "waypointRelativePos": 3.0,
-      "rotationDegrees": 90.0
+      "rotationDegrees": -90.0
     },
     {
       "waypointRelativePos": 4.0,
-      "rotationDegrees": 90.0
+      "rotationDegrees": -135.0
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
+    {
+      "name": "deploy",
+      "waypointRelativePos": 0.15,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "deploy"
+        }
+      }
+    },
     {
       "name": "intake",
       "waypointRelativePos": 0.5,
@@ -146,13 +157,13 @@
   },
   "goalEndState": {
     "velocity": 1.0,
-    "rotation": 95.0
+    "rotation": -145.0
   },
   "reversed": false,
   "folder": "1st Pass",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SHOP left-trench-far"
+            "pathName": "right-bump-safe"
           }
         },
         {
@@ -19,13 +19,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SHOP left-trench-hub"
+            "pathName": "SHOP right-bump-trench-hub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot-small-hopper"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coast"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "left-trench-collect"
+            "pathName": "right-trench-collect"
           }
         }
       ]

@@ -1,0 +1,62 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left-bump-safe"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot-small-hopper"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SHOP left-bump-bump-hub"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "depot-bump"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot-small-hopper"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "depot-coast-to-mid"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "New Autos",
+  "choreoAuto": false
+}

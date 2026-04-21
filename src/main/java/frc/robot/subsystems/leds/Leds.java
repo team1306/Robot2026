@@ -35,7 +35,11 @@ public class Leds extends SubsystemBase {
             .anyToState(LedState.AUTO, state -> LedsIO.setSolid(255, 0, 255))
             .anyToState(LedState.AIMING, state -> LedsIO.setSolid(0, 255, 0))
             .anyToState(LedState.SHOOTING, state -> LedsIO.setBounce(0, 255, 0, 80))
-            .anyToState(LedState.OTHER, AllianceTriggers.isRedAlliance() ? state -> LedsIO.setSolid(255, 0, 0) : state -> LedsIO.setSolid(0, 0, 255));
+            .anyToState(
+                LedState.OTHER,
+                AllianceTriggers.isRedAlliance()
+                    ? state -> LedsIO.setSolid(255, 0, 0)
+                    : state -> LedsIO.setSolid(0, 0, 255));
 
     stateMachine = new StateMachine<>(LedState.NONE, edges);
     if (DriverStation.isDisabled()) {

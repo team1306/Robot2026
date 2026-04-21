@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 6.0,
-        "y": 6.8
+        "y": 6.7
       },
       "prevControl": {
         "x": 6.0,
-        "y": 7.05
+        "y": 6.95
       },
       "nextControl": {
         "x": 6.0,
-        "y": 6.55
+        "y": 6.45
       },
       "isLocked": false,
       "linkedName": "trench-exit-spin-left"
@@ -96,15 +96,15 @@
     },
     {
       "anchor": {
-        "x": 2.0,
+        "x": 2.5,
         "y": 5.5
       },
       "prevControl": {
-        "x": 3.7500000000000004,
+        "x": 4.25,
         "y": 5.5
       },
       "nextControl": {
-        "x": 1.5,
+        "x": 2.0,
         "y": 5.5
       },
       "isLocked": false,
@@ -112,11 +112,11 @@
     },
     {
       "anchor": {
-        "x": 0.6786386554621853,
+        "x": 0.7,
         "y": 5.803268907563026
       },
       "prevControl": {
-        "x": 1.1616015686067191,
+        "x": 1.1829629131445338,
         "y": 5.673859385011765
       },
       "nextControl": null,
@@ -211,7 +211,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 167.69198418257204
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "2nd Pass",

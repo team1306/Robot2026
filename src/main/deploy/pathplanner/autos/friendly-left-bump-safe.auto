@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left-bump-safe"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot-small-hopper"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SHOP left-bump-trench-hub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot-small-hopper"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coast"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left-trench-collect"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "New Autos",
+  "choreoAuto": false
+}

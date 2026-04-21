@@ -23,6 +23,8 @@ import frc.robot.commands.FuelCollectionCommand;
 import frc.robot.commands.ShootOnTheMoveCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.booster.Booster;
+import frc.robot.subsystems.deploy.Deploy;
+import frc.robot.subsystems.deploy.DeployerPosition;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.fueldetection.FuelDetection;
 import frc.robot.subsystems.indexer.Indexer;
@@ -42,6 +44,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
   private final Booster booster;
   private final FuelDetection fuelDetection;
   private final Leds leds;
+  private final Deploy deploy;
 
   public CompetitionControllerMapping(
       CommandXboxController driverController,
@@ -52,7 +55,8 @@ public class CompetitionControllerMapping extends ControllerMapping {
       Indexer indexer,
       Booster booster,
       FuelDetection fuelDetection,
-      Leds leds) {
+      Leds leds,
+      Deploy deploy) {
     super(driverController, operatorController);
     this.drive = drive;
     this.intake = intake;
@@ -61,6 +65,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
     this.booster = booster;
     this.fuelDetection = fuelDetection;
     this.leds = leds;
+    this.deploy = deploy;
 
     shooter.resetVelocityOverride();
   }
@@ -157,7 +162,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     drive,
                     shooter,
                     indexer,
-                    intake,
+                    deploy,
                     booster,
                     leds,
                     () -> -driverController.getLeftY(),
@@ -185,21 +190,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
     /* ---P2--- */
 
-    // Jumble Indexer
-    operatorController
-        .leftTrigger(0.1)
-        .whileTrue(
-            indexer
-                .jumbleIndexer(() -> operatorController.getLeftTriggerAxis())
-                .alongWith(
-                    new InstantCommand(
-                        () ->
-                            operatorController.setRumble(
-                                RumbleType.kBothRumble, operatorController.getLeftTriggerAxis()))))
-        .onFalse(
-            new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0))
-                .ignoringDisable(true));
-
     // Spool Shooter
     operatorController
         .rightTrigger()
@@ -221,10 +211,19 @@ public class CompetitionControllerMapping extends ControllerMapping {
             new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0))
                 .ignoringDisable(true));
 
-    // Deploy Intake
-    operatorController.x().whileTrue(intake.deployCommand());
+    // DEPLOY
+    operatorController.x().onTrue(deploy.deployCommand());
+    operatorController.leftTrigger(0.5).whileTrue(deploy.crunchCommand());
+    operatorController.povLeft().whileTrue(deploy.deployManuallyCommand(0.2));
+    operatorController.povRight().whileTrue(deploy.deployManuallyCommand(-0.2));
 
-    // Overides
+    operatorController
+        .back()
+        .onTrue(
+            Commands.runOnce(
+                () -> deploy.setDeployerPosition(DeployerPosition.RETRACTED),
+                deploy)); // TESTING ONLY
+    // OVERRIDES
 
     // Force Indexer
     operatorController.rightBumper().whileTrue(indexer.indexUntilCancelledCommand(1));

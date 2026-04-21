@@ -19,13 +19,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left-trench-hub"
+            "pathName": "left-trench-trench-hub"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "shoot-small-hopper"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coast"
           }
         },
         {

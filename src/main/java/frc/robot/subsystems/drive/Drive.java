@@ -207,6 +207,18 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putData("Field", field2d);
   }
 
+  public void setBrakeMode() {
+    for (Module module : modules) {
+      module.setBrakeMode();
+    }
+  }
+
+  public void setCoastMode() {
+    for (Module module : modules) {
+      module.setCoastMode();
+    }
+  }
+
   /**
    * Runs the drive at the desired velocity.
    *

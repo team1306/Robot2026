@@ -19,11 +19,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.commands.SafeAimAndShootCommand;
 import frc.robot.commands.ShootOnTheMoveCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.controls.Controls;
 import frc.robot.subsystems.booster.Booster;
+import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
@@ -47,12 +49,14 @@ public class Autos {
   private final Shooter shooter;
   private final Booster booster;
   private final Leds leds;
+  private final Deploy deploy;
 
   private final Command sotmSmallHopperCommand;
   private final Command shootSmallHopperCommand;
   private final Command shootUntilDoneCommand;
   private final Command spoolShooterCommand;
   private final Command intakeCommand;
+  private final Command deployCommand;
 
   // Prefer to construct autos lazily to save limited memory. Required with many auto files
   private final LoggedDashboardChooser<Auto> autoChooser;
@@ -63,15 +67,24 @@ public class Autos {
   private static final List<String> autoNames = AutoBuilder.getAllAutoNames();
 
   public Autos(
-      Drive drive, Indexer indexer, Intake intake, Shooter shooter, Booster booster, Leds leds) {
+      Drive drive,
+      Indexer indexer,
+      Intake intake,
+      Shooter shooter,
+      Booster booster,
+      Leds leds,
+      Deploy deploy) {
     this.drive = drive;
     this.indexer = indexer;
     this.intake = intake;
     this.shooter = shooter;
     this.booster = booster;
     this.leds = leds;
+    this.deploy = deploy;
 
     inAllianceZoneSupplier = () -> RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
+
+    deployCommand = deploy.deployCommand().asProxy();
 
     sotmSmallHopperCommand =
         new ConditionalCommand(
@@ -79,7 +92,7 @@ public class Autos {
                     drive,
                     shooter,
                     indexer,
-                    intake,
+                    deploy,
                     booster,
                     leds,
                     () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
@@ -115,7 +128,7 @@ public class Autos {
                 drive,
                 shooter,
                 indexer,
-                intake,
+                deploy,
                 booster,
                 leds,
                 () -> 0,
@@ -135,7 +148,7 @@ public class Autos {
                     drive,
                     shooter,
                     indexer,
-                    intake,
+                    deploy,
                     booster,
                     leds,
                     () -> 0,
@@ -193,15 +206,19 @@ public class Autos {
   private void bindNamedCommands() {
     NamedCommands.registerCommand("intake", intakeCommand);
 
-    NamedCommands.registerCommand("spool-shooter", spoolShooterCommand);
+    NamedCommands.registerCommand("deploy", deployCommand);
 
-    NamedCommands.registerCommand("deploy-intake", intake.deployCommand().asProxy());
+    NamedCommands.registerCommand("spool-shooter", spoolShooterCommand);
 
     NamedCommands.registerCommand("shoot-until-done", shootUntilDoneCommand);
 
     NamedCommands.registerCommand("shoot-small-hopper", shootSmallHopperCommand);
 
     NamedCommands.registerCommand("sotm-small-hopper", sotmSmallHopperCommand);
+
+    NamedCommands.registerCommand("coast", Commands.runOnce(() -> drive.setCoastMode()));
+
+    RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> drive.setBrakeMode()));
   }
 
   private void bindEventMarkers() {

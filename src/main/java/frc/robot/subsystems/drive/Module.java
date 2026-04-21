@@ -71,6 +71,14 @@ public class Module {
     turnEncoderDisconnectedAlert.set(!inputs.turnEncoderConnected);
   }
 
+  public void setBrakeMode() {
+    io.setBrakeMode();
+  }
+
+  public void setCoastMode() {
+    io.setCoastMode();
+  }
+
   /** Runs the module with the specified setpoint state. Mutates the state to optimize it. */
   public void runSetpoint(SwerveModuleState state) {
     // Optimize velocity setpoint

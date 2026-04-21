@@ -19,13 +19,32 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left-depot-hub"
+            "pathName": "left-trench-depot-hub"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot-small-hopper"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "depot-transition-SOTM"
+            "pathName": "depot-coast-to-mid"
           }
         }
       ]

@@ -1,22 +1,24 @@
 package frc.robot.commands;
 
-import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.subsystems.booster.Booster;
+import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
-import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.util.LocationUtils;
 import frc.robot.util.RebuiltUtils;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
@@ -24,17 +26,19 @@ import org.littletonrobotics.junction.Logger;
 
 public class SafeShootCommand extends ParallelCommandGroup {
 
-  private static final double INDEXER_SPEED = 1;
+  private static double INDEXER_SPEED = 1;
+  private static Time RETRACT_DELAY = Seconds.of(1);
   private static final double BOOSTER_SPEED = 1;
-  private static final Distance MINIMUM_SHOT_DISTANCE = Feet.of(7.5);
+  private static final Distance MINIMUM_SHOT_DISTANCE = Meters.of(2.2);
 
   private boolean isActive;
+  private boolean hasStartedShooting;
 
   public SafeShootCommand(
       Drive drive,
       Shooter shooter,
       Indexer indexer,
-      Intake intake,
+      Deploy deploy,
       Booster booster,
       Leds leds,
       Supplier<Translation2d> positionSupplier,
@@ -43,6 +47,11 @@ public class SafeShootCommand extends ParallelCommandGroup {
       BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive,
       BooleanSupplier overrideAutoRanging) {
+
+    Logger.recordOutput(
+        "Shooter/Distance to Target",
+        LocationUtils.getDistanceToLocation(
+            drive.getPose().getTranslation(), positionSupplier.get()));
 
     BooleanSupplier shooterVelocityCondition =
         shooter.isAtRequestedSpeed(Constants.Tolerances.NORMAL_SPEED_TOLERANCE);
@@ -66,6 +75,11 @@ public class SafeShootCommand extends ParallelCommandGroup {
                 && (hubActiveCondition.getAsBoolean() || overrideHubActive.getAsBoolean())
                 && (autoRangeCondition.getAsBoolean() || overrideAutoRanging.getAsBoolean());
 
+    BooleanSupplier notMovingCondition =
+        () ->
+            drive.getChassisSpeeds().vxMetersPerSecond < 0.025
+                && drive.getChassisSpeeds().vyMetersPerSecond < 0.025;
+
     Command guardedIndexerCommand =
         new GuardedCommand(
             Commands.waitUntil(
@@ -74,8 +88,18 @@ public class SafeShootCommand extends ParallelCommandGroup {
                                 .isAtRequestedSpeed(Constants.Tolerances.INITIAL_SPEED_TOLERANCE)
                                 .getAsBoolean()
                             || overrideVelocitySafeguard.getAsBoolean())
+                .andThen(Commands.runOnce(() -> hasStartedShooting = true))
                 .andThen(indexer.indexUntilCancelledCommand(INDEXER_SPEED)),
             combinedCondition);
+
+    // Command guardedDeployCommand =
+    //     Commands.waitUntil(() -> hasStartedShooting)
+    //         .andThen(Commands.waitTime(RETRACT_DELAY))
+    //         .andThen(
+    //             new GuardedCommand(
+    //                 deploy.crunchCommand(),
+    //                 () -> combinedCondition.getAsBoolean() &&
+    // notMovingCondition.getAsBoolean()));
 
     Command shootAtDistanceCommand =
         ShooterCommands.shootAtDistanceCommand(
@@ -89,16 +113,6 @@ public class SafeShootCommand extends ParallelCommandGroup {
             .boostCommand(BOOSTER_SPEED)
             .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
-    Command intakeCommand = intake.shakeIntake();
-
-    @SuppressWarnings("unused")
-    Trigger intakeRescheduler =
-        new Trigger(
-                () ->
-                    this.isActive
-                        && (intake.getCurrentCommand() == null
-                            || intake.getCurrentCommand() == intake.getDefaultCommand()))
-            .onTrue(intakeCommand);
     @SuppressWarnings("unused")
     Trigger indexerRescheduler =
         new Trigger(
@@ -119,10 +133,12 @@ public class SafeShootCommand extends ParallelCommandGroup {
 
     Command activityTracker =
         Commands.startEnd(
-            () -> isActive = true,
+            () -> {
+              isActive = true;
+              hasStartedShooting = false;
+            },
             () -> {
               isActive = false;
-              intakeCommand.cancel();
               guardedIndexerCommand.cancel();
               shootAtDistanceCommand.cancel();
             });
@@ -139,9 +155,9 @@ public class SafeShootCommand extends ParallelCommandGroup {
         activityTracker,
         shootAtDistanceCommand.asProxy(),
         guardedIndexerCommand.asProxy(),
+        // guardedDeployCommand.asProxy(),
         boosterCommand.asProxy(),
-        loggedGuardCommand,
-        intakeCommand.asProxy());
+        loggedGuardCommand);
   }
 
   private void logConditions(
