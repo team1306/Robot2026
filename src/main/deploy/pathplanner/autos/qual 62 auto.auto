@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "qual 30 auto 1"
+            "pathName": "qual 62 right-bump-far"
           }
         },
         {
@@ -19,13 +19,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "qual 30 2"
+            "pathName": "right-bump-bump-hub"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shoot-until-done"
+            "name": "shoot-small-hopper"
           }
         }
       ]
