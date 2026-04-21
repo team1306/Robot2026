@@ -20,7 +20,7 @@ public class ShooterConstants {
   public static final double KV = 2.5;
   public static final double KS = 0.058037;
 
-  public static final double ROTOR_TO_SENSOR_RATIO = 1.5;
+  public static final double ROTOR_TO_SENSOR_RATIO = (24D / 36D);
 
   // CONFIGS
   public static final TalonFXConfiguration CW_SHOOTER_MOTOR_CONFIGS =
@@ -31,7 +31,7 @@ public class ShooterConstants {
           .withFeedback(
               new FeedbackConfigs()
                   .withFeedbackRemoteSensorID(Constants.CanIds.SHOOTER_ENCODER_ID)
-                  .withFeedbackSensorSource(FeedbackSensorSourceValue.SyncCANcoder)
+                  .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
                   .withRotorToSensorRatio(ROTOR_TO_SENSOR_RATIO))
           .withCurrentLimits(
               new CurrentLimitsConfigs()
