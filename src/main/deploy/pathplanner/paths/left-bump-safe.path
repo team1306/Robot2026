@@ -16,15 +16,15 @@
     },
     {
       "anchor": {
-        "x": 8.0,
+        "x": 7.8,
         "y": 6.5
       },
       "prevControl": {
-        "x": 8.0,
+        "x": 7.8,
         "y": 7.6
       },
       "nextControl": {
-        "x": 8.0,
+        "x": 7.8,
         "y": 5.5
       },
       "isLocked": false,
@@ -32,15 +32,15 @@
     },
     {
       "anchor": {
-        "x": 8.0,
+        "x": 7.85,
         "y": 5.0
       },
       "prevControl": {
-        "x": 8.0,
+        "x": 7.85,
         "y": 5.5
       },
       "nextControl": {
-        "x": 8.0,
+        "x": 7.85,
         "y": 4.0
       },
       "isLocked": false,
@@ -48,16 +48,16 @@
     },
     {
       "anchor": {
-        "x": 6.9,
+        "x": 6.7,
         "y": 5.0
       },
       "prevControl": {
-        "x": 6.9,
+        "x": 6.7,
         "y": 4.0
       },
       "nextControl": {
-        "x": 6.9,
-        "y": 5.5
+        "x": 6.7,
+        "y": 5.25
       },
       "isLocked": false,
       "linkedName": "fuel-safe-exit-2-left"
@@ -80,11 +80,11 @@
     },
     {
       "anchor": {
-        "x": 2.5,
+        "x": 2.3,
         "y": 5.5
       },
       "prevControl": {
-        "x": 2.75,
+        "x": 2.55,
         "y": 5.5
       },
       "nextControl": null,

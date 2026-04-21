@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.75,
+        "x": 2.2,
         "y": 2.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.75,
+        "x": 2.2,
         "y": 0.6000000000000005
       },
       "isLocked": false,
@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 4.4,
-        "y": 0.55
+        "y": 0.6
       },
       "prevControl": {
         "x": 3.9000000000000004,
-        "y": 0.5499999999999998
+        "y": 0.5999999999999996
       },
       "nextControl": {
         "x": 5.9,
-        "y": 0.5499999999999998
+        "y": 0.5999999999999998
       },
       "isLocked": false,
       "linkedName": "trench-pass-right"
@@ -37,7 +37,7 @@
       },
       "prevControl": {
         "x": 6.0,
-        "y": 1.0500000000000003
+        "y": 1.05
       },
       "nextControl": {
         "x": 6.0,
@@ -112,11 +112,11 @@
     },
     {
       "anchor": {
-        "x": 2.75,
+        "x": 2.2,
         "y": 2.55
       },
       "prevControl": {
-        "x": 3.75,
+        "x": 3.2,
         "y": 2.549999999999999
       },
       "nextControl": null,

@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SHOP left-bump-trench-hub"
+            "pathName": "SHOP left-bump-bump-hub"
           }
         },
         {
@@ -37,7 +37,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left-trench-collect"
+            "pathName": "left-bump-collect"
           }
         }
       ]
