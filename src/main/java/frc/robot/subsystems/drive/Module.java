@@ -79,6 +79,14 @@ public class Module {
     io.setCoastMode();
   }
 
+  public void setAutoCurrent() {
+    io.setAutoCurrent();
+  }
+
+  public void setTeleopCurrent() {
+    io.setTeleopCurrent();
+  }
+
   /** Runs the module with the specified setpoint state. Mutates the state to optimize it. */
   public void runSetpoint(SwerveModuleState state) {
     // Optimize velocity setpoint

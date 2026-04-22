@@ -1,5 +1,7 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Amp;
+import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.pathplanner.lib.util.FlippingUtil;
@@ -7,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -44,6 +47,22 @@ public final class Constants {
     public static final Rotation2d PASSING_ANGLE_TOLERANCE = Rotation2d.fromDegrees(15);
     public static final AngularVelocity INITIAL_SPEED_TOLERANCE = RotationsPerSecond.of(0.5);
     public static final AngularVelocity NORMAL_SPEED_TOLERANCE = RotationsPerSecond.of(2);
+  }
+
+  public static class CurrentLimits {
+    public static final Current AUTO_DRIVE_STATOR = Amps.of(100);
+    public static final Current AUTO_DRIVE_SUPPLY = Amps.of(80);
+    public static final Current TELEOP_DRIVE_STATOR = Amps.of(60);
+    public static final Current TELEOP_DRIVE_SUPPLY = Amps.of(50);
+    public static final Current STEER_STATOR = Amps.of(60);
+
+    public static final Current SHOOTER_SUPPLY = Amps.of(60);
+    public static final Current BOOSTER_SUPPLY = Amps.of(60);
+    public static final Current INTAKE_SUPPLY = Amps.of(60);
+    public static final Current INDEXER_SUPPLY = Amps.of(40);
+
+    public static final Current DEPLOY_STATOR = Amps.of(60);
+    public static final Current DEPLOY_SUPPLY = Amps.of(40);
   }
 
   public static class CanIds {

@@ -50,4 +50,7 @@ public interface ModuleIO {
   public default void setBrakeMode() {}
 
   public default void setCoastMode() {}
+
+  public default void setAutoCurrent() {}
+  public default void setTeleopCurrent() {}
 }

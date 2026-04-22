@@ -219,6 +219,18 @@ public class Drive extends SubsystemBase {
     }
   }
 
+  public void setAutoCurrent() {
+    for (Module module : modules) {
+      module.setAutoCurrent();
+    }
+  }
+
+  public void setTeleopCurrent() {
+    for (Module module : modules) {
+      module.setTeleopCurrent();
+    }
+  }
+
   /**
    * Runs the drive at the desired velocity.
    *

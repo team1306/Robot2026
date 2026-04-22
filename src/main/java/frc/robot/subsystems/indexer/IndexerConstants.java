@@ -1,8 +1,8 @@
 package frc.robot.subsystems.indexer;
 
-import static edu.wpi.first.units.Units.Amps;
-
 import badgerutils.motor.MotorConfigUtils;
+import frc.robot.Constants;
+
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -16,7 +16,7 @@ public class IndexerConstants {
               new CurrentLimitsConfigs()
                   .withStatorCurrentLimitEnable(false)
                   .withSupplyCurrentLimitEnable(true)
-                  .withSupplyCurrentLimit(Amps.of(40)))
+                  .withSupplyCurrentLimit(Constants.CurrentLimits.INDEXER_SUPPLY))
           .withMotorOutput(
               MotorConfigUtils.createMotorOutputConfig(
                   InvertedValue.Clockwise_Positive, NeutralModeValue.Brake));

@@ -1,8 +1,8 @@
 package frc.robot.subsystems.intake;
 
-import static edu.wpi.first.units.Units.Amps;
-
 import badgerutils.motor.MotorConfigUtils;
+import frc.robot.Constants;
+
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -17,7 +17,7 @@ public class IntakeConstants {
               new CurrentLimitsConfigs()
                   .withStatorCurrentLimitEnable(false)
                   .withSupplyCurrentLimitEnable(true)
-                  .withSupplyCurrentLimit(Amps.of(60)))
+                  .withSupplyCurrentLimit(Constants.CurrentLimits.INTAKE_SUPPLY))
           .withMotorOutput(
               MotorConfigUtils.createMotorOutputConfig(
                   InvertedValue.Clockwise_Positive, NeutralModeValue.Brake));

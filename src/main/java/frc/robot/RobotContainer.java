@@ -1,6 +1,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.controls.Controls;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.booster.Booster;
@@ -148,6 +150,9 @@ public class RobotContainer {
 
     controls = new Controls(drive, intake, shooter, indexer, booster, fuelDetection, leds, deploy);
     autos = new Autos(drive, indexer, intake, shooter, booster, leds, deploy);
+
+    RobotModeTriggers.autonomous().onTrue(Commands.runOnce(() -> drive.setAutoCurrent()));
+    RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> drive.setTeleopCurrent()));
   }
 
   public Command getAutonomousCommand() {

@@ -1,7 +1,5 @@
 package frc.robot.subsystems.deploy;
 
-import static edu.wpi.first.units.Units.Amps;
-
 import badgerutils.motor.MotorConfigUtils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
@@ -37,9 +35,9 @@ public class DeployConstants {
           .withCurrentLimits(
               new CurrentLimitsConfigs()
                   .withStatorCurrentLimitEnable(true)
-                  .withStatorCurrentLimit(Amps.of(60))
+                  .withStatorCurrentLimit(Constants.CurrentLimits.DEPLOY_STATOR)
                   .withSupplyCurrentLimitEnable(true)
-                  .withSupplyCurrentLimit(Amps.of(40)))
+                  .withSupplyCurrentLimit(Constants.CurrentLimits.DEPLOY_SUPPLY))
           .withSlot0(
               MotorConfigUtils.createPidConfig(
                   KP_0, 0, KD_0, 0, 0, 0, 0, GravityTypeValue.Arm_Cosine))
