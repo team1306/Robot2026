@@ -374,6 +374,7 @@ public class Drive extends SubsystemBase {
                     target.getY() - drive.getPose().getY(), target.getX() - drive.getPose().getX()))
             .plus(Rotation2d.k180deg);
     Rotation2d angleError = drive.getRotation().minus(targetAngle);
+    Logger.recordOutput("Controls/isLocked angle error", angleError);
     return Math.abs(angleError.getRadians()) < tolerance.getRadians();
   }
 

@@ -1,0 +1,129 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.3,
+        "y": 5.5
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.4974939759036148,
+        "y": 5.663228915662651
+      },
+      "isLocked": false,
+      "linkedName": "bump-left-alliance"
+    },
+    {
+      "anchor": {
+        "x": 1.0686385542168677,
+        "y": 5.859927710843374
+      },
+      "prevControl": {
+        "x": 1.3072585487256252,
+        "y": 5.785358962559387
+      },
+      "nextControl": {
+        "x": 0.591398565199353,
+        "y": 6.009065207411348
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.467156626506024,
+        "y": 7.3023855421686745
+      },
+      "prevControl": {
+        "x": 2.467156626506024,
+        "y": 7.3023855421686745
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 0.75,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 4.6,
+        "y": 4.06
+      },
+      "rotationOffset": 180.0,
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 2.0,
+      "name": "Point Towards Zone"
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "sotm-small-hopper",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 1.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "sotm-small-hopper"
+        }
+      }
+    },
+    {
+      "name": "sotm-small-hopper",
+      "waypointRelativePos": 1.2,
+      "endWaypointRelativePos": 1.6,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "sotm-small-hopper"
+        }
+      }
+    },
+    {
+      "name": "sotm-small-hopper",
+      "waypointRelativePos": 1.61,
+      "endWaypointRelativePos": 2.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "sotm-small-hopper"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 92.23697906343772
+  },
+  "reversed": false,
+  "folder": "Testing",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 145.0
+  },
+  "useDefaultConstraints": true
+}
