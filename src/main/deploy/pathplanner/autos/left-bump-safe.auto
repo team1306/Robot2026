@@ -19,25 +19,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left-bump-trench-hub"
+            "pathName": "left-bump-bump-hub"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shoot-small-hopper"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "coast"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "left-trench-collect"
+            "name": "shoot-until-done"
           }
         }
       ]

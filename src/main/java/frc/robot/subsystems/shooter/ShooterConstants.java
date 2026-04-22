@@ -3,13 +3,16 @@ package frc.robot.subsystems.shooter;
 import static edu.wpi.first.units.Units.Amps;
 
 import badgerutils.motor.MotorConfigUtils;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import frc.robot.Constants;
 
 public class ShooterConstants {
@@ -20,9 +23,15 @@ public class ShooterConstants {
   public static final double KV = 2.5;
   public static final double KS = 0.058037;
 
-  public static final double ROTOR_TO_SENSOR_RATIO = 1.5;
+  public static final double ROTOR_TO_SENSOR_RATIO = (24D / 36D);
 
   // CONFIGS
+  public static final CANcoderConfiguration ENCODER_CONFIG =
+      new CANcoderConfiguration()
+          .withMagnetSensor(
+              new MagnetSensorConfigs()
+                  .withSensorDirection(SensorDirectionValue.Clockwise_Positive));
+
   public static final TalonFXConfiguration CW_SHOOTER_MOTOR_CONFIGS =
       new TalonFXConfiguration()
           .withSlot0(
@@ -31,7 +40,7 @@ public class ShooterConstants {
           .withFeedback(
               new FeedbackConfigs()
                   .withFeedbackRemoteSensorID(Constants.CanIds.SHOOTER_ENCODER_ID)
-                  .withFeedbackSensorSource(FeedbackSensorSourceValue.SyncCANcoder)
+                  .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
                   .withRotorToSensorRatio(ROTOR_TO_SENSOR_RATIO))
           .withCurrentLimits(
               new CurrentLimitsConfigs()

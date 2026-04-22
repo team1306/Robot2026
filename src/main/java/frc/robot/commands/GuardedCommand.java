@@ -59,6 +59,7 @@ public class GuardedCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    initialized = false;
     command.end(interrupted);
   }
 }
