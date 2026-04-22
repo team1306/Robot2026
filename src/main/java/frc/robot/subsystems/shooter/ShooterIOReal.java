@@ -5,12 +5,14 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -220,19 +222,21 @@ public class ShooterIOReal implements ShooterIO {
 
   @Override
   public void setVelocity(AngularVelocity velocity) {
-    leftTopMotor.setControl(velocityRequest.withVelocity(velocity));
-    leftBottomMotor.setControl(velocityRequest.withVelocity(velocity));
-    rightTopMotor.setControl(velocityRequest.withVelocity(velocity));
-    rightBottomMotor.setControl(velocityRequest.withVelocity(velocity));
-    // leftBottomMotor.setControl(
-    //     new Follower(leftTopMotor.getDeviceID(), MotorAlignmentValue.Aligned));
+    TalonFX leader;
 
-    //     rightTopMotor.setControl(
-    //     new Follower(leftTopMotor.getDeviceID(), MotorAlignmentValue.Opposed));
+    if (leftTopMotor.isConnected()) leader = leftTopMotor;
+    else if (leftBottomMotor.isConnected()) leader = leftBottomMotor;
+    else if (rightTopMotor.isConnected()) leader = rightTopMotor;
+    else leader = rightBottomMotor;
 
-    //     rightBottomMotor.setControl(
-    //     new Follower(leftTopMotor.getDeviceID(), MotorAlignmentValue.Opposed));
-
+    velocityRequest.withVelocity(velocity);
+    Follower follower = new Follower(leader.getDeviceID(), MotorAlignmentValue.Aligned);
+    Follower followerInverted = follower.clone().withMotorAlignment(MotorAlignmentValue.Opposed);
+    
+    leftTopMotor.setControl(leader == leftTopMotor ? velocityRequest : follower);
+    leftBottomMotor.setControl(leader == leftBottomMotor ? velocityRequest : follower);
+    rightTopMotor.setControl(leader == rightTopMotor ? velocityRequest : followerInverted);
+    rightBottomMotor.setControl(leader == rightBottomMotor ? velocityRequest : followerInverted);
   }
 
   @Override
