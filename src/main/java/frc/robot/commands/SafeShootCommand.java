@@ -118,19 +118,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
     Command hoodCommand =
         hood.angleFromDistance(distanceSupplier)
             .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
-
-    Command hoodCommand =
-        hood.angleFromDistance(distanceSupplier)
-            .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
-
-    @SuppressWarnings("unused")
-    Trigger intakeRescheduler =
-        new Trigger(
-                () ->
-                    this.isActive
-                        && (intake.getCurrentCommand() == null
-                            || intake.getCurrentCommand() == intake.getDefaultCommand()))
-            .onTrue(intakeCommand);
+            
     @SuppressWarnings("unused")
     Trigger indexerRescheduler =
         new Trigger(
