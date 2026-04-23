@@ -49,10 +49,10 @@ public final class Constants {
   }
 
   public static class CurrentLimits {
-    public static final Current AUTO_DRIVE_STATOR = Amps.of(100);
-    public static final Current AUTO_DRIVE_SUPPLY = Amps.of(80);
-    public static final Current TELEOP_DRIVE_STATOR = Amps.of(60);
-    public static final Current TELEOP_DRIVE_SUPPLY = Amps.of(50);
+    public static final Current HIGH_DRIVE_STATOR = Amps.of(100);
+    public static final Current HIGH_DRIVE_SUPPLY = Amps.of(80);
+    public static final Current LOW_DRIVE_STATOR = Amps.of(60);
+    public static final Current LOW_DRIVE_SUPPLY = Amps.of(50);
     public static final Current STEER_STATOR = Amps.of(60);
 
     public static final Current SHOOTER_SUPPLY = Amps.of(60);

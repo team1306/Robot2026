@@ -94,7 +94,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     if (robotContainer.drive != null) {
-      robotContainer.drive.setAutoCurrent();
+      robotContainer.drive.setHighCurrentLimits();
     }
   }
 
@@ -124,7 +124,7 @@ public class Robot extends LoggedRobot {
     }
 
     if (robotContainer.drive != null) {
-      robotContainer.drive.setTeleopCurrent();
+      robotContainer.drive.setLowCurrentLimits();
     }
   }
 

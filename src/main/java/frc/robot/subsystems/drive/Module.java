@@ -79,12 +79,12 @@ public class Module {
     io.setCoastMode();
   }
 
-  public void setAutoCurrent() {
-    io.setAutoCurrent();
+  public void setHighCurrentLimits() {
+    io.setHighCurrentLimits();
   }
 
-  public void setTeleopCurrent() {
-    io.setTeleopCurrent();
+  public void setLowCurrentLimits() {
+    io.setLowCurrentLimits();
   }
 
   /** Runs the module with the specified setpoint state. Mutates the state to optimize it. */

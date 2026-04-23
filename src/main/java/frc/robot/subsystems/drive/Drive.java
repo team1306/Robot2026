@@ -219,15 +219,15 @@ public class Drive extends SubsystemBase {
     }
   }
 
-  public void setAutoCurrent() {
+  public void setHighCurrentLimits() {
     for (Module module : modules) {
-      module.setAutoCurrent();
+      module.setHighCurrentLimits();
     }
   }
 
-  public void setTeleopCurrent() {
+  public void setLowCurrentLimits() {
     for (Module module : modules) {
-      module.setTeleopCurrent();
+      module.setLowCurrentLimits();
     }
   }
 

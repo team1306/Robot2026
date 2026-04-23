@@ -190,6 +190,13 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
     /* ---P2--- */
 
+    // Force through defence?
+    operatorController
+        .leftStick()
+        .whileTrue(
+            Commands.startEnd(
+                () -> drive.setHighCurrentLimits(), () -> drive.setLowCurrentLimits()));
+
     // Spool Shooter
     operatorController
         .rightTrigger()

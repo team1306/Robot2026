@@ -58,7 +58,7 @@ public class TunerConstants {
       new TalonFXConfiguration()
           .withCurrentLimits(
               new CurrentLimitsConfigs()
-                  .withSupplyCurrentLimit(Constants.CurrentLimits.TELEOP_DRIVE_SUPPLY)
+                  .withSupplyCurrentLimit(Constants.CurrentLimits.HIGH_DRIVE_SUPPLY)
                   .withSupplyCurrentLimitEnable(true));
   private static final TalonFXConfiguration steerInitialConfigs =
       new TalonFXConfiguration()
@@ -121,7 +121,7 @@ public class TunerConstants {
               .withDriveMotorGains(driveGains)
               .withSteerMotorClosedLoopOutput(kSteerClosedLoopOutput)
               .withDriveMotorClosedLoopOutput(kDriveClosedLoopOutput)
-              .withSlipCurrent(Constants.CurrentLimits.TELEOP_DRIVE_STATOR)
+              .withSlipCurrent(Constants.CurrentLimits.HIGH_DRIVE_STATOR)
               .withSpeedAt12Volts(kSpeedAt12Volts)
               .withDriveMotorType(kDriveMotorType)
               .withSteerMotorType(kSteerMotorType)

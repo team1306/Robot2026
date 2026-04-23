@@ -51,7 +51,7 @@ public interface ModuleIO {
 
   public default void setCoastMode() {}
 
-  public default void setAutoCurrent() {}
+  public default void setHighCurrentLimits() {}
 
-  public default void setTeleopCurrent() {}
+  public default void setLowCurrentLimits() {}
 }

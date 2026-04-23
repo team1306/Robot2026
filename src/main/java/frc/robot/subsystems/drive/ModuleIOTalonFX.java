@@ -296,26 +296,26 @@ public class ModuleIOTalonFX implements ModuleIO {
   }
 
   @Override
-  public void setAutoCurrent() {
+  public void setHighCurrentLimits() {
     driveTalon
         .getConfigurator()
         .apply(
             driveConfig
                 .clone()
                 .CurrentLimits
-                .withStatorCurrentLimit(Constants.CurrentLimits.AUTO_DRIVE_STATOR)
-                .withSupplyCurrentLimit(Constants.CurrentLimits.AUTO_DRIVE_SUPPLY));
+                .withStatorCurrentLimit(Constants.CurrentLimits.HIGH_DRIVE_STATOR)
+                .withSupplyCurrentLimit(Constants.CurrentLimits.HIGH_DRIVE_SUPPLY));
   }
 
   @Override
-  public void setTeleopCurrent() {
+  public void setLowCurrentLimits() {
     driveTalon
         .getConfigurator()
         .apply(
             driveConfig
                 .clone()
                 .CurrentLimits
-                .withStatorCurrentLimit(Constants.CurrentLimits.TELEOP_DRIVE_STATOR)
-                .withSupplyCurrentLimit(Constants.CurrentLimits.TELEOP_DRIVE_SUPPLY));
+                .withStatorCurrentLimit(Constants.CurrentLimits.LOW_DRIVE_STATOR)
+                .withSupplyCurrentLimit(Constants.CurrentLimits.LOW_DRIVE_SUPPLY));
   }
 }
