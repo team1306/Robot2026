@@ -222,7 +222,7 @@ public class ShooterIOReal implements ShooterIO {
 
   @Override
   public void setVelocity(AngularVelocity velocity) {
-    TalonFX leader;
+    TalonFX leader = leftTopMotor;
 
     if (leftTopMotor.isConnected()) leader = leftTopMotor;
     else if (leftBottomMotor.isConnected()) leader = leftBottomMotor;
@@ -232,7 +232,7 @@ public class ShooterIOReal implements ShooterIO {
     velocityRequest.withVelocity(velocity);
     Follower follower = new Follower(leader.getDeviceID(), MotorAlignmentValue.Aligned);
     Follower followerInverted = follower.clone().withMotorAlignment(MotorAlignmentValue.Opposed);
-    
+
     leftTopMotor.setControl(leader == leftTopMotor ? velocityRequest : follower);
     leftBottomMotor.setControl(leader == leftBottomMotor ? velocityRequest : follower);
     rightTopMotor.setControl(leader == rightTopMotor ? velocityRequest : followerInverted);
