@@ -92,7 +92,11 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    if (robotContainer.drive != null) {
+      robotContainer.drive.setAutoCurrent();
+    }
+  }
 
   /** This function is called periodically when disabled. */
   @Override
@@ -117,6 +121,10 @@ public class Robot extends LoggedRobot {
   public void teleopInit() {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
+    }
+
+    if (robotContainer.drive != null) {
+      robotContainer.drive.setTeleopCurrent();
     }
   }
 

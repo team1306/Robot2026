@@ -1,12 +1,11 @@
 package frc.robot.subsystems.indexer;
 
 import badgerutils.motor.MotorConfigUtils;
-import frc.robot.Constants;
-
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import frc.robot.Constants;
 
 public class IndexerConstants {
   // CONFIGS
