@@ -181,8 +181,6 @@ public class SafeShootCommand extends ParallelCommandGroup {
         // guardedDeployCommand.asProxy(),
         boosterCommand.asProxy(),
         hoodCommand,
-        loggedGuardCommand,
-        hoodCommand,
         loggedGuardCommand);
   }
 
