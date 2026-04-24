@@ -27,6 +27,7 @@ import frc.robot.subsystems.deploy.DeployerPosition;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.fueldetection.FuelDetection;
 import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.Leds;
@@ -108,6 +109,9 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 () -> -driverController.getLeftX(),
                 () -> -driverController.getRightX())
             .alongWith(logWithinRangeCommand));
+
+    // Hood down
+    hood.setDefaultCommand(hood.moveToAngle(HoodConstants.ZERO_POSITION));
 
     /* ---P1--- */
 

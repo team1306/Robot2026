@@ -21,24 +21,16 @@ import org.littletonrobotics.junction.Logger;
 
 public class ShooterCommands {
 
+    // Starter setpoints; not well done
   public static final ShooterSetpoint[] HUB_SETPOINTS =
       Arrays.stream(
               new ShooterSetpoint[] {
                 new ShooterSetpoint(
-                    Meters.of(3.07), Rotations.of(0), RotationsPerSecond.of(35), Seconds.of(0.881)),
+                    Meters.of(2.41), Rotations.of(0), RotationsPerSecond.of(22), Seconds.of(.7)),
                 new ShooterSetpoint(
-                    Meters.of(2.41), Rotations.of(0), RotationsPerSecond.of(33), Seconds.of(0.763)),
+                    Meters.of(3), Rotations.of(.2), RotationsPerSecond.of(23.5), Seconds.of(.9)),
                 new ShooterSetpoint(
-                    Meters.of(3.88), Rotations.of(0), RotationsPerSecond.of(38), Seconds.of(1.013)),
-                new ShooterSetpoint(
-                    Meters.of(4.85), Rotations.of(0), RotationsPerSecond.of(42), Seconds.of(1.156)),
-                new ShooterSetpoint(
-                    Meters.of(4.42),
-                    Rotations.of(0),
-                    RotationsPerSecond.of(40.5),
-                    Seconds.of(1.094)),
-                new ShooterSetpoint(
-                    Meters.of(5.61), Rotations.of(0), RotationsPerSecond.of(55), Seconds.of(1.261)),
+                    Meters.of(4.76), Rotations.of(.3), RotationsPerSecond.of(28), Seconds.of(1.3))
               })
           .sorted()
           .toArray(ShooterSetpoint[]::new);
@@ -47,20 +39,11 @@ public class ShooterCommands {
       Arrays.stream(
               new ShooterSetpoint[] {
                 new ShooterSetpoint(
-                    Meters.of(3.07), Rotations.of(0), RotationsPerSecond.of(35), Seconds.of(0.881)),
+                    Meters.of(2.41), Rotations.of(0), RotationsPerSecond.of(22), Seconds.of(.7)),
                 new ShooterSetpoint(
-                    Meters.of(2.41), Rotations.of(0), RotationsPerSecond.of(33), Seconds.of(0.763)),
+                    Meters.of(3), Rotations.of(.2), RotationsPerSecond.of(23.5), Seconds.of(.9)),
                 new ShooterSetpoint(
-                    Meters.of(3.88), Rotations.of(0), RotationsPerSecond.of(38), Seconds.of(1.013)),
-                new ShooterSetpoint(
-                    Meters.of(4.85), Rotations.of(0), RotationsPerSecond.of(42), Seconds.of(1.156)),
-                new ShooterSetpoint(
-                    Meters.of(4.42),
-                    Rotations.of(0),
-                    RotationsPerSecond.of(40.5),
-                    Seconds.of(1.094)),
-                new ShooterSetpoint(
-                    Meters.of(5.61), Rotations.of(0), RotationsPerSecond.of(55), Seconds.of(1.261)),
+                    Meters.of(4.76), Rotations.of(.3), RotationsPerSecond.of(28), Seconds.of(1.3))
               })
           .sorted()
           .toArray(ShooterSetpoint[]::new);

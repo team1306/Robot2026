@@ -20,8 +20,8 @@ public class HoodConstants {
   public static final double KS = 0;
   public static final double KG = 0;
 
-  public static final Angle ZERO_POSITION = Rotations.of(0);
-  public static final Angle MAX_ANGLE = Rotations.of(.9);
+  public static final Angle ZERO_POSITION = Rotations.of(0.02);
+  public static final Angle MAX_ANGLE = Rotations.of(.88);
 
   public static final double ROTOR_TO_SENSOR_RATIO = 150.462963;
 
