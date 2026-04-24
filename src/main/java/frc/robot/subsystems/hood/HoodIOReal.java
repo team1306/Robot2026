@@ -1,5 +1,7 @@
 package frc.robot.subsystems.hood;
 
+import static edu.wpi.first.units.Units.Rotations;
+
 import badgerutils.motor.MotorConfigUtils;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
@@ -7,6 +9,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -92,6 +95,12 @@ public class HoodIOReal implements HoodIO {
 
   @Override
   public void setAngle(Angle angle) {
+    angle =
+        Rotations.of(
+            MathUtil.clamp(
+                angle.in(Rotations),
+                HoodConstants.ZERO_POSITION.in(Rotations),
+                HoodConstants.MAX_ANGLE.in(Rotations)));
     motor.setControl(positionRequest.withPosition(angle));
   }
 }

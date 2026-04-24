@@ -22,27 +22,27 @@ public class VisionConstants {
   // Robot to camera transforms
   public static final Transform3d RIGHT_BACK_CAMERA_POSITION =
       new Transform3d(
-          Inches.of(-9.607),
-          Inches.of(-13.028588),
-          Inches.of(8.125806),
+          Inches.of(-11.738),
+          Inches.of(-10.872),
+          Inches.of(9.541),
           new Rotation3d(Degrees.of(0), Degrees.of(-23), Degrees.of(-165)));
   public static final Transform3d RIGHT_SIDE_CAMERA_POSITION =
       new Transform3d(
-          Inches.of(-7.002289),
-          Inches.of(-13.805643),
-          Inches.of(10.677571),
+          Inches.of(-10.25),
+          Inches.of(-14.051),
+          Inches.of(7.94),
           new Rotation3d(Degrees.of(0), Degrees.of(-22), Degrees.of(-90)));
   public static final Transform3d LEFT_BACK_CAMERA_POSITION =
       new Transform3d(
-          Inches.of(-9.487822),
-          Inches.of(12.996737),
-          Inches.of(8.415729),
+          Inches.of(-11.738),
+          Inches.of(10.872),
+          Inches.of(9.541),
           new Rotation3d(Degrees.of(0), Degrees.of(-23), Degrees.of(165)));
   public static final Transform3d LEFT_SIDE_CAMERA_POSITION =
       new Transform3d(
-          Inches.of(-7.002289),
-          Inches.of(13.805643),
-          Inches.of(10.677571),
+          Inches.of(-10.25),
+          Inches.of(14.051),
+          Inches.of(7.648),
           new Rotation3d(Degrees.of(0), Degrees.of(-22), Degrees.of(90)));
 
   // Basic filtering thresholds

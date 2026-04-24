@@ -1,6 +1,7 @@
 package frc.robot.controls;
 
 import static edu.wpi.first.units.Units.Feet;
+import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import badgerutils.commands.CommandUtils;
@@ -19,6 +20,7 @@ import frc.robot.commands.GuardedCommand;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
@@ -35,10 +37,15 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
   private final Shooter shooter;
   private final Indexer indexer;
   private final Booster booster;
+  private final Hood hood;
 
   @AutoLogOutput
   private final LoggedNetworkNumberPlus targetSpeed =
       new LoggedNetworkNumberPlus("/Tuning/Shooter RPS", 0.75);
+
+  @AutoLogOutput
+  private final LoggedNetworkNumberPlus hoodAngle =
+      new LoggedNetworkNumberPlus("/Tuning/Hood Angle", 0);
 
   @AutoLogOutput
   private final LoggedNetworkNumberPlus boosterPower =
@@ -51,13 +58,16 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
       Intake intake,
       Shooter shooter,
       Indexer indexer,
-      Booster booster) {
+      Booster booster,
+      Hood hood) {
     super(driverController, operatorController);
     this.drive = drive;
     this.intake = intake;
     this.shooter = shooter;
     this.indexer = indexer;
     this.booster = booster;
+
+    this.hood = hood;
   }
 
   @Override
@@ -100,6 +110,9 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
                                 drive.getPose().getTranslation(),
                                 RebuiltUtils.getCurrentHubLocation().toTranslation2d())))));
 
+    hood.setDefaultCommand(
+        Commands.run(() -> hood.setAngle(Rotations.of(hoodAngle.getAsDouble())), hood));
+
     /* ---P1--- */
 
     // Reset Odometry
@@ -129,7 +142,8 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
                 .alongWith(
                     new GuardedCommand(
                         indexer.indexUntilCancelledCommand(1),
-                        shooter.isAtRequestedSpeed(Constants.Tolerances.NORMAL_SPEED_TOLERANCE))));
+                        shooter.isAtRequestedSpeed(Constants.Tolerances.NORMAL_SPEED_TOLERANCE)))
+                .alongWith(booster.boostCommand(0.8)));
     driverController.a().whileTrue(booster.boostCommand(1));
 
     driverController
@@ -141,7 +155,7 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
                     new GuardedCommand(
                             indexer.indexUntilCancelledCommand(1),
                             shooter.isAtRequestedSpeed(Constants.Tolerances.NORMAL_SPEED_TOLERANCE))
-                        .alongWith(intake.shakeIntake())
+                        .alongWith(booster.boostCommand(0.8))
                         .alongWith(
                             new DriveAimLockedCommand(
                                 drive,
@@ -155,5 +169,6 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
   public void clear() {
     super.clear();
     CommandUtils.removeAndCancelDefaultCommand(drive);
+    CommandUtils.removeAndCancelDefaultCommand(hood);
   }
 }
