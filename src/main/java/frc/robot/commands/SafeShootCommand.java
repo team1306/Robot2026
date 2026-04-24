@@ -3,7 +3,6 @@ package frc.robot.commands;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Seconds;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
@@ -44,7 +43,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
       Hood hood,
       Leds leds,
       Supplier<Translation2d> positionSupplier,
-      Rotation2d angleTolerance,
+      BooleanSupplier isScoring,
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive,
@@ -59,7 +58,14 @@ public class SafeShootCommand extends ParallelCommandGroup {
         shooter.isAtRequestedSpeed(Constants.Tolerances.NORMAL_SPEED_TOLERANCE);
 
     BooleanSupplier driveAngleCondition =
-        () -> drive.isLocked(drive, positionSupplier.get(), true, angleTolerance);
+        () ->
+            drive.isLocked(
+                drive,
+                positionSupplier.get(),
+                true,
+                isScoring.getAsBoolean()
+                    ? Constants.Tolerances.SCORING_ANGLE_TOLERANCE
+                    : Constants.Tolerances.PASSING_ANGLE_TOLERANCE);
 
     BooleanSupplier hubActiveCondition =
         () ->
@@ -107,7 +113,13 @@ public class SafeShootCommand extends ParallelCommandGroup {
         () -> Meters.of(drive.getPose().getTranslation().getDistance(positionSupplier.get()));
 
     Command shootAtDistanceCommand =
-        ShooterCommands.shootAtDistanceCommand(shooter, distanceSupplier)
+        ShooterCommands.shootAtDistanceCommand(
+                shooter,
+                distanceSupplier,
+                () ->
+                    isScoring.getAsBoolean()
+                        ? ShooterCommands.HUB_SETPOINTS
+                        : ShooterCommands.PASSING_SETPOINTS)
             .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
     Command boosterCommand =
@@ -116,7 +128,12 @@ public class SafeShootCommand extends ParallelCommandGroup {
             .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
     Command hoodCommand =
-        hood.angleFromDistance(distanceSupplier)
+        hood.angleFromDistance(
+                distanceSupplier,
+                () ->
+                    isScoring.getAsBoolean()
+                        ? ShooterCommands.HUB_SETPOINTS
+                        : ShooterCommands.PASSING_SETPOINTS)
             .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
     @SuppressWarnings("unused")

@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FaceforwardCommand;
 import frc.robot.commands.FuelCollectionCommand;
@@ -34,6 +33,7 @@ import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.LocationUtils;
 import frc.robot.util.RebuiltUtils;
+import java.util.function.BooleanSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class CompetitionControllerMapping extends ControllerMapping {
@@ -94,6 +94,9 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
                         ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
                         : RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())));
+
+    BooleanSupplier inAllianceZoneSupplier =
+        () -> RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
 
     /* ---Default Commands--- */
 
@@ -173,24 +176,22 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     () -> -driverController.getLeftY(),
                     () -> -driverController.getLeftX(),
                     () ->
-                        RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
+                        inAllianceZoneSupplier.getAsBoolean()
                             ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
                             : RebuiltUtils.getNearestAllianceCorner(
                                 drive.getPose().getTranslation()),
-                    RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
-                        ? Constants.Tolerances.SCORING_ANGLE_TOLERANCE
-                        : Constants.Tolerances.PASSING_ANGLE_TOLERANCE,
+                    inAllianceZoneSupplier,
                     operatorController.rightBumper(),
                     () ->
                         operatorController.rightBumper().getAsBoolean()
-                            || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation()),
+                            || !inAllianceZoneSupplier.getAsBoolean(),
                     () ->
                         operatorController.rightBumper().getAsBoolean()
                             || operatorController.leftBumper().getAsBoolean()
-                            || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation()),
+                            || !inAllianceZoneSupplier.getAsBoolean(),
                     () ->
                         operatorController.rightBumper().getAsBoolean()
-                            || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation()))
+                            || !inAllianceZoneSupplier.getAsBoolean())
                 .alongWith(loggedTargetCommand)
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
     /* ---P2--- */
@@ -203,11 +204,12 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     shooter,
                     () ->
                         LocationUtils.getDistanceToLocation(
-                            RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
+                            inAllianceZoneSupplier.getAsBoolean()
                                 ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
                                 : RebuiltUtils.getNearestAllianceCorner(
                                     drive.getPose().getTranslation()),
-                            drive.getPose().getTranslation()))
+                            drive.getPose().getTranslation()),
+                    () -> ShooterCommands.HUB_SETPOINTS)
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
                 .alongWith(
                     new InstantCommand(

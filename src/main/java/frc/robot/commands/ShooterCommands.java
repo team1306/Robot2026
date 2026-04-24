@@ -12,8 +12,6 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.Interpolation;
 import java.util.Arrays;
@@ -23,7 +21,29 @@ import org.littletonrobotics.junction.Logger;
 
 public class ShooterCommands {
 
-  public static final ShooterSetpoint[] SETPOINTS =
+  public static final ShooterSetpoint[] HUB_SETPOINTS =
+      Arrays.stream(
+              new ShooterSetpoint[] {
+                new ShooterSetpoint(
+                    Meters.of(3.07), Rotations.of(0), RotationsPerSecond.of(35), Seconds.of(0.881)),
+                new ShooterSetpoint(
+                    Meters.of(2.41), Rotations.of(0), RotationsPerSecond.of(33), Seconds.of(0.763)),
+                new ShooterSetpoint(
+                    Meters.of(3.88), Rotations.of(0), RotationsPerSecond.of(38), Seconds.of(1.013)),
+                new ShooterSetpoint(
+                    Meters.of(4.85), Rotations.of(0), RotationsPerSecond.of(42), Seconds.of(1.156)),
+                new ShooterSetpoint(
+                    Meters.of(4.42),
+                    Rotations.of(0),
+                    RotationsPerSecond.of(40.5),
+                    Seconds.of(1.094)),
+                new ShooterSetpoint(
+                    Meters.of(5.61), Rotations.of(0), RotationsPerSecond.of(55), Seconds.of(1.261)),
+              })
+          .sorted()
+          .toArray(ShooterSetpoint[]::new);
+
+  public static final ShooterSetpoint[] PASSING_SETPOINTS =
       Arrays.stream(
               new ShooterSetpoint[] {
                 new ShooterSetpoint(
@@ -96,19 +116,14 @@ public class ShooterCommands {
     return Commands.runEnd(() -> shooter.setVelocity(velocity.get()), shooter::setIdle, shooter);
   }
 
-  public static Command shootAtDistanceCommand(Shooter shooter, Supplier<Distance> distance) {
+  public static Command shootAtDistanceCommand(
+      Shooter shooter, Supplier<Distance> distance, Supplier<ShooterSetpoint[]> setpoints) {
     return shootAtSpeedCommand(
         shooter,
         () -> {
           Logger.recordOutput("Shooter/Distance to Target", distance.get().in(Feet));
-          return interpolateSetpoints(SETPOINTS, distance.get()).velocity;
+          return interpolateSetpoints(setpoints.get(), distance.get()).velocity;
         });
-  }
-
-  public static Command shootForTimeCommand(
-      Shooter shooter, Supplier<Distance> distanceSupplier, Time time) {
-    return new ParallelDeadlineGroup(
-        new WaitCommand(time), shootAtDistanceCommand(shooter, distanceSupplier));
   }
 
   public record ShooterSetpoint(

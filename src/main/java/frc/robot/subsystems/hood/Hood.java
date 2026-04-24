@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.ShooterCommands;
+import frc.robot.commands.ShooterCommands.ShooterSetpoint;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -41,10 +42,11 @@ public class Hood extends SubsystemBase {
         () -> setAngle(angleSupplier.get()), () -> setAngle(HoodConstants.ZERO_POSITION), this);
   }
 
-  public Command angleFromDistance(Supplier<Distance> distanceSupplier) {
+  public Command angleFromDistance(
+      Supplier<Distance> distanceSupplier, Supplier<ShooterSetpoint[]> setpoints) {
     return moveToAngle(
         () ->
-            ShooterCommands.interpolateSetpoints(ShooterCommands.SETPOINTS, distanceSupplier.get())
+            ShooterCommands.interpolateSetpoints(setpoints.get(), distanceSupplier.get())
                 .hoodAngle());
   }
 }

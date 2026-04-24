@@ -101,7 +101,7 @@ public class Autos {
                     hood,
                     leds,
                     () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                    Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
+                    inAllianceZoneSupplier,
                     () -> false,
                     () -> false,
                     () -> true,
@@ -119,7 +119,8 @@ public class Autos {
                         drive
                             .getPose()
                             .getTranslation()
-                            .getDistance(RebuiltUtils.getCurrentHubLocation().toTranslation2d())))
+                            .getDistance(RebuiltUtils.getCurrentHubLocation().toTranslation2d())),
+                () -> ShooterCommands.HUB_SETPOINTS)
             .asProxy();
 
     intakeCommand =
@@ -140,7 +141,7 @@ public class Autos {
                 () -> 0,
                 () -> 0,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
+                inAllianceZoneSupplier,
                 () -> false,
                 () -> false,
                 () -> true,
@@ -161,7 +162,7 @@ public class Autos {
                     () -> 0,
                     () -> 0,
                     () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                    Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
+                    inAllianceZoneSupplier,
                     () -> false,
                     () -> false,
                     () -> true,
