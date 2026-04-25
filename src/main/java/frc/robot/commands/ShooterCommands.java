@@ -21,7 +21,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class ShooterCommands {
 
-    // Starter setpoints; not well done
+  // Starter setpoints; not well done
   public static final ShooterSetpoint[] HUB_SETPOINTS =
       Arrays.stream(
               new ShooterSetpoint[] {
@@ -43,7 +43,12 @@ public class ShooterCommands {
                 new ShooterSetpoint(
                     Meters.of(3), Rotations.of(.2), RotationsPerSecond.of(23.5), Seconds.of(.9)),
                 new ShooterSetpoint(
-                    Meters.of(4.76), Rotations.of(.3), RotationsPerSecond.of(28), Seconds.of(1.3))
+                    Meters.of(7.25),
+                    Rotations.of(.7),
+                    RotationsPerSecond.of(28),
+                    Seconds.of(.86)), // estimated time
+                new ShooterSetpoint(
+                    Meters.of(15), Rotations.of(.8), RotationsPerSecond.of(41), Seconds.of(1.66))
               })
           .sorted()
           .toArray(ShooterSetpoint[]::new);
