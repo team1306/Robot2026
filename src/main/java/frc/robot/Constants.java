@@ -53,6 +53,8 @@ public final class Constants {
     public static final int SHOOTER_RIGHT_TOP_MOTOR_ID = 15;
     public static final int SHOOTER_RIGHT_BOTTOM_MOTOR_ID = 16;
     public static final int BOOSTER_MOTOR_ID = 28;
+    public static final int HOOD_MOTOR_ID = 29;
+    public static final int HOOD_ENCODER_ID = 30;
 
     public static final int SHOOTER_ENCODER_ID = 19;
 

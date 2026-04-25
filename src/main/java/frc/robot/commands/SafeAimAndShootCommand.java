@@ -1,12 +1,12 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
@@ -24,11 +24,12 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
       Indexer indexer,
       Deploy deploy,
       Booster booster,
+      Hood hood,
       Leds leds,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       Supplier<Translation2d> positionSupplier,
-      Rotation2d angleTolerance,
+      BooleanSupplier isScoring,
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive,
@@ -41,9 +42,10 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
             indexer,
             deploy,
             booster,
+            hood,
             leds,
             positionSupplier,
-            angleTolerance,
+            isScoring,
             overrideAngleSafeguard,
             overrideVelocitySafeguard,
             overrideHubActive,

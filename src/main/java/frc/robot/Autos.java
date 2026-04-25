@@ -27,6 +27,7 @@ import frc.robot.controls.Controls;
 import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.Leds;
@@ -48,6 +49,7 @@ public class Autos {
   private final Intake intake;
   private final Shooter shooter;
   private final Booster booster;
+  private final Hood hood;
   private final Leds leds;
   private final Deploy deploy;
 
@@ -72,6 +74,7 @@ public class Autos {
       Intake intake,
       Shooter shooter,
       Booster booster,
+      Hood hood,
       Leds leds,
       Deploy deploy) {
     this.drive = drive;
@@ -79,6 +82,7 @@ public class Autos {
     this.intake = intake;
     this.shooter = shooter;
     this.booster = booster;
+    this.hood = hood;
     this.leds = leds;
     this.deploy = deploy;
 
@@ -94,9 +98,10 @@ public class Autos {
                     indexer,
                     deploy,
                     booster,
+                    hood,
                     leds,
                     () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                    Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
+                    inAllianceZoneSupplier,
                     () -> false,
                     () -> false,
                     () -> true,
@@ -114,7 +119,8 @@ public class Autos {
                         drive
                             .getPose()
                             .getTranslation()
-                            .getDistance(RebuiltUtils.getCurrentHubLocation().toTranslation2d())))
+                            .getDistance(RebuiltUtils.getCurrentHubLocation().toTranslation2d())),
+                () -> ShooterCommands.HUB_SETPOINTS)
             .asProxy();
 
     intakeCommand =
@@ -130,11 +136,12 @@ public class Autos {
                 indexer,
                 deploy,
                 booster,
+                hood,
                 leds,
                 () -> 0,
                 () -> 0,
                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
+                inAllianceZoneSupplier,
                 () -> false,
                 () -> false,
                 () -> true,
@@ -150,11 +157,12 @@ public class Autos {
                     indexer,
                     deploy,
                     booster,
+                    hood,
                     leds,
                     () -> 0,
                     () -> 0,
                     () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                    Constants.Tolerances.SCORING_ANGLE_TOLERANCE,
+                    inAllianceZoneSupplier,
                     () -> false,
                     () -> false,
                     () -> true,

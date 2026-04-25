@@ -11,9 +11,11 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.ShooterCommands.ShooterSetpoint;
 import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
@@ -32,13 +34,24 @@ public class ShootOnTheMoveCommands {
       Indexer indexer,
       Deploy deploy,
       Booster booster,
+      Hood hood,
       Leds leds,
       Supplier<Translation2d> target,
-      Rotation2d angleTolerance,
+      BooleanSupplier isScoring,
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive,
       BooleanSupplier overrideAutoRanging) {
+    Supplier<Translation2d> leadTarget =
+        () ->
+            calculateLeadTarget(
+                drive,
+                target,
+                () ->
+                    isScoring.getAsBoolean()
+                        ? ShooterCommands.HUB_SETPOINTS
+                        : ShooterCommands.PASSING_SETPOINTS);
+
     SafeShootCommand shootCommand =
         new SafeShootCommand(
             drive,
@@ -46,17 +59,17 @@ public class ShootOnTheMoveCommands {
             indexer,
             deploy,
             booster,
+            hood,
             leds,
-            () -> calculateLeadTarget(drive, target),
-            angleTolerance,
+            leadTarget,
+            isScoring,
             overrideAngleSafeguard,
             overrideVelocitySafeguard,
             overrideHubActive,
             overrideAutoRanging);
 
     DriveAimLockedCommand driveCommand =
-        new DriveAimLockedCommand(
-            drive, () -> 0, () -> 0, () -> calculateLeadTarget(drive, target), true);
+        new DriveAimLockedCommand(drive, () -> 0, () -> 0, leadTarget, true);
 
     return shootCommand.alongWith(
         Commands.startEnd(
@@ -74,11 +87,12 @@ public class ShootOnTheMoveCommands {
       Indexer indexer,
       Deploy deploy,
       Booster booster,
+      Hood hood,
       Leds leds,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       Supplier<Translation2d> target,
-      Rotation2d angleTolerance,
+      BooleanSupplier isScoring,
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive,
@@ -89,18 +103,27 @@ public class ShootOnTheMoveCommands {
         indexer,
         deploy,
         booster,
+        hood,
         leds,
         () -> xSupplier.getAsDouble() * SLOWDOWN_FACTOR,
         () -> ySupplier.getAsDouble() * SLOWDOWN_FACTOR,
-        () -> calculateLeadTarget(drive, target),
-        angleTolerance,
+        () ->
+            calculateLeadTarget(
+                drive,
+                target,
+                () ->
+                    isScoring.getAsBoolean()
+                        ? ShooterCommands.HUB_SETPOINTS
+                        : ShooterCommands.PASSING_SETPOINTS),
+        isScoring,
         overrideAngleSafeguard,
         overrideVelocitySafeguard,
         overrideHubActive,
         overrideAutoRanging);
   }
 
-  private static Translation2d calculateLeadTarget(Drive drive, Supplier<Translation2d> target) {
+  private static Translation2d calculateLeadTarget(
+      Drive drive, Supplier<Translation2d> target, Supplier<ShooterSetpoint[]> setpoints) {
     Translation2d robotPos = drive.getPose().getTranslation();
     Translation2d targetPos = target.get();
 
@@ -110,8 +133,7 @@ public class ShootOnTheMoveCommands {
         new Translation2d(fieldSpeeds.vxMetersPerSecond, fieldSpeeds.vyMetersPerSecond);
 
     Distance distance = LocationUtils.getDistanceToLocation(robotPos, targetPos);
-    Time timeOfFlight =
-        ShooterCommands.interpolateSetpoints(ShooterCommands.SETPOINTS, distance).time();
+    Time timeOfFlight = ShooterCommands.interpolateSetpoints(setpoints.get(), distance).time();
     Translation2d aimPoint = new Translation2d();
 
     for (int i = 0; i < 20; i++) {
@@ -121,8 +143,7 @@ public class ShootOnTheMoveCommands {
       aimPoint = targetPos.minus(motionOffset);
 
       Distance newDistance = LocationUtils.getDistanceToLocation(aimPoint, robotPos);
-      timeOfFlight =
-          ShooterCommands.interpolateSetpoints(ShooterCommands.SETPOINTS, newDistance).time();
+      timeOfFlight = ShooterCommands.interpolateSetpoints(setpoints.get(), newDistance).time();
     }
 
     Logger.recordOutput("ShootOnTheMove/Target", new Pose2d(aimPoint, Rotation2d.kZero));

@@ -1,4 +1,5 @@
 import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,9 +13,11 @@ public class ShooterCommandsTest {
 
   private static final ShooterSetpoint[] testSetpoints =
       new ShooterSetpoint[] {
-        new ShooterSetpoint(Meters.of(0), RotationsPerSecond.of(0), Seconds.of(1)),
-        new ShooterSetpoint(Meters.of(5), RotationsPerSecond.of(0.5), Seconds.of(0.5)),
-        new ShooterSetpoint(Meters.of(10), RotationsPerSecond.of(1), Seconds.of(1)),
+        new ShooterSetpoint(Meters.of(0), Rotations.of(0), RotationsPerSecond.of(0), Seconds.of(1)),
+        new ShooterSetpoint(
+            Meters.of(5), Rotations.of(0), RotationsPerSecond.of(0.5), Seconds.of(0.5)),
+        new ShooterSetpoint(
+            Meters.of(10), Rotations.of(0), RotationsPerSecond.of(1), Seconds.of(1)),
       };
 
   @Test

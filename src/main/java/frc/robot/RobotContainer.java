@@ -17,6 +17,9 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.fueldetection.FuelDetection;
 import frc.robot.subsystems.fueldetection.FuelDetectionIO;
+import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.hood.HoodIO;
+import frc.robot.subsystems.hood.HoodIOReal;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIO;
 import frc.robot.subsystems.indexer.IndexerIOReal;
@@ -49,6 +52,7 @@ public class RobotContainer {
   private final Indexer indexer;
   private final Shooter shooter;
   private final Booster booster;
+  private final Hood hood;
   private final FuelDetection fuelDetection;
   private final Leds leds;
   private final Deploy deploy;
@@ -91,7 +95,8 @@ public class RobotContainer {
                     VisionConstants.RIGHT_SIDE_CAMERA_POSITION));
         fuelDetection = new FuelDetection(new FuelDetectionIO() {});
         leds = new Leds(new LedsReal());
-        deploy = new Deploy(new DeployIOReal());
+        deploy = new Deploy(new DeployIO() {});
+        hood = new Hood(new HoodIOReal());
         break;
 
       case SIM:
@@ -118,6 +123,7 @@ public class RobotContainer {
         fuelDetection = new FuelDetection(new FuelDetectionIO() {});
         leds = new Leds(new LedsReal());
         deploy = new Deploy(new DeployIOReal());
+        hood = new Hood(new HoodIOReal());
         break;
 
       default:
@@ -143,11 +149,13 @@ public class RobotContainer {
         fuelDetection = new FuelDetection(new FuelDetectionIO() {});
         leds = new Leds(new LedsIO() {});
         deploy = new Deploy(new DeployIO() {});
+        hood = new Hood(new HoodIO() {});
         break;
     }
 
-    controls = new Controls(drive, intake, shooter, indexer, booster, fuelDetection, leds, deploy);
-    autos = new Autos(drive, indexer, intake, shooter, booster, leds, deploy);
+    controls =
+        new Controls(drive, intake, shooter, indexer, booster, hood, fuelDetection, leds, deploy);
+    autos = new Autos(drive, indexer, intake, shooter, booster, hood, leds, deploy);
   }
 
   public Command getAutonomousCommand() {

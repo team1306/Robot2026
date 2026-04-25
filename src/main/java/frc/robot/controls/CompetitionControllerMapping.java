@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FaceforwardCommand;
 import frc.robot.commands.FuelCollectionCommand;
@@ -27,12 +26,15 @@ import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.deploy.DeployerPosition;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.fueldetection.FuelDetection;
+import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.LocationUtils;
 import frc.robot.util.RebuiltUtils;
+import java.util.function.BooleanSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class CompetitionControllerMapping extends ControllerMapping {
@@ -42,6 +44,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
   private final Shooter shooter;
   private final Indexer indexer;
   private final Booster booster;
+  private final Hood hood;
   private final FuelDetection fuelDetection;
   private final Leds leds;
   private final Deploy deploy;
@@ -54,6 +57,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
       Shooter shooter,
       Indexer indexer,
       Booster booster,
+      Hood hood,
       FuelDetection fuelDetection,
       Leds leds,
       Deploy deploy) {
@@ -63,6 +67,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
     this.shooter = shooter;
     this.indexer = indexer;
     this.booster = booster;
+    this.hood = hood;
     this.fuelDetection = fuelDetection;
     this.leds = leds;
     this.deploy = deploy;
@@ -91,6 +96,9 @@ public class CompetitionControllerMapping extends ControllerMapping {
                         ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
                         : RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())));
 
+    BooleanSupplier inAllianceZoneSupplier =
+        () -> RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
+
     /* ---Default Commands--- */
 
     // Drive with stick
@@ -101,6 +109,9 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 () -> -driverController.getLeftX(),
                 () -> -driverController.getRightX())
             .alongWith(logWithinRangeCommand));
+
+    // Hood down
+    hood.setDefaultCommand(hood.moveToAngle(HoodConstants.ZERO_POSITION));
 
     /* ---P1--- */
 
@@ -164,28 +175,27 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     indexer,
                     deploy,
                     booster,
+                    hood,
                     leds,
                     () -> -driverController.getLeftY(),
                     () -> -driverController.getLeftX(),
                     () ->
-                        RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
+                        inAllianceZoneSupplier.getAsBoolean()
                             ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
                             : RebuiltUtils.getNearestAllianceCorner(
                                 drive.getPose().getTranslation()),
-                    RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
-                        ? Constants.Tolerances.SCORING_ANGLE_TOLERANCE
-                        : Constants.Tolerances.PASSING_ANGLE_TOLERANCE,
+                    inAllianceZoneSupplier,
                     operatorController.rightBumper(),
                     () ->
                         operatorController.rightBumper().getAsBoolean()
-                            || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation()),
+                            || !inAllianceZoneSupplier.getAsBoolean(),
                     () ->
                         operatorController.rightBumper().getAsBoolean()
                             || operatorController.leftBumper().getAsBoolean()
-                            || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation()),
+                            || !inAllianceZoneSupplier.getAsBoolean(),
                     () ->
                         operatorController.rightBumper().getAsBoolean()
-                            || !RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation()))
+                            || !inAllianceZoneSupplier.getAsBoolean())
                 .alongWith(loggedTargetCommand)
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
     /* ---P2--- */
@@ -198,11 +208,12 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     shooter,
                     () ->
                         LocationUtils.getDistanceToLocation(
-                            RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
+                            inAllianceZoneSupplier.getAsBoolean()
                                 ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
                                 : RebuiltUtils.getNearestAllianceCorner(
                                     drive.getPose().getTranslation()),
-                            drive.getPose().getTranslation()))
+                            drive.getPose().getTranslation()),
+                    () -> ShooterCommands.HUB_SETPOINTS)
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
                 .alongWith(
                     new InstantCommand(

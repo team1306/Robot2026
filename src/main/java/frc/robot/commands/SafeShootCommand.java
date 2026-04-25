@@ -3,7 +3,6 @@ package frc.robot.commands;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Seconds;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
@@ -15,6 +14,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
@@ -40,9 +40,10 @@ public class SafeShootCommand extends ParallelCommandGroup {
       Indexer indexer,
       Deploy deploy,
       Booster booster,
+      Hood hood,
       Leds leds,
       Supplier<Translation2d> positionSupplier,
-      Rotation2d angleTolerance,
+      BooleanSupplier isScoring,
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive,
@@ -57,7 +58,14 @@ public class SafeShootCommand extends ParallelCommandGroup {
         shooter.isAtRequestedSpeed(Constants.Tolerances.NORMAL_SPEED_TOLERANCE);
 
     BooleanSupplier driveAngleCondition =
-        () -> drive.isLocked(drive, positionSupplier.get(), true, angleTolerance);
+        () ->
+            drive.isLocked(
+                drive,
+                positionSupplier.get(),
+                true,
+                isScoring.getAsBoolean()
+                    ? Constants.Tolerances.SCORING_ANGLE_TOLERANCE
+                    : Constants.Tolerances.PASSING_ANGLE_TOLERANCE);
 
     BooleanSupplier hubActiveCondition =
         () ->
@@ -101,16 +109,31 @@ public class SafeShootCommand extends ParallelCommandGroup {
     //                 () -> combinedCondition.getAsBoolean() &&
     // notMovingCondition.getAsBoolean()));
 
+    Supplier<Distance> distanceSupplier =
+        () -> Meters.of(drive.getPose().getTranslation().getDistance(positionSupplier.get()));
+
     Command shootAtDistanceCommand =
         ShooterCommands.shootAtDistanceCommand(
                 shooter,
+                distanceSupplier,
                 () ->
-                    Meters.of(drive.getPose().getTranslation().getDistance(positionSupplier.get())))
+                    isScoring.getAsBoolean()
+                        ? ShooterCommands.HUB_SETPOINTS
+                        : ShooterCommands.PASSING_SETPOINTS)
             .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
     Command boosterCommand =
         booster
             .boostCommand(BOOSTER_SPEED)
+            .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+
+    Command hoodCommand =
+        hood.angleFromDistance(
+                distanceSupplier,
+                () ->
+                    isScoring.getAsBoolean()
+                        ? ShooterCommands.HUB_SETPOINTS
+                        : ShooterCommands.PASSING_SETPOINTS)
             .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
     @SuppressWarnings("unused")
@@ -157,6 +180,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
         guardedIndexerCommand.asProxy(),
         // guardedDeployCommand.asProxy(),
         boosterCommand.asProxy(),
+        hoodCommand,
         loggedGuardCommand);
   }
 
