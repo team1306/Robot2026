@@ -251,6 +251,18 @@ public class Drive extends SubsystemBase {
     }
   }
 
+  public void setHighCurrentLimits() {
+    for (Module module : modules) {
+      module.setHighCurrentLimits();
+    }
+  }
+
+  public void setLowCurrentLimits() {
+    for (Module module : modules) {
+      module.setLowCurrentLimits();
+    }
+  }
+
   /**
    * Runs the drive at the desired velocity.
    *

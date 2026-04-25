@@ -83,7 +83,9 @@ public class DeployIOReal implements DeployIO {
     if (lastKnownPosition == DeployerPosition.EXTENDED && position == DeployerPosition.DUMP)
       slot = 1;
     if (lastKnownPosition == DeployerPosition.DUMP && position == DeployerPosition.EXTENDED)
-      slot = 2;
+      slot = 1;
+
+    System.out.println("With slot " + slot);
 
     motor.setControl(positionRequest.withPosition(position.getAngle()).withSlot(slot));
 

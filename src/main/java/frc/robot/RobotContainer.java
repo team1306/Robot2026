@@ -46,7 +46,7 @@ import frc.robot.subsystems.vision.VisionIOPhotonVision;
  */
 public class RobotContainer {
   // Subsystems
-  private final Drive drive;
+  public final Drive drive;
   private final Vision vision;
   private final Intake intake;
   private final Indexer indexer;
@@ -95,7 +95,7 @@ public class RobotContainer {
                     VisionConstants.RIGHT_SIDE_CAMERA_POSITION));
         fuelDetection = new FuelDetection(new FuelDetectionIO() {});
         leds = new Leds(new LedsReal());
-        deploy = new Deploy(new DeployIO() {});
+        deploy = new Deploy(new DeployIOReal());
         hood = new Hood(new HoodIOReal());
         break;
 
