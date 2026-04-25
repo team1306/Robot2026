@@ -17,11 +17,19 @@
     {
       "anchor": {
         "x": 8.25,
+<<<<<<< HEAD
         "y": 4.035
       },
       "prevControl": {
         "x": 7.2499999999999964,
         "y": 4.035
+=======
+        "y": 7.138469879518072
+      },
+      "prevControl": {
+        "x": 7.2499999999999964,
+        "y": 7.138469879518072
+>>>>>>> e470d1a (hilltoppers)
       },
       "nextControl": null,
       "isLocked": false,
