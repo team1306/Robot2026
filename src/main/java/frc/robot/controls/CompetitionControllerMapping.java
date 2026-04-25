@@ -295,25 +295,59 @@ public class CompetitionControllerMapping extends ControllerMapping {
   }
 
   private Command getHubCollectingPath(Drive drive, Translation2d position) {
+    Command collectionPath;
     if (RebuiltUtils.isInAllianceZone(position)) {
-      return RebuiltUtils.isLeftSide(position)
-          ? drive.leftToRightAllianceCloseHubSweep
-          : drive.rightToLeftAllianceCloseHubSweep;
+      collectionPath =
+          RebuiltUtils.isLeftSide(position)
+              ? drive.leftToRightAllianceCloseHubSweep
+              : drive.rightToLeftAllianceCloseHubSweep;
     } else if (RebuiltUtils.isInOpponentAllianceZone(position)) {
-      return RebuiltUtils.isLeftSide(position)
-          ? drive.leftToRightAllianceFarHubSweep
-          : drive.rightToLeftAllianceFarHubSweep;
+      collectionPath =
+          RebuiltUtils.isLeftSide(position)
+              ? drive.leftToRightAllianceFarHubSweep
+              : drive.rightToLeftAllianceFarHubSweep;
     } else if (RebuiltUtils.isOurHalf(position)) {
-      return RebuiltUtils.isLeftSide(position)
-          ? drive.leftToRightMidCloseHubSweep
-          : drive.rightToLeftMidCloseHubSweep;
+      collectionPath =
+          RebuiltUtils.isLeftSide(position)
+              ? drive.leftToRightMidCloseHubSweep
+              : drive.rightToLeftMidCloseHubSweep;
     } else if (!RebuiltUtils.isOurHalf(position)) {
-      return RebuiltUtils.isLeftSide(position)
-          ? drive.leftToRightMidFarHubSweep
-          : drive.rightToLeftMidFarHubSweep;
+      collectionPath =
+          RebuiltUtils.isLeftSide(position)
+              ? drive.leftToRightMidFarHubSweep
+              : drive.rightToLeftMidFarHubSweep;
+    } else {
+
+      System.out.println("Could not find suitable path");
+      return Commands.none();
     }
 
-    System.out.println("Could not find suitable path");
-    return Commands.none();
+    return collectionPath;
   }
+  /*
+  private Command pathOnTheFlyToHubCollectingPath(Drive drive, Command hubCollectingPath) {
+    HashMap<Command, Pose2d> map = new HashMap<>();
+    map.put(
+        drive.leftToRightAllianceCloseHubSweep, new Pose2d(3.45, 5, Rotation2d.fromDegrees(-90)));
+    map.put(
+        drive.rightToLeftAllianceCloseHubSweep, new Pose2d(3.45, 3.1, Rotation2d.fromDegrees(90)));
+    map.put(drive.leftToRightMidCloseHubSweep, new Pose2d(5.8, 5, Rotation2d.fromDegrees(-90)));
+    map.put(drive.rightToLeftMidCloseHubSweep, new Pose2d(5.8, 3.1, Rotation2d.fromDegrees(90)));
+    map.put(drive.leftToRightMidFarHubSweep, new Pose2d(10.75, 5, Rotation2d.fromDegrees(-90)));
+    map.put(drive.rightToLeftMidFarHubSweep, new Pose2d(10.75, 3.1, Rotation2d.fromDegrees(90)));
+    map.put(drive.leftToRightAllianceFarHubSweep, new Pose2d(13.1, 5, Rotation2d.fromDegrees(-90)));
+    map.put(
+        drive.rightToLeftAllianceFarHubSweep, new Pose2d(13.1, 3.1, Rotation2d.fromDegrees(90)));
+
+    return AutoBuilder.followPath(
+        new PathPlannerPath(
+            PathPlannerPath.waypointsFromPoses(drive.getPose(), map.get(hubCollectingPath)),
+            new PathConstraints(2.0, 3.0, Degrees.of(540).in(Radians), Degrees.of(720).in(Radians)),
+            new IdealStartingState(
+                Math.sqrt(
+                    Math.pow(drive.getChassisSpeeds().vxMetersPerSecond, 2)
+                        + Math.pow(drive.getChassisSpeeds().vyMetersPerSecond, 2)),
+                drive.getPose().getRotation()),
+            new GoalEndState(2, map.get(hubCollectingPath).getRotation())));
+  }*/
 }
