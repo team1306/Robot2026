@@ -23,7 +23,6 @@ import frc.robot.commands.ShootOnTheMoveCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.deploy.Deploy;
-import frc.robot.subsystems.deploy.DeployerPosition;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.fueldetection.FuelDetection;
 import frc.robot.subsystems.hood.Hood;
@@ -235,12 +234,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
     operatorController.povLeft().whileTrue(deploy.deployManuallyCommand(0.2));
     operatorController.povRight().whileTrue(deploy.deployManuallyCommand(-0.2));
 
-    operatorController
-        .back()
-        .onTrue(
-            Commands.runOnce(
-                () -> deploy.setDeployerPosition(DeployerPosition.RETRACTED),
-                deploy)); // TESTING ONLY
     // OVERRIDES
 
     // Force Indexer

@@ -4,7 +4,6 @@ import badgerutils.motor.MotorConfigUtils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.Slot1Configs;
-import com.ctre.phoenix6.configs.Slot2Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -13,17 +12,13 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Constants;
 
 public class DeployConstants {
-  public static final double KP_0 = 130;
-  public static final double KD_0 = 5;
-  public static final double KS_0 = 5;
+  public static final double KP_0 = 100;
+  public static final double KD_0 = 15;
+  public static final double KS_0 = 0;
 
-  public static final double KP_1 = 130;
-  public static final double KD_1 = 5;
-  public static final double KS_1 = 5;
-
-  public static final double KP_2 = 130;
-  public static final double KD_2 = 5;
-  public static final double KS_2 = 5;
+  public static final double KP_1 = 300;
+  public static final double KD_1 = 30;
+  public static final double KS_1 = 0;
 
   private static final double ROTOR_TO_SENSOR_RATIO = (25D / 1D) * (18D / 18D);
 
@@ -41,8 +36,7 @@ public class DeployConstants {
           .withSlot0(
               MotorConfigUtils.createPidConfig(
                   KP_0, 0, KD_0, 0, 0, 0, 0, GravityTypeValue.Arm_Cosine))
-          .withSlot1(new Slot1Configs().withKP(KP_1).withKD(KD_1).withKS(KD_2))
-          .withSlot2(new Slot2Configs().withKP(KP_2).withKD(KD_2).withKS(KS_2))
+          .withSlot1(new Slot1Configs().withKP(KP_1).withKD(KD_1).withKS(KS_1))
           .withFeedback(
               new FeedbackConfigs()
                   .withFeedbackRemoteSensorID(Constants.CanIds.DEPLOYER_ENCODER_ID)

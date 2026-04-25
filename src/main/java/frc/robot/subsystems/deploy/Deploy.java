@@ -41,18 +41,12 @@ public class Deploy extends SubsystemBase {
   }
 
   public Command crunchCommand() {
-    // return Commands.startEnd(
-    //     () -> setDeployerPosition(DeployerPosition.DUMP),
-    //     () -> setDeployerPosition(DeployerPosition.EXTENDED),
-    //     this);
-
-    return (Commands.runOnce(() -> setDutyCycle(0.2), this)
-            .andThen(Commands.waitSeconds(.5))
-            .andThen(
-                Commands.runEnd(
-                    () -> setDeployerPosition(DeployerPosition.DUMP),
-                    () -> setDeployerPosition(DeployerPosition.EXTENDED),
-                    this)))
-        .finallyDo(() -> setDeployerPosition(DeployerPosition.EXTENDED));
+    return Commands.startEnd(
+        () -> {
+          setDeployerPosition(DeployerPosition.DUMP);
+          System.out.println("Crunch");
+        },
+        () -> setDeployerPosition(DeployerPosition.EXTENDED),
+        this);
   }
 }
