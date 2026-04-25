@@ -7,6 +7,7 @@ import static edu.wpi.first.units.Units.Seconds;
 import badgerutils.commands.CommandUtils;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FaceforwardCommand;
-import frc.robot.commands.FuelCollectionCommand;
 import frc.robot.commands.ShootOnTheMoveCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.booster.Booster;
@@ -134,8 +134,12 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 .intakeUntilInterruptedCommand(1)
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
-    // Fuel Collection
-    driverController.b().whileTrue(new FuelCollectionCommand(drive, fuelDetection));
+    // Hub Sweep
+    driverController
+        .b()
+        .whileTrue(
+            Commands.deferredProxy(
+                () -> getHubCollectingPath(drive, drive.getPose().getTranslation())));
 
     // Robot Relative Drive
     driverController
@@ -288,5 +292,28 @@ public class CompetitionControllerMapping extends ControllerMapping {
     super.clear();
     CommandUtils.removeAndCancelDefaultCommand(drive);
     CommandUtils.removeAndCancelDefaultCommand(intake);
+  }
+
+  private Command getHubCollectingPath(Drive drive, Translation2d position) {
+    if (RebuiltUtils.isInAllianceZone(position)) {
+      return RebuiltUtils.isLeftSide(position)
+          ? drive.leftToRightAllianceCloseHubSweep
+          : drive.rightToLeftAllianceCloseHubSweep;
+    } else if (RebuiltUtils.isInOpponentAllianceZone(position)) {
+      return RebuiltUtils.isLeftSide(position)
+          ? drive.leftToRightAllianceFarHubSweep
+          : drive.rightToLeftAllianceFarHubSweep;
+    } else if (RebuiltUtils.isOurHalf(position)) {
+      return RebuiltUtils.isLeftSide(position)
+          ? drive.leftToRightMidCloseHubSweep
+          : drive.rightToLeftMidCloseHubSweep;
+    } else if (!RebuiltUtils.isOurHalf(position)) {
+      return RebuiltUtils.isLeftSide(position)
+          ? drive.leftToRightMidFarHubSweep
+          : drive.rightToLeftMidFarHubSweep;
+    }
+
+    System.out.println("Could not find suitable path");
+    return Commands.none();
   }
 }

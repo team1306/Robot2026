@@ -5,8 +5,9 @@
   "pathFolders": [
     "1st Pass",
     "2nd Pass",
-    "Depot",
     "3rd Pass",
+    "Depot",
+    "Teleop Pathing",
     "Testing"
   ],
   "autoFolders": [
