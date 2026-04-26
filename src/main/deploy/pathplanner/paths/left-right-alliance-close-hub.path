@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.45,
-        "y": 5.0
+        "x": 3.101192771084338,
+        "y": 5.215192771084337
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.45,
-        "y": 4.0
+        "x": 3.277969466380975,
+        "y": 5.0384160757877
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.45,
-        "y": 3.5
+        "x": 3.5,
+        "y": 4.5
       },
       "prevControl": {
-        "x": 3.45,
-        "y": 4.500000000000001
+        "x": 3.323223304703363,
+        "y": 4.6767766952966365
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,7 +38,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 1.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -46,13 +46,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.5,
+    "velocity": 0.0,
     "rotation": -90.0
   },
   "reversed": false,
   "folder": "Teleop Pathing",
   "idealStartingState": {
-    "velocity": 1.5,
+    "velocity": 0.0,
     "rotation": -90.0
   },
   "useDefaultConstraints": false
