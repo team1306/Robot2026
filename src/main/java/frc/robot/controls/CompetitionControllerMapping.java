@@ -7,6 +7,7 @@ import static edu.wpi.first.units.Units.Seconds;
 import badgerutils.commands.CommandUtils;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,12 +19,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FaceforwardCommand;
-import frc.robot.commands.FuelCollectionCommand;
 import frc.robot.commands.ShootOnTheMoveCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.deploy.Deploy;
-import frc.robot.subsystems.deploy.DeployerPosition;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.fueldetection.FuelDetection;
 import frc.robot.subsystems.hood.Hood;
@@ -134,8 +133,12 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 .intakeUntilInterruptedCommand(1)
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
-    // Fuel Collection
-    driverController.b().whileTrue(new FuelCollectionCommand(drive, fuelDetection));
+    // Hub Sweep
+    driverController
+        .b()
+        .whileTrue(
+            Commands.deferredProxy(
+                () -> getHubCollectingPath(drive, drive.getPose().getTranslation())));
 
     // Robot Relative Drive
     driverController
@@ -200,6 +203,13 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
     /* ---P2--- */
 
+    // Force through defence?
+    operatorController
+        .leftStick()
+        .whileTrue(
+            Commands.startEnd(
+                () -> drive.setHighCurrentLimits(), () -> drive.setLowCurrentLimits()));
+
     // Spool Shooter
     operatorController
         .rightTrigger()
@@ -228,12 +238,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
     operatorController.povLeft().whileTrue(deploy.deployManuallyCommand(0.2));
     operatorController.povRight().whileTrue(deploy.deployManuallyCommand(-0.2));
 
-    operatorController
-        .back()
-        .onTrue(
-            Commands.runOnce(
-                () -> deploy.setDeployerPosition(DeployerPosition.RETRACTED),
-                deploy)); // TESTING ONLY
     // OVERRIDES
 
     // Force Indexer
@@ -289,4 +293,61 @@ public class CompetitionControllerMapping extends ControllerMapping {
     CommandUtils.removeAndCancelDefaultCommand(drive);
     CommandUtils.removeAndCancelDefaultCommand(intake);
   }
+
+  private Command getHubCollectingPath(Drive drive, Translation2d position) {
+    Command collectionPath;
+    if (RebuiltUtils.isInAllianceZone(position)) {
+      collectionPath =
+          RebuiltUtils.isLeftSide(position)
+              ? drive.leftToRightAllianceCloseHubSweep
+              : drive.rightToLeftAllianceCloseHubSweep;
+    } else if (RebuiltUtils.isInOpponentAllianceZone(position)) {
+      collectionPath =
+          RebuiltUtils.isLeftSide(position)
+              ? drive.leftToRightAllianceFarHubSweep
+              : drive.rightToLeftAllianceFarHubSweep;
+    } else if (RebuiltUtils.isOurHalf(position)) {
+      collectionPath =
+          RebuiltUtils.isLeftSide(position)
+              ? drive.leftToRightMidCloseHubSweep
+              : drive.rightToLeftMidCloseHubSweep;
+    } else if (!RebuiltUtils.isOurHalf(position)) {
+      collectionPath =
+          RebuiltUtils.isLeftSide(position)
+              ? drive.leftToRightMidFarHubSweep
+              : drive.rightToLeftMidFarHubSweep;
+    } else {
+
+      System.out.println("Could not find suitable path");
+      return Commands.none();
+    }
+
+    return collectionPath;
+  }
+  /*
+  private Command pathOnTheFlyToHubCollectingPath(Drive drive, Command hubCollectingPath) {
+    HashMap<Command, Pose2d> map = new HashMap<>();
+    map.put(
+        drive.leftToRightAllianceCloseHubSweep, new Pose2d(3.45, 5, Rotation2d.fromDegrees(-90)));
+    map.put(
+        drive.rightToLeftAllianceCloseHubSweep, new Pose2d(3.45, 3.1, Rotation2d.fromDegrees(90)));
+    map.put(drive.leftToRightMidCloseHubSweep, new Pose2d(5.8, 5, Rotation2d.fromDegrees(-90)));
+    map.put(drive.rightToLeftMidCloseHubSweep, new Pose2d(5.8, 3.1, Rotation2d.fromDegrees(90)));
+    map.put(drive.leftToRightMidFarHubSweep, new Pose2d(10.75, 5, Rotation2d.fromDegrees(-90)));
+    map.put(drive.rightToLeftMidFarHubSweep, new Pose2d(10.75, 3.1, Rotation2d.fromDegrees(90)));
+    map.put(drive.leftToRightAllianceFarHubSweep, new Pose2d(13.1, 5, Rotation2d.fromDegrees(-90)));
+    map.put(
+        drive.rightToLeftAllianceFarHubSweep, new Pose2d(13.1, 3.1, Rotation2d.fromDegrees(90)));
+
+    return AutoBuilder.followPath(
+        new PathPlannerPath(
+            PathPlannerPath.waypointsFromPoses(drive.getPose(), map.get(hubCollectingPath)),
+            new PathConstraints(2.0, 3.0, Degrees.of(540).in(Radians), Degrees.of(720).in(Radians)),
+            new IdealStartingState(
+                Math.sqrt(
+                    Math.pow(drive.getChassisSpeeds().vxMetersPerSecond, 2)
+                        + Math.pow(drive.getChassisSpeeds().vyMetersPerSecond, 2)),
+                drive.getPose().getRotation()),
+            new GoalEndState(2, map.get(hubCollectingPath).getRotation())));
+  }*/
 }

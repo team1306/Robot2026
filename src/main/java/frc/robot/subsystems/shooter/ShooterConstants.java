@@ -1,7 +1,5 @@
 package frc.robot.subsystems.shooter;
 
-import static edu.wpi.first.units.Units.Amps;
-
 import badgerutils.motor.MotorConfigUtils;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -20,7 +18,7 @@ public class ShooterConstants {
   public static final double KI = 0;
   public static final double KD = 0;
 
-  public static final double KV = 2.5;
+  public static final double KV = 3;
   public static final double KS = 0.058037;
 
   public static final double ROTOR_TO_SENSOR_RATIO = (24D / 36D);
@@ -45,7 +43,7 @@ public class ShooterConstants {
           .withCurrentLimits(
               new CurrentLimitsConfigs()
                   .withStatorCurrentLimitEnable(false)
-                  .withSupplyCurrentLimit(Amps.of(60))
+                  .withSupplyCurrentLimit(Constants.CurrentLimits.SHOOTER_SUPPLY)
                   .withSupplyCurrentLimitEnable(true))
           .withMotorOutput(
               MotorConfigUtils.createMotorOutputConfig(

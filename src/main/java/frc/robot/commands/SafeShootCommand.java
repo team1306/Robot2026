@@ -100,6 +100,16 @@ public class SafeShootCommand extends ParallelCommandGroup {
                 .andThen(indexer.indexUntilCancelledCommand(INDEXER_SPEED)),
             combinedCondition);
 
+    Command guardedDeployCommand =
+        new GuardedCommand(
+            Commands.waitUntil(
+                    () ->
+                        shooter
+                            .isAtRequestedSpeed(Constants.Tolerances.INITIAL_SPEED_TOLERANCE)
+                            .getAsBoolean())
+                .andThen(Commands.runOnce(() -> hasStartedShooting = true))
+                .andThen(deploy.crunchCommand()),
+            combinedCondition);
     // Command guardedDeployCommand =
     //     Commands.waitUntil(() -> hasStartedShooting)
     //         .andThen(Commands.waitTime(RETRACT_DELAY))
@@ -178,7 +188,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
         activityTracker,
         shootAtDistanceCommand.asProxy(),
         guardedIndexerCommand.asProxy(),
-        // guardedDeployCommand.asProxy(),
+        guardedDeployCommand.asProxy(),
         boosterCommand.asProxy(),
         hoodCommand,
         loggedGuardCommand);

@@ -46,7 +46,7 @@ import frc.robot.subsystems.vision.VisionIOPhotonVision;
  */
 public class RobotContainer {
   // Subsystems
-  private final Drive drive;
+  public final Drive drive;
   private final Vision vision;
   private final Intake intake;
   private final Indexer indexer;
