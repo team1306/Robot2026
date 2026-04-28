@@ -188,6 +188,17 @@ public class Autos {
             LoggedNetworkTablesBuilder.createLoggedAutoResettingButton("Autos/Reset Odometry")
                 .onTrue(new InstantCommand(this::resetAutoOdometry).ignoringDisable(true)));
 
+    autoChooser.onChange(
+        (Auto auto) -> {
+          try {
+            // Construct this auto to warm up the JSON parser and get all the paths into
+            // PathPlanner's path cache.
+            PathPlannerAuto pp_auto = new PathPlannerAuto(auto.autoName);
+            DriverStation.reportWarning("Preloaded auto " + pp_auto.getName(), false);
+          } catch (Exception e) {
+            DriverStation.reportError("Error preloading auto " + auto.autoName, false);
+          }
+        });
     bindNamedCommands();
     bindEventMarkers();
   }
