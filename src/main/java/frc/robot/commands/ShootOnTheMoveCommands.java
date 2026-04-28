@@ -10,12 +10,10 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.ShooterCommands.ShooterSetpoint;
 import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.deploy.Deploy;
-import frc.robot.subsystems.deploy.DeployerPosition;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
@@ -74,15 +72,14 @@ public class ShootOnTheMoveCommands {
     DriveAimLockedCommand driveCommand =
         new DriveAimLockedCommand(drive, () -> 0, () -> 0, leadTarget, true);
 
-    return shootCommand
-        .alongWith(
-            Commands.startEnd(
-                () -> {
-                  driveCommand.resetPID();
-                  PPHolonomicDriveController.overrideRotationFeedback(
-                      () -> driveCommand.getPIDOutput(false));
-                },
-                () -> PPHolonomicDriveController.clearRotationFeedbackOverride()));
+    return shootCommand.alongWith(
+        Commands.startEnd(
+            () -> {
+              driveCommand.resetPID();
+              PPHolonomicDriveController.overrideRotationFeedback(
+                  () -> driveCommand.getPIDOutput(false));
+            },
+            () -> PPHolonomicDriveController.clearRotationFeedbackOverride()));
   }
 
   public static Command aimAndShootOnTheMoveCommand(
