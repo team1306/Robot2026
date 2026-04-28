@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.Seconds;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -47,7 +48,8 @@ public class SafeShootCommand extends ParallelCommandGroup {
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive,
-      BooleanSupplier overrideAutoRanging) {
+      BooleanSupplier overrideAutoRanging,
+      BooleanSupplier additionalDeployCondition) {
 
     Logger.recordOutput(
         "Shooter/Distance to Target",
@@ -78,15 +80,11 @@ public class SafeShootCommand extends ParallelCommandGroup {
 
     BooleanSupplier combinedCondition =
         () ->
-            (shooterVelocityCondition.getAsBoolean() || overrideVelocitySafeguard.getAsBoolean())
+            (shooterVelocityCondition.getAsBoolean()
+                    || overrideVelocitySafeguard.getAsBoolean())
                 && (driveAngleCondition.getAsBoolean() || overrideAngleSafeguard.getAsBoolean())
                 && (hubActiveCondition.getAsBoolean() || overrideHubActive.getAsBoolean())
                 && (autoRangeCondition.getAsBoolean() || overrideAutoRanging.getAsBoolean());
-
-    BooleanSupplier notMovingCondition =
-        () ->
-            drive.getChassisSpeeds().vxMetersPerSecond < 0.025
-                && drive.getChassisSpeeds().vyMetersPerSecond < 0.025;
 
     Command guardedIndexerCommand =
         new GuardedCommand(
@@ -100,24 +98,17 @@ public class SafeShootCommand extends ParallelCommandGroup {
                 .andThen(indexer.indexUntilCancelledCommand(INDEXER_SPEED)),
             combinedCondition);
 
-    Command guardedDeployCommand =
-        new GuardedCommand(
-            Commands.waitUntil(
-                    () ->
-                        shooter
-                            .isAtRequestedSpeed(Constants.Tolerances.INITIAL_SPEED_TOLERANCE)
-                            .getAsBoolean())
-                .andThen(Commands.runOnce(() -> hasStartedShooting = true))
-                .andThen(deploy.crunchCommand()),
-            combinedCondition);
-    // Command guardedDeployCommand =
-    //     Commands.waitUntil(() -> hasStartedShooting)
-    //         .andThen(Commands.waitTime(RETRACT_DELAY))
-    //         .andThen(
-    //             new GuardedCommand(
-    //                 deploy.crunchCommand(),
-    //                 () -> combinedCondition.getAsBoolean() &&
-    // notMovingCondition.getAsBoolean()));
+    Command deployCommand =
+            Commands.waitUntil(() -> hasStartedShooting)
+            .andThen(
+                Commands.waitTime(RETRACT_DELAY)
+                    )
+            .andThen(
+                new GuardedCommand(
+                    deploy
+                        .crunchCommand()
+                        ,
+                    additionalDeployCondition));
 
     Supplier<Distance> distanceSupplier =
         () -> Meters.of(drive.getPose().getTranslation().getDistance(positionSupplier.get()));
@@ -162,7 +153,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
                     shooterVelocityCondition,
                     driveAngleCondition,
                     hubActiveCondition,
-                    autoRangeCondition));
+                    autoRangeCondition, additionalDeployCondition));
 
     Command activityTracker =
         Commands.startEnd(
@@ -188,7 +179,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
         activityTracker,
         shootAtDistanceCommand.asProxy(),
         guardedIndexerCommand.asProxy(),
-        guardedDeployCommand.asProxy(),
+        deployCommand.asProxy(),
         boosterCommand.asProxy(),
         hoodCommand,
         loggedGuardCommand);
@@ -198,7 +189,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
       BooleanSupplier shooterVelocityCondition,
       BooleanSupplier driveAngleCondition,
       BooleanSupplier hubActiveCondition,
-      BooleanSupplier withinRangeCondition) {
+      BooleanSupplier withinRangeCondition, BooleanSupplier additionalDeployCondition) {
     Logger.recordOutput(
         "Controls/Ready To Shoot",
         shooterVelocityCondition.getAsBoolean() && driveAngleCondition.getAsBoolean());
@@ -207,5 +198,6 @@ public class SafeShootCommand extends ParallelCommandGroup {
     Logger.recordOutput("Controls/Drive Angle Condition", driveAngleCondition.getAsBoolean());
     Logger.recordOutput("Controls/HubActive", hubActiveCondition.getAsBoolean());
     Logger.recordOutput("Controls/Within Range Condition", withinRangeCondition.getAsBoolean());
+    Logger.recordOutput("Controls/Additional Deploy Condition", additionalDeployCondition.getAsBoolean());
   }
 }

@@ -145,7 +145,8 @@ public class Autos {
                 () -> false,
                 () -> false,
                 () -> true,
-                () -> false),
+                () -> false,
+                () -> true),
             Commands.none(),
             inAllianceZoneSupplier);
 
@@ -166,7 +167,8 @@ public class Autos {
                     () -> false,
                     () -> false,
                     () -> true,
-                    () -> false),
+                    () -> false,
+                    () -> true),
                 Commands.none(),
                 inAllianceZoneSupplier)
             .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION));
