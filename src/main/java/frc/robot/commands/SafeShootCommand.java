@@ -28,6 +28,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
 
   private static double INDEXER_SPEED = 1;
   private static Time RETRACT_DELAY = Seconds.of(1);
+  private static Time LIFT_TIME = Seconds.of(0.5);
   private static final double BOOSTER_SPEED = 1;
   private static final Distance MINIMUM_SHOT_DISTANCE = Meters.of(2.2);
 
@@ -99,7 +100,10 @@ public class SafeShootCommand extends ParallelCommandGroup {
     Command deployCommand =
         Commands.waitUntil(() -> hasStartedShooting)
             .andThen(Commands.waitTime(RETRACT_DELAY))
-            .andThen(new GuardedCommand(deploy.crunchCommand(), additionalDeployCondition));
+            .andThen(
+                new GuardedCommand(
+                    deploy.crunchCommand().withDeadline(Commands.waitTime(LIFT_TIME)),
+                    additionalDeployCondition));
 
     Supplier<Distance> distanceSupplier =
         () -> Meters.of(drive.getPose().getTranslation().getDistance(positionSupplier.get()));
