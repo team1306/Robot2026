@@ -227,7 +227,11 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf)
                 .alongWith(
                     new InstantCommand(
-                        () -> operatorController.setRumble(RumbleType.kBothRumble, 0.25))))
+                        () -> operatorController.setRumble(RumbleType.kBothRumble, 0.25)))
+                .alongWith(
+                    (booster.boostCommand(-0.5).alongWith(indexer.indexUntilCancelledCommand(-0.5)))
+                        .withDeadline(Commands.waitSeconds(0.25))
+                        .andThen(booster.boostCommand(.8))))
         .onFalse(
             new InstantCommand(() -> operatorController.setRumble(RumbleType.kBothRumble, 0))
                 .ignoringDisable(true));
