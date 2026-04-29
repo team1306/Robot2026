@@ -26,24 +26,42 @@ public class ShooterCommands {
       Arrays.stream(
               new ShooterSetpoint[] {
                 new ShooterSetpoint(
-                    Meters.of(2.44), Rotations.of(0), RotationsPerSecond.of(22), Seconds.of(0.7824)),
+                    Meters.of(2.44),
+                    Rotations.of(0),
+                    RotationsPerSecond.of(22),
+                    Seconds.of(0.7824)),
                 new ShooterSetpoint(
-                    Meters.of(2.86), Rotations.of(0), RotationsPerSecond.of(22.5), Seconds.of(0.8694)),
+                    Meters.of(2.86),
+                    Rotations.of(0),
+                    RotationsPerSecond.of(22.5),
+                    Seconds.of(0.8694)),
                 new ShooterSetpoint(
                     Meters.of(3.15),
                     Rotations.of(0),
                     RotationsPerSecond.of(23.25),
                     Seconds.of(0.897)),
                 new ShooterSetpoint(
-                    Meters.of(3.34), Rotations.of(0), RotationsPerSecond.of(23.5), Seconds.of(0.9162)),
+                    Meters.of(3.34),
+                    Rotations.of(0),
+                    RotationsPerSecond.of(23.5),
+                    Seconds.of(0.9162)),
                 new ShooterSetpoint(
-                    Meters.of(3.82), Rotations.of(0), RotationsPerSecond.of(24.5), Seconds.of(1.016)),
+                    Meters.of(3.82),
+                    Rotations.of(0),
+                    RotationsPerSecond.of(24.5),
+                    Seconds.of(1.016)),
                 new ShooterSetpoint(
-                    Meters.of(4.23), Rotations.of(0), RotationsPerSecond.of(25.75), Seconds.of(1.0426)),
+                    Meters.of(4.23),
+                    Rotations.of(0),
+                    RotationsPerSecond.of(25.75),
+                    Seconds.of(1.0426)),
                 new ShooterSetpoint(
                     Meters.of(4.69), Rotations.of(0), RotationsPerSecond.of(27), Seconds.of(1.096)),
                 new ShooterSetpoint(
-                    Meters.of(5), Rotations.of(0.1), RotationsPerSecond.of(27.25), Seconds.of(1.1946)),
+                    Meters.of(5),
+                    Rotations.of(0.1),
+                    RotationsPerSecond.of(27.25),
+                    Seconds.of(1.1946)),
                 new ShooterSetpoint(
                     Meters.of(5.42),
                     Rotations.of(0.2),
@@ -57,7 +75,10 @@ public class ShooterCommands {
       Arrays.stream(
               new ShooterSetpoint[] {
                 new ShooterSetpoint(
-                    Meters.of(6.3), Rotations.of(.4), RotationsPerSecond.of(22), Seconds.of(0.8942)),
+                    Meters.of(6.3),
+                    Rotations.of(.4),
+                    RotationsPerSecond.of(22),
+                    Seconds.of(0.8942)),
                 new ShooterSetpoint(
                     Meters.of(7.25),
                     Rotations.of(.7),
