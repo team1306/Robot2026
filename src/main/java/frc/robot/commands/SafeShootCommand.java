@@ -102,7 +102,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
             .andThen(Commands.waitTime(RETRACT_DELAY))
             .andThen(
                 new GuardedCommand(
-                    deploy.crunchCommand().withDeadline(Commands.waitTime(LIFT_TIME)),
+                    deploy.crunchCommand().until(() -> deploy.isPastOrAtSetpoint()),
                     additionalDeployCondition));
 
     Supplier<Distance> distanceSupplier =

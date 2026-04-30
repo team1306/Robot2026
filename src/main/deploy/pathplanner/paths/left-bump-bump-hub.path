@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 2.3,
-        "y": 7.449999999999999
+        "y": 7.0
       },
       "isLocked": false,
       "linkedName": "bump-left-alliance"
@@ -146,8 +146,33 @@
       "rotationDegrees": 135.0
     }
   ],
-  "constraintZones": [],
-  "pointTowardsZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.33,
+      "constraints": {
+        "maxVelocity": 0.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 480.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 4.6,
+        "y": 4.06
+      },
+      "rotationOffset": 180.0,
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.33,
+      "name": "Point Towards Zone"
+    }
+  ],
   "eventMarkers": [
     {
       "name": "intake",
@@ -157,6 +182,17 @@
         "type": "named",
         "data": {
           "name": "intake"
+        }
+      }
+    },
+    {
+      "name": "sotm-until-done",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 0.33,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "sotm-until-done"
         }
       }
     },

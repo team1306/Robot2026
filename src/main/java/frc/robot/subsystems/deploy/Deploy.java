@@ -52,4 +52,8 @@ public class Deploy extends SubsystemBase {
   public Command crunchCommand() {
     return deployToPositionCommand(DeployerPosition.DUMP);
   }
+
+  public boolean isPastOrAtSetpoint() {
+    return deployIO.isAtSetpoint();
+  }
 }

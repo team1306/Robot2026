@@ -54,6 +54,7 @@ public class Autos {
   private final Deploy deploy;
 
   private final Command sotmSmallHopperCommand;
+  private final Command sotmUntilDoneCommand;
   private final Command shootSmallHopperCommand;
   private final Command shootUntilDoneCommand;
   private final Command spoolShooterCommand;
@@ -108,6 +109,26 @@ public class Autos {
                     () -> false)
                 .alongWith(intake.intakeUntilInterruptedCommand(1).asProxy())
                 .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)),
+            Commands.none(),
+            inAllianceZoneSupplier);
+
+    sotmUntilDoneCommand =
+        new ConditionalCommand(
+            ShootOnTheMoveCommands.shootOnTheMoveAutoCommand(
+                    drive,
+                    shooter,
+                    indexer,
+                    deploy,
+                    booster,
+                    hood,
+                    leds,
+                    () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                    inAllianceZoneSupplier,
+                    () -> false,
+                    () -> false,
+                    () -> true,
+                    () -> false)
+                .alongWith(intake.intakeUntilInterruptedCommand(1).asProxy()),
             Commands.none(),
             inAllianceZoneSupplier);
 
@@ -226,6 +247,8 @@ public class Autos {
 
     NamedCommands.registerCommand("sotm-small-hopper", sotmSmallHopperCommand);
 
+    NamedCommands.registerCommand("sotm-until-done", sotmUntilDoneCommand);
+
     NamedCommands.registerCommand("coast", Commands.runOnce(() -> drive.setCoastMode()));
 
     RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> drive.setBrakeMode()));
@@ -242,6 +265,9 @@ public class Autos {
 
     new EventTrigger("sotm-small-hopper")
         .onFalse(Commands.runOnce(() -> sotmSmallHopperCommand.cancel()));
+
+    new EventTrigger("sotm-until-done")
+        .onFalse(Commands.runOnce(() -> sotmUntilDoneCommand.cancel()));
   }
 
   public static final class Auto {
