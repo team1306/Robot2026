@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.controls.Controls;
 import frc.robot.generated.TunerConstants;
@@ -97,6 +98,7 @@ public class RobotContainer {
         leds = new Leds(new LedsReal());
         deploy = new Deploy(new DeployIO() {});
         hood = new Hood(new HoodIOReal());
+
         break;
 
       case SIM:
@@ -156,6 +158,8 @@ public class RobotContainer {
     controls =
         new Controls(drive, intake, shooter, indexer, booster, hood, fuelDetection, leds, deploy);
     autos = new Autos(drive, indexer, intake, shooter, booster, hood, leds, deploy);
+    // Warm up the PathPlaner system.
+    FollowPathCommand.warmupCommand();
   }
 
   public Command getAutonomousCommand() {
