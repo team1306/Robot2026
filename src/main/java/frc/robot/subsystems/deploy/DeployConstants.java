@@ -12,11 +12,11 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Constants;
 
 public class DeployConstants {
-  public static final double KP_0 = 100;
+  public static final double KP_0 = 180;
   public static final double KD_0 = 15;
   public static final double KS_0 = 0;
 
-  public static final double KP_1 = 300;
+  public static final double KP_1 = 380;
   public static final double KD_1 = 30;
   public static final double KS_1 = 0;
 

@@ -100,13 +100,14 @@ public class SafeShootCommand extends ParallelCommandGroup {
     Command deployCommand =
         Commands.waitUntil(() -> hasStartedShooting)
             .andThen(Commands.waitTime(RETRACT_DELAY))
-            .andThen(
-                new GuardedCommand(
-                    deploy.crunchCommand().until(() -> deploy.isPastOrAtSetpoint()),
-                    additionalDeployCondition));
+            .andThen(new GuardedCommand(deploy.crunchCommand(), additionalDeployCondition))
+            .until(() -> deploy.isPastOrAtSetpoint());
 
     Supplier<Distance> distanceSupplier =
         () -> Meters.of(drive.getPose().getTranslation().getDistance(positionSupplier.get()));
+
+    Command logDeployConditionCommand =
+        Commands.run(() -> Logger.recordOutput("Deploy/is at target", deploy.isPastOrAtSetpoint()));
 
     Command shootAtDistanceCommand =
         ShooterCommands.shootAtDistanceCommand(
@@ -178,7 +179,8 @@ public class SafeShootCommand extends ParallelCommandGroup {
         deployCommand.asProxy(),
         boosterCommand.asProxy(),
         hoodCommand,
-        loggedGuardCommand);
+        loggedGuardCommand,
+        logDeployConditionCommand);
   }
 
   private void logConditions(

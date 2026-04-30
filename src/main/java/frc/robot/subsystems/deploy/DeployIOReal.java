@@ -96,7 +96,7 @@ public class DeployIOReal implements DeployIO {
     return deployerMotorPosition
         .getValue()
         .minus(positionRequest.getPositionMeasure())
-        .gt(Rotations.of(-0.1));
+        .gt(Rotations.of(-0.05));
   }
 
   @Override
