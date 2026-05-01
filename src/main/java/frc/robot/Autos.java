@@ -216,7 +216,11 @@ public class Autos {
   public Command createCommandFromSelectedAuto() {
     Auto auto = autoChooser.get();
     return new WaitCommand(autoWaitTime.get())
-        .andThen(auto.getCommand())
+        .andThen(
+            auto.getCommand()
+                .alongWith(
+                    Commands.waitTime(Seconds.of(3))
+                        .andThen(Commands.runOnce(() -> drive.setLowCurrentLimits()))))
         .andThen(Commands.print("Auto Complete"))
         .withName(auto.getName());
   }
