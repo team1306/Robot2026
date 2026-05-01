@@ -20,11 +20,11 @@
         "y": 4.9
       },
       "prevControl": {
-        "x": 0.7645959724050702,
+        "x": 0.7645959724050705,
         "y": 4.723223304703364
       },
       "nextControl": {
-        "x": 0.4110425818117971,
+        "x": 0.41104258181179676,
         "y": 5.076776695296637
       },
       "isLocked": false,
@@ -48,12 +48,12 @@
     },
     {
       "anchor": {
-        "x": 2.0412048192771084,
-        "y": 6.908987951807229
+        "x": 1.7,
+        "y": 6.3
       },
       "prevControl": {
-        "x": 1.3340980380905614,
-        "y": 7.616094732993777
+        "x": 1.1056189135229162,
+        "y": 6.894381086477083
       },
       "nextControl": null,
       "isLocked": false,
@@ -87,7 +87,12 @@
       "name": "deploy",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "deploy"
+        }
+      }
     },
     {
       "name": "intake",
@@ -111,7 +116,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 128.21102542556127
+    "rotation": 135.0
   },
   "reversed": false,
   "folder": "Depot",

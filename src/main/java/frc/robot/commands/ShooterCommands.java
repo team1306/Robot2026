@@ -86,7 +86,7 @@ public class ShooterCommands {
                 new ShooterSetpoint(
                     Meters.of(7.25),
                     Rotations.of(.7),
-                    RotationsPerSecond.of(28),
+                    RotationsPerSecond.of(27),
                     Seconds.of(0.9304)),
                 new ShooterSetpoint(
                     Meters.of(15), Rotations.of(.7), RotationsPerSecond.of(50), Seconds.of(1.66))
