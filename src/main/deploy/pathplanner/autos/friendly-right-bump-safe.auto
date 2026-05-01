@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shoot-small-hopper"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "SHOP right-bump-bump-hub"
@@ -19,13 +25,7 @@
         {
           "type": "named",
           "data": {
-            "name": "coast"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "right-bump-collect"
+            "name": "shoot-until-done"
           }
         }
       ]

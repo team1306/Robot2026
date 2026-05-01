@@ -11,15 +11,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shoot-small-hopper"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "SHOP left-bump-bump-hub"
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shoot-small-hopper"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "depot-bump"
+            "pathName": "depot-bump-sotm"
           }
         },
         {

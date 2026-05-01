@@ -7,25 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left-bump-safe"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot-small-hopper"
+            "pathName": "bump-bump"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "SHOP left-bump-bump-hub"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot-until-done"
+            "pathName": "depot-bump-sotm"
           }
         }
       ]

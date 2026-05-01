@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shoot-small-hopper"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "left-bump-bump-hub"
