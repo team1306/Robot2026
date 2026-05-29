@@ -106,7 +106,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 drive,
                 () -> -driverController.getLeftY(),
                 () -> -driverController.getLeftX(),
-                () -> -driverController.getRightX())
+                () -> -driverController.getRightX(), () -> 1, () -> 1)
             .alongWith(logWithinRangeCommand));
 
     // Hood down

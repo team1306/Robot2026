@@ -30,7 +30,7 @@ import frc.robot.util.RebuiltUtils;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class ShooterTestingControllerMapping extends ControllerMapping {
+public class OutreachControllerMapping extends ControllerMapping {
 
   private final Drive drive;
   private final Intake intake;
@@ -40,18 +40,21 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
   private final Hood hood;
 
   @AutoLogOutput
-  private final LoggedNetworkNumberPlus targetSpeed =
-      new LoggedNetworkNumberPlus("/Tuning/Shooter RPS", 0.75);
+  private final LoggedNetworkNumberPlus shooterRPS =
+      new LoggedNetworkNumberPlus("/Tuning/Outreach/Shooter RPS", 12);
 
   @AutoLogOutput
   private final LoggedNetworkNumberPlus hoodAngle =
-      new LoggedNetworkNumberPlus("/Tuning/Hood Angle", 0);
+      new LoggedNetworkNumberPlus("/Tuning/Outreach/Hood Angle (0-0.9)", 0);
 
   @AutoLogOutput
-  private final LoggedNetworkNumberPlus boosterPower =
-      new LoggedNetworkNumberPlus("/Tuning/Booster Duty Cycle", 1);
+  private final LoggedNetworkNumberPlus boosterDutyCycle =
+      new LoggedNetworkNumberPlus("/Tuning/Outreach/Booster Duty Cycle", 0.5);
 
-  public ShooterTestingControllerMapping(
+      @AutoLogOutput private final LoggedNetworkNumberPlus driveSpeedMultiplier = new LoggedNetworkNumberPlus("/Tuning/Outreach/Drive Speed Multiplier", 0.3);
+      @AutoLogOutput private final LoggedNetworkNumberPlus turnSpeedMultiplier = new LoggedNetworkNumberPlus("/Tuning/Outreach/Turning Speed Multiplier", 0.5);
+
+  public OutreachControllerMapping(
       CommandXboxController driverController,
       CommandXboxController operatorController,
       Drive drive,
@@ -72,25 +75,6 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
 
   @Override
   public void bind() {
-    Command logWithinRangeCommand =
-        Commands.run(
-            () ->
-                SmartDashboard.putBoolean(
-                    "Controls/In Range",
-                    LocationUtils.getDistanceToLocation(
-                            drive.getPose().getTranslation(),
-                            RebuiltUtils.getCurrentHubLocation().toTranslation2d())
-                        .gt(Feet.of(7.5))));
-
-    Command loggedTargetCommand =
-        Commands.run(
-            () ->
-                Logger.recordOutput(
-                    "Controls/Target",
-                    RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation())
-                        ? RebuiltUtils.getCurrentHubLocation().toTranslation2d()
-                        : RebuiltUtils.getNearestAllianceCorner(drive.getPose().getTranslation())));
-
     /* ---Default Commands--- */
 
     // Drive with stick
@@ -99,8 +83,7 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
                 drive,
                 () -> -driverController.getLeftY(),
                 () -> -driverController.getLeftX(),
-                () -> -driverController.getRightX(), () -> 1, () -> 1)
-            .alongWith(logWithinRangeCommand)
+                () -> -driverController.getRightX(), driveSpeedMultiplier, turnSpeedMultiplier)
             .alongWith(
                 new RunCommand(
                     () ->
@@ -135,34 +118,21 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
     driverController
-        .leftBumper()
+        .rightBumper()
         .whileTrue(
             ShooterCommands.shootAtSpeedCommand(
-                    shooter, () -> RotationsPerSecond.of(targetSpeed.get()))
+                    shooter, () -> RotationsPerSecond.of(shooterRPS.get()))
                 .alongWith(
                     new GuardedCommand(
                         indexer.indexUntilCancelledCommand(1),
                         shooter.isAtRequestedSpeed(Constants.Tolerances.NORMAL_SPEED_TOLERANCE)))
-                .alongWith(booster.boostCommand(0.8)));
-    driverController.a().whileTrue(booster.boostCommand(1));
+                .alongWith(booster.boostCommand(boosterDutyCycle)));
 
-    driverController
-        .rightBumper()
-        .whileTrue(
-            ShooterCommands.shootAtSpeedCommand(
-                    shooter, () -> RotationsPerSecond.of(targetSpeed.get()))
-                .alongWith(
-                    new GuardedCommand(
-                            indexer.indexUntilCancelledCommand(1),
-                            shooter.isAtRequestedSpeed(Constants.Tolerances.NORMAL_SPEED_TOLERANCE))
-                        .alongWith(booster.boostCommand(0.8))
-                        .alongWith(
-                            new DriveAimLockedCommand(
-                                drive,
-                                () -> -driverController.getLeftY(),
-                                () -> -driverController.getLeftX(),
-                                () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                                true))));
+    driverController.rightTrigger().whileTrue(indexer.indexUntilCancelledCommand(1));
+
+
+    driverController.a().whileTrue(new DriveAimLockedCommand(drive, () -> 0, () -> 0, () -> Constants.Locations.blueHub.toTranslation2d(), true));
+    
   }
 
   @Override

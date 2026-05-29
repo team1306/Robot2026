@@ -77,7 +77,7 @@ public class DriveAtAngleCommand extends Command {
     // Get linear velocity
     Translation2d linearVelocity =
         DriveCommands.getLinearVelocityFromJoysticks(
-            xSupplier.getAsDouble(), ySupplier.getAsDouble());
+            xSupplier.getAsDouble(), ySupplier.getAsDouble(), 1, false);
 
     // Calculate angular speed
     double omega = getPIDOutput(false);
