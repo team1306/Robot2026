@@ -77,6 +77,7 @@ public class Controls {
             intake,
             shooter,
             indexer,
+            deploy,
             booster,
             hood));
 

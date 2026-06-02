@@ -42,10 +42,10 @@ public final class Constants {
   }
 
   public static class Tolerances {
-    public static final Rotation2d SCORING_ANGLE_TOLERANCE = Rotation2d.fromDegrees(5);
+    public static final Rotation2d SCORING_ANGLE_TOLERANCE = Rotation2d.fromDegrees(10);
     public static final Rotation2d PASSING_ANGLE_TOLERANCE = Rotation2d.fromDegrees(15);
-    public static final AngularVelocity INITIAL_SPEED_TOLERANCE = RotationsPerSecond.of(0.5);
-    public static final AngularVelocity NORMAL_SPEED_TOLERANCE = RotationsPerSecond.of(2);
+    public static final AngularVelocity INITIAL_SPEED_TOLERANCE = RotationsPerSecond.of(0.1);
+    public static final AngularVelocity NORMAL_SPEED_TOLERANCE = RotationsPerSecond.of(0.25);
   }
 
   public static class CurrentLimits {

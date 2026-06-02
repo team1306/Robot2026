@@ -1,6 +1,7 @@
 package frc.robot.subsystems.deploy;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Rotations;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
@@ -88,6 +89,14 @@ public class DeployIOReal implements DeployIO {
     motor.setControl(positionRequest.withPosition(position.getAngle()).withSlot(slot));
 
     lastKnownPosition = position;
+  }
+
+  @Override
+  public boolean isAtSetpoint() {
+    return deployerMotorPosition
+        .getValue()
+        .minus(positionRequest.getPositionMeasure())
+        .gt(Rotations.of(-0.05));
   }
 
   @Override

@@ -19,6 +19,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.GuardedCommand;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.booster.Booster;
+import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
@@ -38,6 +39,7 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
   private final Indexer indexer;
   private final Booster booster;
   private final Hood hood;
+  private final Deploy deploy;
 
   @AutoLogOutput
   private final LoggedNetworkNumberPlus targetSpeed =
@@ -58,6 +60,7 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
       Intake intake,
       Shooter shooter,
       Indexer indexer,
+      Deploy deploy,
       Booster booster,
       Hood hood) {
     super(driverController, operatorController);
@@ -66,7 +69,7 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
     this.shooter = shooter;
     this.indexer = indexer;
     this.booster = booster;
-
+    this.deploy = deploy;
     this.hood = hood;
   }
 
@@ -81,6 +84,8 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
                             drive.getPose().getTranslation(),
                             RebuiltUtils.getCurrentHubLocation().toTranslation2d())
                         .gt(Feet.of(7.5))));
+    Command logDeployConditionCommand =
+        Commands.run(() -> Logger.recordOutput("Deploy/is at target", deploy.isPastOrAtSetpoint()));
 
     Command loggedTargetCommand =
         Commands.run(
@@ -101,6 +106,7 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
                 () -> -driverController.getLeftX(),
                 () -> -driverController.getRightX(), () -> 1, () -> 1)
             .alongWith(logWithinRangeCommand)
+            .alongWith(logDeployConditionCommand)
             .alongWith(
                 new RunCommand(
                     () ->
@@ -163,6 +169,9 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
                                 () -> -driverController.getLeftX(),
                                 () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
                                 true))));
+
+    operatorController.x().onTrue(deploy.deployCommand());
+    operatorController.leftTrigger(0.5).whileTrue(deploy.crunchCommand());
   }
 
   @Override

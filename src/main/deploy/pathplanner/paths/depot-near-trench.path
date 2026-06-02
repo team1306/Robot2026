@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.3,
-        "y": 5.5
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 1.8662392961243413,
-        "y": 5.565777040367884
-      },
-      "isLocked": false,
-      "linkedName": "bump-left-alliance"
-    },
-    {
-      "anchor": {
         "x": 0.7,
         "y": 5.803268907563026
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.7000000000000001,
+        "y": 6.803268907563026
+      },
+      "isLocked": false,
+      "linkedName": "depot-gather-bump"
+    },
+    {
+      "anchor": {
+        "x": 2.5,
+        "y": 7.4
+      },
       "prevControl": {
-        "x": 0.9494249769327897,
-        "y": 5.78632249549211
+        "x": 1.5,
+        "y": 7.4
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "depot-gather-bump"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -35,7 +35,7 @@
       "minWaypointRelativePos": 0,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.0,
+        "maxVelocity": 1.5,
         "maxAcceleration": 1.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -68,13 +68,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Depot",
   "idealStartingState": {
     "velocity": 2.0,
-    "rotation": 145.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
