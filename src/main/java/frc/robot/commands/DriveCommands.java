@@ -29,9 +29,11 @@ public class DriveCommands {
 
   private DriveCommands() {}
 
-  public static Translation2d getLinearVelocityFromJoysticks(double x, double y, double multiplier, boolean withDeadband) {
+  public static Translation2d getLinearVelocityFromJoysticks(
+      double x, double y, double multiplier, boolean withDeadband) {
     // Apply deadband
-    double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), withDeadband ? DEADBAND * multiplier : 0);
+    double linearMagnitude =
+        MathUtil.applyDeadband(Math.hypot(x, y), withDeadband ? DEADBAND * multiplier : 0);
     Rotation2d linearDirection = new Rotation2d(Math.atan2(y, x));
 
     // Square magnitude for more precise control
@@ -50,15 +52,24 @@ public class DriveCommands {
       Drive drive,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
-      DoubleSupplier omegaSupplier, DoubleSupplier translationMultiplier, DoubleSupplier omegaMultiplier) {
+      DoubleSupplier omegaSupplier,
+      DoubleSupplier translationMultiplier,
+      DoubleSupplier omegaMultiplier) {
     return Commands.run(
         () -> {
           // Get linear velocity
           Translation2d linearVelocity =
-              getLinearVelocityFromJoysticks(xSupplier.getAsDouble() * translationMultiplier.getAsDouble(), ySupplier.getAsDouble() * translationMultiplier.getAsDouble(), translationMultiplier.getAsDouble(), true);
+              getLinearVelocityFromJoysticks(
+                  xSupplier.getAsDouble() * translationMultiplier.getAsDouble(),
+                  ySupplier.getAsDouble() * translationMultiplier.getAsDouble(),
+                  translationMultiplier.getAsDouble(),
+                  true);
 
           // Apply rotation deadband
-          double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble() * omegaMultiplier.getAsDouble(), DEADBAND * omegaMultiplier.getAsDouble());
+          double omega =
+              MathUtil.applyDeadband(
+                  omegaSupplier.getAsDouble() * omegaMultiplier.getAsDouble(),
+                  DEADBAND * omegaMultiplier.getAsDouble());
 
           // Square rotation value for more precise control
           omega = Math.signum(omega) * Math.pow(Math.abs(omega), .75);

@@ -1,14 +1,11 @@
 package frc.robot.controls;
 
-import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import badgerutils.commands.CommandUtils;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -51,8 +48,13 @@ public class OutreachControllerMapping extends ControllerMapping {
   private final LoggedNetworkNumberPlus boosterDutyCycle =
       new LoggedNetworkNumberPlus("/Tuning/Outreach/Booster Duty Cycle", 0.5);
 
-      @AutoLogOutput private final LoggedNetworkNumberPlus driveSpeedMultiplier = new LoggedNetworkNumberPlus("/Tuning/Outreach/Drive Speed Multiplier", 0.3);
-      @AutoLogOutput private final LoggedNetworkNumberPlus turnSpeedMultiplier = new LoggedNetworkNumberPlus("/Tuning/Outreach/Turning Speed Multiplier", 0.5);
+  @AutoLogOutput
+  private final LoggedNetworkNumberPlus driveSpeedMultiplier =
+      new LoggedNetworkNumberPlus("/Tuning/Outreach/Drive Speed Multiplier", 0.3);
+
+  @AutoLogOutput
+  private final LoggedNetworkNumberPlus turnSpeedMultiplier =
+      new LoggedNetworkNumberPlus("/Tuning/Outreach/Turning Speed Multiplier", 0.5);
 
   public OutreachControllerMapping(
       CommandXboxController driverController,
@@ -83,7 +85,9 @@ public class OutreachControllerMapping extends ControllerMapping {
                 drive,
                 () -> -driverController.getLeftY(),
                 () -> -driverController.getLeftX(),
-                () -> -driverController.getRightX(), driveSpeedMultiplier, turnSpeedMultiplier)
+                () -> -driverController.getRightX(),
+                driveSpeedMultiplier,
+                turnSpeedMultiplier)
             .alongWith(
                 new RunCommand(
                     () ->
@@ -130,9 +134,15 @@ public class OutreachControllerMapping extends ControllerMapping {
 
     driverController.rightTrigger().whileTrue(indexer.indexUntilCancelledCommand(1));
 
-
-    driverController.a().whileTrue(new DriveAimLockedCommand(drive, () -> 0, () -> 0, () -> Constants.Locations.blueHub.toTranslation2d(), true));
-    
+    driverController
+        .a()
+        .whileTrue(
+            new DriveAimLockedCommand(
+                drive,
+                () -> 0,
+                () -> 0,
+                () -> Constants.Locations.blueHub.toTranslation2d(),
+                true));
   }
 
   @Override
