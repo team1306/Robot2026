@@ -121,19 +121,18 @@ public class OutreachControllerMapping extends ControllerMapping {
                 .intakeUntilInterruptedCommand(1)
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
+    // Spool
     driverController
         .rightBumper()
         .whileTrue(
             ShooterCommands.shootAtSpeedCommand(
                     shooter, () -> RotationsPerSecond.of(shooterRPS.get()))
-                .alongWith(
-                    new GuardedCommand(
-                        indexer.indexUntilCancelledCommand(1),
-                        shooter.isAtRequestedSpeed(Constants.Tolerances.NORMAL_SPEED_TOLERANCE)))
                 .alongWith(booster.boostCommand(boosterDutyCycle)));
 
+    // Shoot
     driverController.rightTrigger().whileTrue(indexer.indexUntilCancelledCommand(1));
 
+    // Aim locked
     driverController
         .a()
         .whileTrue(
