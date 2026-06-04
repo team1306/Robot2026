@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.commands.DriveAimLockedCommand;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.GuardedCommand;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.drive.Drive;

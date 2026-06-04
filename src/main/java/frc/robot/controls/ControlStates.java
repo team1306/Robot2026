@@ -5,4 +5,5 @@ public enum ControlStates {
   CLEANING,
   SYSID,
   SHOOTER_TESTING,
+  OUTREACH,
 }
