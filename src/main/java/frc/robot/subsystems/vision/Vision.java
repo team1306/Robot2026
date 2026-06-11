@@ -40,6 +40,12 @@ public class Vision extends SubsystemBase {
               "Vision camera " + inputs[i].cameraName + " is disconnected.", AlertType.kWarning);
     }
   }
+  public Pose3d getPose3d(int cameraIndex, int tagId){
+    for (int i = 0; i < (inputs[cameraIndex].tagPoses).length; i++) {
+      if (inputs[cameraIndex].tagPoses[i].tag() == tagId){return inputs[cameraIndex].tagPoses[i].pose();};
+    }
+    return null;
+  }
 
   /**
    * Returns the X angle to the best target, which can be used for simple servoing with vision.
