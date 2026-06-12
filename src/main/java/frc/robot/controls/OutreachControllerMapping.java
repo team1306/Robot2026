@@ -59,7 +59,7 @@ public class OutreachControllerMapping extends ControllerMapping {
 
   @AutoLogOutput
   private final LoggedNetworkNumberPlus turnSpeedMultiplier =
-      new LoggedNetworkNumberPlus("/Tuning/Outreach/Turning Speed Multiplier", 0.5);
+      new LoggedNetworkNumberPlus("/Tuning/Outreach/Turning Speed Multiplier", 0.3);
 
   public OutreachControllerMapping(
       CommandXboxController driverController,
