@@ -13,6 +13,7 @@ import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.vision.Vision;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,7 +42,8 @@ public class Controls {
       Hood hood,
       FuelDetection fuelDetection,
       Leds leds,
-      Deploy deploy) {
+      Deploy deploy,
+      Vision vision) {
     DriverStation.silenceJoystickConnectionWarning(true);
     driverController = new CommandXboxController(0);
     operatorController = new CommandXboxController(1);
@@ -67,7 +69,19 @@ public class Controls {
         ControlStates.CLEANING,
         new CleaningControllerMapping(
             driverController, operatorController, intake, indexer, shooter));
-          mappings.put(ControlStates.OUTREACH, new OutreachControllerMapping(driverController, operatorController, drivetrain, intake, shooter, indexer, booster, hood));
+    mappings.put(
+        ControlStates.OUTREACH,
+        new OutreachControllerMapping(
+            driverController,
+            operatorController,
+            drivetrain,
+            intake,
+            shooter,
+            deploy,
+            indexer,
+            booster,
+            hood,
+            vision));
     mappings.put(
         ControlStates.SHOOTER_TESTING,
         new ShooterTestingControllerMapping(

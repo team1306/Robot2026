@@ -154,7 +154,8 @@ public class RobotContainer {
     }
 
     controls =
-        new Controls(drive, intake, shooter, indexer, booster, hood, fuelDetection, leds, deploy);
+        new Controls(
+            drive, intake, shooter, indexer, booster, hood, fuelDetection, leds, deploy, vision);
     autos = new Autos(drive, indexer, intake, shooter, booster, hood, leds, deploy);
   }
 

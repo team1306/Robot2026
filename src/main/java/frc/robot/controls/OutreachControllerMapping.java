@@ -8,18 +8,22 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.commands.DriveAimLockedCommand;
+import frc.robot.commands.DriveAtAngleCommand;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.booster.Booster;
+import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.LocationUtils;
 import frc.robot.util.LoggedNetworkNumberPlus;
 import frc.robot.util.RebuiltUtils;
@@ -31,17 +35,19 @@ public class OutreachControllerMapping extends ControllerMapping {
   private final Drive drive;
   private final Intake intake;
   private final Shooter shooter;
+  private final Deploy deploy;
   private final Indexer indexer;
   private final Booster booster;
   private final Hood hood;
+  private final Vision vision;
 
   @AutoLogOutput
   private final LoggedNetworkNumberPlus shooterRPS =
-      new LoggedNetworkNumberPlus("/Tuning/Outreach/Shooter RPS", 12);
+      new LoggedNetworkNumberPlus("/Tuning/Outreach/Shooter RPS", 16);
 
   @AutoLogOutput
   private final LoggedNetworkNumberPlus hoodAngle =
-      new LoggedNetworkNumberPlus("/Tuning/Outreach/Hood Angle (0-0.9)", 0);
+      new LoggedNetworkNumberPlus("/Tuning/Outreach/Hood Angle (0-0.9)", 0.2);
 
   @AutoLogOutput
   private final LoggedNetworkNumberPlus boosterDutyCycle =
@@ -61,15 +67,19 @@ public class OutreachControllerMapping extends ControllerMapping {
       Drive drive,
       Intake intake,
       Shooter shooter,
+      Deploy deploy,
       Indexer indexer,
       Booster booster,
-      Hood hood) {
+      Hood hood,
+      Vision vision) {
     super(driverController, operatorController);
     this.drive = drive;
     this.intake = intake;
     this.shooter = shooter;
+    this.deploy = deploy;
     this.indexer = indexer;
     this.booster = booster;
+    this.vision = vision;
 
     this.hood = hood;
   }
@@ -124,12 +134,22 @@ public class OutreachControllerMapping extends ControllerMapping {
     driverController
         .rightBumper()
         .whileTrue(
-            ShooterCommands.shootAtSpeedCommand(
-                    shooter, () -> RotationsPerSecond.of(shooterRPS.get()))
-                .alongWith(booster.boostCommand(boosterDutyCycle)));
+            new DriveAtAngleCommand(
+                drive,
+                () -> -driverController.getLeftY(),
+                () -> -driverController.getLeftX(),
+                () -> vision.getTargetX(0)));
 
     // Shoot
-    driverController.rightTrigger().whileTrue(indexer.indexUntilCancelledCommand(1));
+    driverController
+        .rightTrigger()
+        .whileTrue(
+            new ParallelCommandGroup(
+                    indexer.indexUntilCancelledCommand(1),
+                    ShooterCommands.shootAtSpeedCommand(
+                        shooter, () -> RotationsPerSecond.of(shooterRPS.get())),
+                    deploy.crunchCommand())
+                .alongWith(booster.boostCommand(boosterDutyCycle)));
 
     // Aim locked
     driverController

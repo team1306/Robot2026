@@ -15,7 +15,7 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class DriveAtAngleCommand extends Command {
-  private static double ANGLE_KP = 5.8;
+  private static double ANGLE_KP = 2;
   private static double ANGLE_KI = 0.00;
   private static double ANGLE_KD = 0.16;
   private static final double ANGLE_MAX_VELOCITY = 1000;
@@ -132,10 +132,7 @@ public class DriveAtAngleCommand extends Command {
 
     double output =
         angleController.calculate(
-            drive.getRotation().getRadians(),
-            flipped
-                ? rotationSupplier.get().getRadians() + Math.PI
-                : rotationSupplier.get().getRadians());
+            rotationSupplier.get().getRadians(), Rotation2d.fromDegrees(-20.0).getRadians());
 
     Logger.recordOutput("Drive/PID Output", output);
 
