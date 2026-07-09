@@ -3,27 +3,22 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Seconds;
 
-import badgerutils.networktables.LoggedNetworkTablesBuilder;
-import badgerutils.triggers.AllianceTriggers;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.events.EventTrigger;
-import com.pathplanner.lib.util.FlippingUtil;
-import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.measure.Time;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.commands.SafeAimAndShootCommand;
 import frc.robot.commands.ShootOnTheMoveCommands;
 import frc.robot.commands.ShooterCommands;
-import frc.robot.controls.Controls;
+import frc.robot.lib.BLine.FollowPath;
+import frc.robot.lib.BLine.Path;
 import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.deploy.Deploy;
 import frc.robot.subsystems.drive.Drive;
@@ -33,10 +28,8 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.RebuiltUtils;
-import java.util.List;
-import java.util.Optional;
 import java.util.function.BooleanSupplier;
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 public class Autos {
@@ -54,19 +47,19 @@ public class Autos {
   private final Deploy deploy;
 
   private final Command sotmSmallHopperCommand;
-  private final Command shootSmallHopperCommand;
+
   private final Command shootUntilDoneCommand;
   private final Command spoolShooterCommand;
-  private final Command intakeCommand;
+  private final Command startIntakeCommand;
+  private final Command stopIntakeCommand;
   private final Command deployCommand;
 
-  // Prefer to construct autos lazily to save limited memory. Required with many auto files
-  private final LoggedDashboardChooser<Auto> autoChooser;
+  // Auto chooser setup
+  private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   private final LoggedNetworkNumber autoWaitTime =
       new LoggedNetworkNumber("Autos/Auto Wait Seconds");
-
-  private static final List<String> autoNames = AutoBuilder.getAllAutoNames();
+  private final Field2d visualField = new Field2d();
 
   public Autos(
       Drive drive,
@@ -85,6 +78,12 @@ public class Autos {
     this.hood = hood;
     this.leds = leds;
     this.deploy = deploy;
+
+    FollowPath.setDoubleLoggingConsumer(p -> Logger.recordOutput(p.getFirst(), p.getSecond()));
+    FollowPath.setBooleanLoggingConsumer(p -> Logger.recordOutput(p.getFirst(), p.getSecond()));
+    FollowPath.setPoseLoggingConsumer(p -> Logger.recordOutput(p.getFirst(), p.getSecond()));
+    FollowPath.setTranslationListLoggingConsumer(
+        p -> Logger.recordOutput(p.getFirst(), p.getSecond()));
 
     inAllianceZoneSupplier = () -> RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
 
@@ -123,11 +122,17 @@ public class Autos {
                 () -> ShooterCommands.HUB_SETPOINTS)
             .asProxy();
 
-    intakeCommand =
+    startIntakeCommand =
         intake
             .intakeUntilInterruptedCommand(1)
             .asProxy()
             .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    stopIntakeCommand =
+        intake
+            .intakeUntilInterruptedCommand(0)
+            .asProxy()
+            .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+
     shootUntilDoneCommand =
         new ConditionalCommand(
             new SafeAimAndShootCommand(
@@ -149,134 +154,109 @@ public class Autos {
             Commands.none(),
             inAllianceZoneSupplier);
 
-    shootSmallHopperCommand =
-        new ConditionalCommand(
-                new SafeAimAndShootCommand(
-                    drive,
-                    shooter,
-                    indexer,
-                    deploy,
-                    booster,
-                    hood,
-                    leds,
-                    () -> 0,
-                    () -> 0,
-                    () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
-                    inAllianceZoneSupplier,
-                    () -> false,
-                    () -> false,
-                    () -> true,
-                    () -> false),
-                Commands.none(),
-                inAllianceZoneSupplier)
-            .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION));
-
     autoWaitTime.set(0);
-
-    autoChooser = new LoggedDashboardChooser<>("Autos/Auto Chooser");
-
-    autoChooser.addDefaultOption("None", new Auto("Empty", new InstantCommand()));
-
-    for (String auto : autoNames) {
-      autoChooser.addOption(auto, new Auto(auto, auto));
-    }
-
-    Controls.addPersistentTrigger(
-        () ->
-            LoggedNetworkTablesBuilder.createLoggedAutoResettingButton("Autos/Reset Odometry")
-                .onTrue(new InstantCommand(this::resetAutoOdometry).ignoringDisable(true)));
-
-    bindNamedCommands();
-    bindEventMarkers();
-  }
-
-  public Command createCommandFromSelectedAuto() {
-    Auto auto = autoChooser.get();
-    return new WaitCommand(autoWaitTime.get())
-        .andThen(auto.getCommand())
-        .andThen(Commands.print("Auto Complete"))
-        .withName(auto.getName());
-  }
-
-  private void resetAutoOdometry() {
-    Optional<PathPlannerAuto> autoOptional = autoChooser.get().getAuto();
-
-    if (!DriverStation.isDisabled() || autoOptional.isEmpty()) return;
-
-    Pose2d startingPosition = autoOptional.get().getStartingPose();
-
-    drive.setPose(
-        AllianceTriggers.isBlueAlliance()
-            ? startingPosition
-            : FlippingUtil.flipFieldPose(startingPosition));
-  }
-
-  private void bindNamedCommands() {
-    NamedCommands.registerCommand("intake", intakeCommand);
-
-    NamedCommands.registerCommand("deploy", deployCommand);
-
-    NamedCommands.registerCommand("spool-shooter", spoolShooterCommand);
-
-    NamedCommands.registerCommand("shoot-until-done", shootUntilDoneCommand);
-
-    NamedCommands.registerCommand("shoot-small-hopper", shootSmallHopperCommand);
-
-    NamedCommands.registerCommand("sotm-small-hopper", sotmSmallHopperCommand);
-
-    NamedCommands.registerCommand("coast", Commands.runOnce(() -> drive.setCoastMode()));
+    FollowPath.registerEventTrigger("deployIntake", deployCommand);
+    FollowPath.registerEventTrigger("startIntake", startIntakeCommand);
+    FollowPath.registerEventTrigger("stopIntake", stopIntakeCommand);
+    FollowPath.registerEventTrigger("coast", Commands.runOnce(() -> drive.setCoastMode()));
 
     RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> drive.setBrakeMode()));
+
+    // --- CONFIGURE AUTO CHOOSER ---
+
+    // 1. Set the default routine (your original code)
+    autoChooser.setDefaultOption("Citrus Right Sweep", getCitrusRight());
+    autoChooser.addOption("Citrus Left Sweep", getCitrusLeft());
+    autoChooser.addOption("Test", getTest());
+
+    // 2. Add custom routines here
+    autoChooser.addOption("Do Nothing", Commands.none());
+
+    // Example of another custom path routine:
+    // autoChooser.addOption("Citrus Left", Commands.sequence(pathBuilder.build(new
+    // Path("CitrusLeft")), shootUntilDoneCommand));
+
+    // 3. Push the chooser to SmartDashboard
+    SmartDashboard.putData("Auto Mode", autoChooser);
   }
 
-  private void bindEventMarkers() {
-    new EventTrigger("shoot-until-done")
-        .onFalse(Commands.runOnce(() -> shootUntilDoneCommand.cancel()));
-
-    new EventTrigger("intake").onFalse(Commands.runOnce(() -> intakeCommand.cancel()));
-
-    new EventTrigger("shoot-small-hopper")
-        .onFalse(Commands.runOnce(() -> shootSmallHopperCommand.cancel()));
-
-    new EventTrigger("sotm-small-hopper")
-        .onFalse(Commands.runOnce(() -> sotmSmallHopperCommand.cancel()));
+  private Command buildShootSmallHopperCommand() {
+    return new ConditionalCommand(
+            new SafeAimAndShootCommand(
+                drive,
+                shooter,
+                indexer,
+                deploy,
+                booster,
+                hood,
+                leds,
+                () -> 0,
+                () -> 0,
+                () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                inAllianceZoneSupplier,
+                () -> false,
+                () -> false,
+                () -> true,
+                () -> false),
+            Commands.none(),
+            inAllianceZoneSupplier)
+        .alongWith(deploy.crunchCommand().asProxy())
+        .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION));
+  }
+  // Helper method to break out your original routine
+  private Command getCitrusRight() {
+    Path firstSweep = new Path("CitrusRightFirstSweep");
+    Path secondSweep = new Path("CitrusRightSecondSweep");
+    Path thirdSweep = new Path("CitrusRightThirdSweep");
+    return new SequentialCommandGroup(
+        buildPath(firstSweep, true),
+        buildShootSmallHopperCommand(),
+        buildPath(secondSweep, false),
+        buildShootSmallHopperCommand(),
+        buildPath(thirdSweep, false));
   }
 
-  public static final class Auto {
-    private final String autoName;
-    private final String name;
-    private final Command command;
+  private Command getCitrusLeft() {
+    Path firstSweep = new Path("CitrusRightFirstSweep");
+    Path secondSweep = new Path("CitrusRightSecondSweep");
+    Path thirdSweep = new Path("CitrusRightThirdSweep");
+    firstSweep.mirror();
+    secondSweep.mirror();
+    thirdSweep.mirror();
+    return new SequentialCommandGroup(
+        buildPath(firstSweep, true),
+        buildShootSmallHopperCommand(),
+        buildPath(secondSweep, false),
+        buildShootSmallHopperCommand(),
+        buildPath(thirdSweep, false));
+  }
 
-    public Auto(String name, String autoName) {
-      this.command = new InstantCommand();
-      this.name = name;
-      this.autoName = autoName;
+  private Command getTest() {
+    return Commands.sequence(
+        buildPath(new Path("Test"), true),
+        buildShootSmallHopperCommand(),
+        shootUntilDoneCommand.asProxy());
+  }
+
+  private Command buildPath(Path path, boolean resetPose) {
+    FollowPath.Builder pathBuilder =
+        new FollowPath.Builder(
+                drive, // Subsystem requirement
+                drive::getPose, // Supplier<Pose2d>
+                drive::getChassisSpeeds, // Supplier<ChassisSpeeds> (robot-relative)
+                drive::runVelocity, // Consumer<ChassisSpeeds>  (robot-relative)
+                new PIDController(4.5, 0.0, 0.0), // translation — minimizes remaining distance
+                new PIDController(3.0, 0.0, 0.0), // rotation    — minimizes heading error
+                new PIDController(2.0, 0.0, 0.0)) // cross-track — minimizes perpendicular deviation
+            .withDefaultShouldFlip(); // auto-flip when on the red alliance
+    if (resetPose) {
+      pathBuilder = pathBuilder.withPoseReset(drive::setPose);
     }
+    return pathBuilder.build(path);
+  }
 
-    public Auto(String name, Command command) {
-      this.command = command;
-      this.name = name;
-      this.autoName = null;
-    }
+  public Command getAutonomousCommand() {
 
-    public String getName() {
-      return name;
-    }
-
-    public Optional<PathPlannerAuto> getAuto() {
-      if (autoName == null) return Optional.empty();
-      if (!autoNames.contains(autoName)) return Optional.empty();
-
-      return Optional.of(new PathPlannerAuto(autoName));
-    }
-
-    public Command getCommand() {
-      if (autoName != null) {
-        return new PathPlannerAuto(autoName);
-      } else if (command != null) {
-        return command;
-      }
-      return new InstantCommand();
-    }
+    return autoChooser.getSelected();
   }
 }

@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.controls.Controls;
 import frc.robot.generated.TunerConstants;
+import frc.robot.lib.BLine.*;
 import frc.robot.subsystems.booster.Booster;
 import frc.robot.subsystems.booster.BoosterIO;
 import frc.robot.subsystems.booster.BoosterIOReal;
@@ -58,13 +59,14 @@ public class RobotContainer {
   private final Deploy deploy;
 
   private final Controls controls;
-  private final Autos autos;
+  public final Autos autos;
 
   // Initializing constants for tuning
   private final ShooterConstants shooterConstants = new ShooterConstants();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
     switch (Constants.currentMode) {
       case REAL:
         drive =
@@ -159,6 +161,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return autos.createCommandFromSelectedAuto();
+    return autos.getAutonomousCommand();
   }
 }
