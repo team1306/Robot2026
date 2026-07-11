@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -12,11 +14,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.commands.SafeAimAndShootCommand;
 import frc.robot.commands.ShootOnTheMoveCommands;
 import frc.robot.commands.ShooterCommands;
+import frc.robot.controls.Controls;
 import frc.robot.lib.BLine.FollowPath;
 import frc.robot.lib.BLine.Path;
 import frc.robot.subsystems.booster.Booster;
@@ -31,6 +35,8 @@ import frc.robot.util.RebuiltUtils;
 import java.util.function.BooleanSupplier;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
+
+import badgerutils.networktables.LoggedNetworkTablesBuilder;
 
 public class Autos {
   private static final Time SMALL_HOPPER_SHOOT_DURATION = Seconds.of(3);
@@ -56,7 +62,7 @@ public class Autos {
 
   // Auto chooser setup
   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
-
+ 
   private final LoggedNetworkNumber autoWaitTime =
       new LoggedNetworkNumber("Autos/Auto Wait Seconds");
   private final Field2d visualField = new Field2d();
@@ -168,9 +174,15 @@ public class Autos {
     autoChooser.setDefaultOption("Citrus Right Sweep", getCitrusRight());
     autoChooser.addOption("Citrus Left Sweep", getCitrusLeft());
     autoChooser.addOption("Test", getTestAuto());
+    
 
     // 2. Add custom routines here
     autoChooser.addOption("Do Nothing", Commands.none());
+    Controls.addPersistentTrigger(
+        () ->
+            LoggedNetworkTablesBuilder.createLoggedAutoResettingButton("Autos/Reset Odometry")
+                .onTrue(new InstantCommand(this::resetAutoOdometry).ignoringDisable(true)));
+
 
     // Example of another custom path routine:
     // autoChooser.addOption("Citrus Left", Commands.sequence(pathBuilder.build(new
@@ -180,6 +192,9 @@ public class Autos {
     SmartDashboard.putData("Auto Mode", autoChooser);
   }
 
+private void resetAutoOdometry(){
+    drive.setPose(new Pose2d(0, 0, new Rotation2d(0)));
+}
   private Command buildShootSmallHopperCommand() {
     return new ConditionalCommand(
             new SafeAimAndShootCommand(
@@ -237,6 +252,7 @@ public class Autos {
         buildPath(thirdSweep, false));
   }
 
+  
   private Command getTest() {
     return Commands.sequence(
         buildPath(new Path("Test"), true),
