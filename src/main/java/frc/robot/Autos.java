@@ -167,7 +167,7 @@ public class Autos {
     // 1. Set the default routine (your original code)
     autoChooser.setDefaultOption("Citrus Right Sweep", getCitrusRight());
     autoChooser.addOption("Citrus Left Sweep", getCitrusLeft());
-    autoChooser.addOption("Test", getTest());
+    autoChooser.addOption("Test", getTestAuto());
 
     // 2. Add custom routines here
     autoChooser.addOption("Do Nothing", Commands.none());
@@ -204,6 +204,12 @@ public class Autos {
         .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION));
   }
   // Helper method to break out your original routine
+  private Command getTestAuto() {
+    Path firstSweep = new Path("test");
+
+    return new SequentialCommandGroup(
+        buildPath(firstSweep, true));
+  }
   private Command getCitrusRight() {
     Path firstSweep = new Path("CitrusRightFirstSweep");
     Path secondSweep = new Path("CitrusRightSecondSweep");
