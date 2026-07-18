@@ -3,6 +3,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Seconds;
 
+import badgerutils.networktables.LoggedNetworkTablesBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -36,8 +37,6 @@ import java.util.function.BooleanSupplier;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
-import badgerutils.networktables.LoggedNetworkTablesBuilder;
-
 public class Autos {
   private static final Time SMALL_HOPPER_SHOOT_DURATION = Seconds.of(3);
 
@@ -62,7 +61,7 @@ public class Autos {
 
   // Auto chooser setup
   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
- 
+
   private final LoggedNetworkNumber autoWaitTime =
       new LoggedNetworkNumber("Autos/Auto Wait Seconds");
   private final Field2d visualField = new Field2d();
@@ -174,7 +173,6 @@ public class Autos {
     autoChooser.setDefaultOption("Citrus Right Sweep", getCitrusRight());
     autoChooser.addOption("Citrus Left Sweep", getCitrusLeft());
     autoChooser.addOption("Test", getTestAuto());
-    
 
     // 2. Add custom routines here
     autoChooser.addOption("Do Nothing", Commands.none());
@@ -182,7 +180,6 @@ public class Autos {
         () ->
             LoggedNetworkTablesBuilder.createLoggedAutoResettingButton("Autos/Reset Odometry")
                 .onTrue(new InstantCommand(this::resetAutoOdometry).ignoringDisable(true)));
-
 
     // Example of another custom path routine:
     // autoChooser.addOption("Citrus Left", Commands.sequence(pathBuilder.build(new
@@ -192,9 +189,10 @@ public class Autos {
     SmartDashboard.putData("Auto Mode", autoChooser);
   }
 
-private void resetAutoOdometry(){
+  private void resetAutoOdometry() {
     drive.setPose(new Pose2d(0, 0, new Rotation2d(0)));
-}
+  }
+
   private Command buildShootSmallHopperCommand() {
     return new ConditionalCommand(
             new SafeAimAndShootCommand(
@@ -222,9 +220,9 @@ private void resetAutoOdometry(){
   private Command getTestAuto() {
     Path firstSweep = new Path("test");
 
-    return new SequentialCommandGroup(
-        buildPath(firstSweep, true));
+    return new SequentialCommandGroup(buildPath(firstSweep, true));
   }
+
   private Command getCitrusRight() {
     Path firstSweep = new Path("CitrusRightFirstSweep");
     Path secondSweep = new Path("CitrusRightSecondSweep");
@@ -252,7 +250,6 @@ private void resetAutoOdometry(){
         buildPath(thirdSweep, false));
   }
 
-  
   private Command getTest() {
     return Commands.sequence(
         buildPath(new Path("Test"), true),
