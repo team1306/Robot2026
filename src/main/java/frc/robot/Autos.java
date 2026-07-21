@@ -52,7 +52,6 @@ public class Autos {
   private final Deploy deploy;
 
   private final Command sotmSmallHopperCommand;
-
   private final Command shootUntilDoneCommand;
   private final Command spoolShooterCommand;
   private final Command startIntakeCommand;
@@ -115,6 +114,26 @@ public class Autos {
             Commands.none(),
             inAllianceZoneSupplier);
 
+    sotmUntilDoneCommand =
+        new ConditionalCommand(
+            ShootOnTheMoveCommands.shootOnTheMoveAutoCommand(
+                    drive,
+                    shooter,
+                    indexer,
+                    deploy,
+                    booster,
+                    hood,
+                    leds,
+                    () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                    inAllianceZoneSupplier,
+                    () -> false,
+                    () -> false,
+                    () -> true,
+                    () -> false)
+                .alongWith(intake.intakeUntilInterruptedCommand(1).asProxy()),
+            Commands.none(),
+            inAllianceZoneSupplier);
+
     spoolShooterCommand =
         ShooterCommands.shootAtDistanceCommand(
                 shooter,
@@ -155,7 +174,8 @@ public class Autos {
                 () -> false,
                 () -> false,
                 () -> true,
-                () -> false),
+                () -> false,
+                () -> true),
             Commands.none(),
             inAllianceZoneSupplier);
 

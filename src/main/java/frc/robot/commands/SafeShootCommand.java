@@ -28,6 +28,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
 
   private static double INDEXER_SPEED = 1;
   private static Time RETRACT_DELAY = Seconds.of(1);
+  private static Time LIFT_TIME = Seconds.of(0.5);
   private static final double BOOSTER_SPEED = 1;
   private static final Distance MINIMUM_SHOT_DISTANCE = Meters.of(2.2);
 
@@ -47,7 +48,8 @@ public class SafeShootCommand extends ParallelCommandGroup {
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive,
-      BooleanSupplier overrideAutoRanging) {
+      BooleanSupplier overrideAutoRanging,
+      BooleanSupplier additionalDeployCondition) {
 
     Logger.recordOutput(
         "Shooter/Distance to Target",
@@ -83,11 +85,6 @@ public class SafeShootCommand extends ParallelCommandGroup {
                 && (hubActiveCondition.getAsBoolean() || overrideHubActive.getAsBoolean())
                 && (autoRangeCondition.getAsBoolean() || overrideAutoRanging.getAsBoolean());
 
-    BooleanSupplier notMovingCondition =
-        () ->
-            drive.getChassisSpeeds().vxMetersPerSecond < 0.025
-                && drive.getChassisSpeeds().vyMetersPerSecond < 0.025;
-
     Command guardedIndexerCommand =
         new GuardedCommand(
             Commands.waitUntil(
@@ -100,17 +97,17 @@ public class SafeShootCommand extends ParallelCommandGroup {
                 .andThen(indexer.indexUntilCancelledCommand(INDEXER_SPEED)),
             combinedCondition);
 
-    // Command guardedDeployCommand =
-    //     Commands.waitUntil(() -> hasStartedShooting)
-    //         .andThen(Commands.waitTime(RETRACT_DELAY))
-    //         .andThen(
-    //             new GuardedCommand(
-    //                 deploy.crunchCommand(),
-    //                 () -> combinedCondition.getAsBoolean() &&
-    // notMovingCondition.getAsBoolean()));
+    Command deployCommand =
+        Commands.waitUntil(() -> hasStartedShooting)
+            .andThen(Commands.waitTime(RETRACT_DELAY))
+            .andThen(new GuardedCommand(deploy.crunchCommand(), additionalDeployCondition))
+            .until(() -> deploy.isPastOrAtSetpoint());
 
     Supplier<Distance> distanceSupplier =
         () -> Meters.of(drive.getPose().getTranslation().getDistance(positionSupplier.get()));
+
+    Command logDeployConditionCommand =
+        Commands.run(() -> Logger.recordOutput("Deploy/is at target", deploy.isPastOrAtSetpoint()));
 
     Command shootAtDistanceCommand =
         ShooterCommands.shootAtDistanceCommand(
@@ -152,7 +149,8 @@ public class SafeShootCommand extends ParallelCommandGroup {
                     shooterVelocityCondition,
                     driveAngleCondition,
                     hubActiveCondition,
-                    autoRangeCondition));
+                    autoRangeCondition,
+                    additionalDeployCondition));
 
     Command activityTracker =
         Commands.startEnd(
@@ -178,17 +176,19 @@ public class SafeShootCommand extends ParallelCommandGroup {
         activityTracker,
         shootAtDistanceCommand.asProxy(),
         guardedIndexerCommand.asProxy(),
-        // guardedDeployCommand.asProxy(),
+        deployCommand.asProxy(),
         boosterCommand.asProxy(),
         hoodCommand,
-        loggedGuardCommand);
+        loggedGuardCommand,
+        logDeployConditionCommand);
   }
 
   private void logConditions(
       BooleanSupplier shooterVelocityCondition,
       BooleanSupplier driveAngleCondition,
       BooleanSupplier hubActiveCondition,
-      BooleanSupplier withinRangeCondition) {
+      BooleanSupplier withinRangeCondition,
+      BooleanSupplier additionalDeployCondition) {
     Logger.recordOutput(
         "Controls/Ready To Shoot",
         shooterVelocityCondition.getAsBoolean() && driveAngleCondition.getAsBoolean());
@@ -197,5 +197,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
     Logger.recordOutput("Controls/Drive Angle Condition", driveAngleCondition.getAsBoolean());
     Logger.recordOutput("Controls/HubActive", hubActiveCondition.getAsBoolean());
     Logger.recordOutput("Controls/Within Range Condition", withinRangeCondition.getAsBoolean());
+    Logger.recordOutput(
+        "Controls/Additional Deploy Condition", additionalDeployCondition.getAsBoolean());
   }
 }
