@@ -38,7 +38,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 public class Autos {
-  private static final Time SMALL_HOPPER_SHOOT_DURATION = Seconds.of(3.5);
+  private static final Time SMALL_HOPPER_SHOOT_DURATION = Seconds.of(3);
 
   private final BooleanSupplier inAllianceZoneSupplier;
 
