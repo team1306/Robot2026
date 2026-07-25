@@ -89,7 +89,7 @@ public class ShooterCommands {
                     RotationsPerSecond.of(27),
                     Seconds.of(0.9304)),
                 new ShooterSetpoint(
-                    Meters.of(15), Rotations.of(.7), RotationsPerSecond.of(50), Seconds.of(1.66))
+                    Meters.of(15), Rotations.of(.7), RotationsPerSecond.of(45), Seconds.of(1.66))
               })
           .sorted()
           .toArray(ShooterSetpoint[]::new);
