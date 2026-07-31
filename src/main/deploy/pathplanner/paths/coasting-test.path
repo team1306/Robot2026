@@ -17,11 +17,19 @@
     {
       "anchor": {
         "x": 8.25,
+<<<<<<< HEAD
+        "y": 4.035
+      },
+      "prevControl": {
+        "x": 7.2499999999999964,
+        "y": 4.035
+=======
         "y": 7.138469879518072
       },
       "prevControl": {
         "x": 7.2499999999999964,
         "y": 7.138469879518072
+>>>>>>> e470d1a (hilltoppers)
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,8 +54,8 @@
   ],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 480.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
