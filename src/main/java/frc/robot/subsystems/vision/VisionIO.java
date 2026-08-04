@@ -14,7 +14,6 @@ public interface VisionIO {
     public PoseObservation[] poseObservations = new PoseObservation[0];
     public int[] tagIds = new int[0];
     public TagPose[] tagPoses = new TagPose[0];
-    
   }
 
   /** Represents the angle to a simple target, not used for pose estimation. */
@@ -23,7 +22,8 @@ public interface VisionIO {
   /** Represents a robot pose sample used for pose estimation. */
   public static record PoseObservation(
       double timestamp, Pose3d pose, double ambiguity, int tagCount, double averageTagDistance) {}
-  public static record TagPose(int tag, Pose3d pose) {
-  }
+
+  public static record TagPose(int tag, Pose3d pose) {}
+
   public default void updateInputs(VisionIOInputs inputs) {}
 }

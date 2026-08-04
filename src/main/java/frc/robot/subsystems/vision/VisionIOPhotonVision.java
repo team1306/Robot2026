@@ -36,6 +36,7 @@ public class VisionIOPhotonVision implements VisionIO {
     Set<Short> tagIds = new HashSet<>();
     List<PoseObservation> poseObservations = new LinkedList<>();
     List<TagPose> tagPoses = new LinkedList<>();
+    Set<Integer> tagPoseIdsAdded = new HashSet<>();
     for (var result : camera.getAllUnreadResults()) {
       // Update latest target observation
       if (result.hasTargets()) {
@@ -56,10 +57,16 @@ public class VisionIOPhotonVision implements VisionIO {
         Transform3d fieldToRobot = fieldToCamera.plus(robotToCamera.inverse());
         Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), fieldToRobot.getRotation());
 
-        // Calculate average tag distance
+        // Calculate average tag distance, and record the pose of every tag used
         double totalTagDistance = 0.0;
         for (var target : result.targets) {
           totalTagDistance += target.bestCameraToTarget.getTranslation().getNorm();
+
+          // Add tag pose for logging / getPose3d lookups (once per tag ID)
+          if (tagPoseIdsAdded.add(target.fiducialId)) {
+            var tagPose = APRIL_TAG_LAYOUT.getTagPose(target.fiducialId);
+            tagPose.ifPresent(pose -> tagPoses.add(new TagPose(target.fiducialId, pose)));
+          }
         }
 
         // Add tag IDs
@@ -100,9 +107,11 @@ public class VisionIOPhotonVision implements VisionIO {
                   1, // Tag count
                   cameraToTarget.getTranslation().getNorm() // Average tag distance
                   ));
-          tagPoses.add(
-            new TagPose(target.fiducialId, tagPose.get())
-          );
+
+          // Add tag pose for logging / getPose3d lookups (once per tag ID)
+          if (tagPoseIdsAdded.add(target.fiducialId)) {
+            tagPoses.add(new TagPose(target.fiducialId, tagPose.get()));
+          }
         }
       }
     }
