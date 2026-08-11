@@ -3,10 +3,11 @@ package frc.robot.simulation;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.TimeUnit;
-import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import com.ctre.phoenix6.hardware.TalonFX;
 
 /**
  * End-to-end check that the "Spool Shooter" control reaches the hardware: holding the operator's
@@ -33,13 +34,12 @@ class ShooterSpoolIntegrationTest {
   @Timeout(value = 120, unit = TimeUnit.SECONDS)
   void operatorRightTriggerSpoolsAllFourShooterMotors() {
     RobotSimHarness harness = RobotSimHarness.getInstance();
-    ShooterSimFixture shooter = ShooterSimFixture.attach(harness);
+    SimFixture shooter = SimFixtures.createShooterSimFixture(harness);
 
     harness.enableTeleop();
 
-    for (int i = 0; i < shooter.count(); i++) {
-      int motor = i;
-      assertTrue(
+    for (TalonFX motor : shooter.motors()) {
+        assertTrue(
           Math.abs(shooter.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS,
           () -> "expected idle before the trigger was pressed: " + shooter.describe(motor));
     }
@@ -48,45 +48,52 @@ class ShooterSpoolIntegrationTest {
 
     harness.stepUntilOrFail(
         "all four shooter motors commanded to spin",
-        () ->
-            IntStream.range(0, shooter.count())
-                .allMatch(i -> Math.abs(shooter.torqueCurrentAmps(i)) > MIN_COMMAND_AMPS),
+        () -> {
+            for (TalonFX motor : shooter.motors()) {
+                if (Math.abs(shooter.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS) return false;
+            }
+            return true;
+        },
         MAX_LOOPS);
 
-    for (int i = 0; i < shooter.count(); i++) {
-      int motor = i;
-      // Magnitude, not sign: the left and right pairs are configured with opposite inversion.
-      assertTrue(
-          Math.abs(shooter.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
-          () -> "motor was not commanded: " + shooter.describe(motor));
-      assertTrue(
-          Math.abs(shooter.closedLoopReferenceRps(motor)) > 0.0,
-          () -> "motor had a zero velocity setpoint: " + shooter.describe(motor));
-    }
+        for (TalonFX motor : shooter.motors()) {
+            assertTrue(
+                Math.abs(shooter.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
+                () -> "motor was not commanded: " + shooter.describe(motor));
+            assertTrue(
+                Math.abs(shooter.closedLoopReferenceRps(motor)) > 0.0,
+                () -> "motor had a zero velocity setpoint: " + shooter.describe(motor));
+        }
   }
 
   @Test
   @Timeout(value = 120, unit = TimeUnit.SECONDS)
   void releasingTheTriggerReturnsTheShooterToIdle() {
     RobotSimHarness harness = RobotSimHarness.getInstance();
-    ShooterSimFixture shooter = ShooterSimFixture.attach(harness);
+    SimFixture shooter = SimFixtures.createShooterSimFixture(harness);
 
     harness.enableTeleop();
     harness.setOperatorRightTrigger(1.0);
     harness.stepUntilOrFail(
         "shooter spooling",
-        () ->
-            IntStream.range(0, shooter.count())
-                .allMatch(i -> Math.abs(shooter.torqueCurrentAmps(i)) > MIN_COMMAND_AMPS),
+        () -> {
+            for (TalonFX motor : shooter.motors()) {
+                if (Math.abs(shooter.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS) return false;
+            }
+            return true;
+        },
         MAX_LOOPS);
 
     harness.setOperatorRightTrigger(0.0);
 
     harness.stepUntilOrFail(
         "all four shooter motors released to neutral",
-        () ->
-            IntStream.range(0, shooter.count())
-                .allMatch(i -> Math.abs(shooter.torqueCurrentAmps(i)) <= MIN_COMMAND_AMPS),
+        () -> {
+            for (TalonFX motor : shooter.motors()) {
+                if (Math.abs(shooter.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS) return false;
+            }
+            return true;
+        },
         MAX_LOOPS);
   }
 }
