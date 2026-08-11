@@ -1,13 +1,12 @@
-package frc.robot.simulation;
+package frc.robot;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import com.ctre.phoenix6.hardware.TalonFX;
 
 /**
  * End-to-end check that the "Spool Shooter" control reaches the hardware: holding the operator's
@@ -39,7 +38,7 @@ class ShooterSpoolIntegrationTest {
     harness.enableTeleop();
 
     for (TalonFX motor : shooter.motors()) {
-        assertTrue(
+      assertTrue(
           Math.abs(shooter.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS,
           () -> "expected idle before the trigger was pressed: " + shooter.describe(motor));
     }
@@ -49,21 +48,21 @@ class ShooterSpoolIntegrationTest {
     harness.stepUntilOrFail(
         "all four shooter motors commanded to spin",
         () -> {
-            for (TalonFX motor : shooter.motors()) {
-                if (Math.abs(shooter.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS) return false;
-            }
-            return true;
+          for (TalonFX motor : shooter.motors()) {
+            if (Math.abs(shooter.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS) return false;
+          }
+          return true;
         },
         MAX_LOOPS);
 
-        for (TalonFX motor : shooter.motors()) {
-            assertTrue(
-                Math.abs(shooter.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
-                () -> "motor was not commanded: " + shooter.describe(motor));
-            assertTrue(
-                Math.abs(shooter.closedLoopReferenceRps(motor)) > 0.0,
-                () -> "motor had a zero velocity setpoint: " + shooter.describe(motor));
-        }
+    for (TalonFX motor : shooter.motors()) {
+      assertTrue(
+          Math.abs(shooter.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
+          () -> "motor was not commanded: " + shooter.describe(motor));
+      assertTrue(
+          Math.abs(shooter.closedLoopReferenceRps(motor)) > 0.0,
+          () -> "motor had a zero velocity setpoint: " + shooter.describe(motor));
+    }
   }
 
   @Test
@@ -77,10 +76,10 @@ class ShooterSpoolIntegrationTest {
     harness.stepUntilOrFail(
         "shooter spooling",
         () -> {
-            for (TalonFX motor : shooter.motors()) {
-                if (Math.abs(shooter.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS) return false;
-            }
-            return true;
+          for (TalonFX motor : shooter.motors()) {
+            if (Math.abs(shooter.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS) return false;
+          }
+          return true;
         },
         MAX_LOOPS);
 
@@ -89,10 +88,10 @@ class ShooterSpoolIntegrationTest {
     harness.stepUntilOrFail(
         "all four shooter motors released to neutral",
         () -> {
-            for (TalonFX motor : shooter.motors()) {
-                if (Math.abs(shooter.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS) return false;
-            }
-            return true;
+          for (TalonFX motor : shooter.motors()) {
+            if (Math.abs(shooter.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS) return false;
+          }
+          return true;
         },
         MAX_LOOPS);
   }

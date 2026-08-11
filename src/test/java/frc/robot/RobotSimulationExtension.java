@@ -1,4 +1,4 @@
-package frc.robot.simulation;
+package frc.robot;
 
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;

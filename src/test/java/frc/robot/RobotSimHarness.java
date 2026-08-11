@@ -1,4 +1,4 @@
-package frc.robot.simulation;
+package frc.robot;
 
 import com.ctre.phoenix6.unmanaged.Unmanaged;
 import edu.wpi.first.hal.AllianceStationID;
@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import edu.wpi.first.wpilibj.simulation.SimHooks;
 import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.SimulatedRobot;
+
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BooleanSupplier;

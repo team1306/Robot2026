@@ -1,13 +1,12 @@
-package frc.robot.simulation;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+package frc.robot;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.CANcoderSimState;
 import com.ctre.phoenix6.sim.TalonFXSimState;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Observes the four shooter motors through Phoenix's simulation layer, and feeds them the inputs a
@@ -32,7 +31,7 @@ public class SimFixture {
 
   public SimFixture(RobotSimHarness harness, TalonFX[] motors, CANcoder[] encoders) {
     harness.addPreLoopHook(this::feedSimInputs);
-    
+
     this.motors = new HashMap<>();
     for (TalonFX motor : motors) {
       this.motors.put(motor, motor.getSimState());
@@ -49,12 +48,14 @@ public class SimFixture {
 
   /** Runs before every robot loop, standing in for the physical power and sensor wiring. */
   private void feedSimInputs() {
-    encoders.forEach((encoder, simState) -> {
-      simState.setSupplyVoltage(SUPPLY_VOLTAGE);
-    });
-    motors.forEach((motor, simState) -> {
-      simState.setSupplyVoltage(SUPPLY_VOLTAGE);
-    });
+    encoders.forEach(
+        (encoder, simState) -> {
+          simState.setSupplyVoltage(SUPPLY_VOLTAGE);
+        });
+    motors.forEach(
+        (motor, simState) -> {
+          simState.setSupplyVoltage(SUPPLY_VOLTAGE);
+        });
   }
 
   public Set<TalonFX> motors() {
@@ -76,11 +77,11 @@ public class SimFixture {
 
   /** The velocity setpoint the motor is closing on, in rotations per second. */
   public double closedLoopReferenceRps(TalonFX motor) {
-    return motor.getClosedLoopReference().refresh().getValueAsDouble();
+    return motor.getClosedLoopReference().getValueAsDouble();
   }
 
   public boolean remoteSensorInvalid(TalonFX motor) {
-    return motor.getFault_RemoteSensorDataInvalid().refresh().getValue();
+    return motor.getFault_RemoteSensorDataInvalid().getValue();
   }
 
   /** One-line dump of everything a failing assertion might want to explain itself. */
