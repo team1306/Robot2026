@@ -185,21 +185,23 @@ public final class RobotSimHarness {
     step(2);
   }
 
+  /**
+   * Gets the driver sim controller. {@code DriverStationSim.notifyNewData()}must be called after
+   * inputting a control
+   */
   public XboxControllerSim driver() {
     return driver;
   }
 
+  /**
+   * Gets the operator sim controller. {@code DriverStationSim.notifyNewData()}must be called after
+   * inputting a control
+   */
   public XboxControllerSim operator() {
     return operator;
   }
 
-  /** Sets the operator's right trigger axis. {@code rightTrigger()} activates above 0.5. */
-  public void setOperatorRightTrigger(double value) {
-    operator.setRightTriggerAxis(value);
-    DriverStationSim.notifyNewData();
-  }
-
-  public RobotContainer getRobotContainer() {
+  public RobotContainer robotContainer() {
     return robot.getRobotContainer();
   }
 

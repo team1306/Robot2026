@@ -3,6 +3,7 @@ package frc.robot.tests;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import frc.robot.RobotSimHarness;
 import frc.robot.RobotSimulationExtension;
 import frc.robot.SimFixture;
@@ -47,7 +48,8 @@ class ShooterSpoolIntegrationTest {
           () -> "expected idle before the trigger was pressed: " + shooter.describe(motor));
     }
 
-    harness.setOperatorRightTrigger(1.0);
+    harness.operator().setRightTriggerAxis(1.0);
+    DriverStationSim.notifyNewData();
 
     harness.stepUntilOrFail(
         "all four shooter motors commanded to spin",
@@ -76,7 +78,9 @@ class ShooterSpoolIntegrationTest {
     SimFixture shooter = SimFixtures.createShooterSimFixture(harness);
 
     harness.enableTeleop();
-    harness.setOperatorRightTrigger(1.0);
+    harness.operator().setRightTriggerAxis(1.0);
+    DriverStationSim.notifyNewData();
+
     harness.stepUntilOrFail(
         "shooter spooling",
         () -> {
@@ -87,7 +91,8 @@ class ShooterSpoolIntegrationTest {
         },
         MAX_LOOPS);
 
-    harness.setOperatorRightTrigger(0.0);
+    harness.operator().setRightTriggerAxis(0.0);
+    DriverStationSim.notifyNewData();
 
     harness.stepUntilOrFail(
         "all four shooter motors released to neutral",

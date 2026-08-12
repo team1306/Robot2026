@@ -28,7 +28,7 @@ public class IntakeCommandsIntegrationTest {
   void intakeAtDutyCycleControlsAllMotors() {
     RobotSimHarness harness = RobotSimHarness.getInstance();
     SimFixture fixture = SimFixtures.createIntakeSimFixture(harness);
-    Intake intake = harness.getRobotContainer().intake;
+    Intake intake = harness.robotContainer().intake;
 
     harness.enableTeleop();
 
@@ -92,7 +92,7 @@ public class IntakeCommandsIntegrationTest {
   void intakeUntilInterruptedCommandControlsAllMotors() {
     RobotSimHarness harness = RobotSimHarness.getInstance();
     SimFixture fixture = SimFixtures.createIntakeSimFixture(harness);
-    Intake intake = harness.getRobotContainer().intake;
+    Intake intake = harness.robotContainer().intake;
     Command command = intake.intakeUntilInterruptedCommand(1);
 
     harness.enableTeleop();
