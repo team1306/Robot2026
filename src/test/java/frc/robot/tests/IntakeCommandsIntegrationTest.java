@@ -1,6 +1,5 @@
 package frc.robot.tests;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -107,34 +106,27 @@ public class IntakeCommandsIntegrationTest {
 
     CommandScheduler.getInstance().schedule(command);
 
-    assertDoesNotThrow(
-        () ->
-            harness.stepUntilOrFail(
-                "all four intake motors commanded to spin",
-                () -> {
-                  for (TalonFX motor : fixture.motors()) {
-                    if (Math.abs(fixture.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS)
-                      return false;
-                  }
-                  return true;
-                },
-                MAX_LOOPS),
-        "Expected all motors to be running");
+    harness.stepUntilOrFail(
+        "Expected all motors to spin",
+        () -> {
+          for (TalonFX motor : fixture.motors()) {
+            if (Math.abs(fixture.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS) return false;
+          }
+          return true;
+        },
+        MAX_LOOPS);
 
     CommandScheduler.getInstance().cancel(command);
 
-    assertDoesNotThrow(
-        () ->
-            harness.stepUntilOrFail(
-                "all four intake motors commanded to stop",
-                () -> {
-                  for (TalonFX motor : fixture.motors()) {
-                    if (Math.abs(fixture.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS) return false;
-                  }
-                  return true;
-                },
-                MAX_LOOPS),
-        "Expected All Motors to be stopped");
+    harness.stepUntilOrFail(
+        "Expected all motors to stop",
+        () -> {
+          for (TalonFX motor : fixture.motors()) {
+            if (Math.abs(fixture.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS) return false;
+          }
+          return true;
+        },
+        MAX_LOOPS);
 
     CommandScheduler.getInstance().unregisterSubsystem(intake);
   }
