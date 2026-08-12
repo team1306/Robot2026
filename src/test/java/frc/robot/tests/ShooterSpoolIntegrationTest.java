@@ -1,8 +1,12 @@
-package frc.robot;
+package frc.robot.tests;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import frc.robot.RobotSimHarness;
+import frc.robot.RobotSimulationExtension;
+import frc.robot.SimFixture;
+import frc.robot.SimFixtures;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;

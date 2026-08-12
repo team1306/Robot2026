@@ -26,15 +26,15 @@ public class SimFixture {
 
   public static final double SUPPLY_VOLTAGE = 12.0;
 
-  private final Map<TalonFX, TalonFXSimState> motors;
+  private final Map<TalonFX, TalonFXSimState> motorSims;
   private final Map<CANcoder, CANcoderSimState> encoders;
 
   public SimFixture(RobotSimHarness harness, TalonFX[] motors, CANcoder[] encoders) {
     harness.addPreLoopHook(this::feedSimInputs);
 
-    this.motors = new HashMap<>();
+    this.motorSims = new HashMap<>();
     for (TalonFX motor : motors) {
-      this.motors.put(motor, motor.getSimState());
+      this.motorSims.put(motor, motor.getSimState());
     }
 
     this.encoders = new HashMap<>();
@@ -52,14 +52,14 @@ public class SimFixture {
         (encoder, simState) -> {
           simState.setSupplyVoltage(SUPPLY_VOLTAGE);
         });
-    motors.forEach(
+    motorSims.forEach(
         (motor, simState) -> {
           simState.setSupplyVoltage(SUPPLY_VOLTAGE);
         });
   }
 
   public Set<TalonFX> motors() {
-    return motors.keySet();
+    return motorSims.keySet();
   }
 
   public Map<CANcoder, CANcoderSimState> encoders() {
@@ -68,11 +68,11 @@ public class SimFixture {
 
   /** Commanded torque current, the output of the shooter's {@code VelocityTorqueCurrentFOC}. */
   public double torqueCurrentAmps(TalonFX motor) {
-    return motors.get(motor).getTorqueCurrent();
+    return motorSims.get(motor).getTorqueCurrent();
   }
 
   public double motorVoltageVolts(TalonFX motor) {
-    return motors.get(motor).getMotorVoltage();
+    return motorSims.get(motor).getMotorVoltage();
   }
 
   /** The velocity setpoint the motor is closing on, in rotations per second. */
