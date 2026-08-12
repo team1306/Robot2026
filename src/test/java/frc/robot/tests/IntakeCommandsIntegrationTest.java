@@ -1,5 +1,6 @@
 package frc.robot.tests;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -11,7 +12,6 @@ import frc.robot.RobotSimulationExtension;
 import frc.robot.SimFixture;
 import frc.robot.SimFixtures;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeIOReal;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -29,7 +29,7 @@ public class IntakeCommandsIntegrationTest {
   void intakeAtDutyCycleControlsAllMotors() {
     RobotSimHarness harness = RobotSimHarness.getInstance();
     SimFixture fixture = SimFixtures.createIntakeSimFixture(harness);
-    Intake intake = new Intake(new IntakeIOReal());
+    Intake intake = harness.getRobotContainer().intake;
 
     harness.enableTeleop();
 
@@ -51,7 +51,7 @@ public class IntakeCommandsIntegrationTest {
           () -> "motor was not commanded: " + fixture.describe(motor));
     }
 
-    CommandScheduler.getInstance().unregisterSubsystem(intake);
+    intake.setDutyCycle(0);
   }
 
   @Test
@@ -93,17 +93,11 @@ public class IntakeCommandsIntegrationTest {
   void intakeUntilInterruptedCommandControlsAllMotors() {
     RobotSimHarness harness = RobotSimHarness.getInstance();
     SimFixture fixture = SimFixtures.createIntakeSimFixture(harness);
-    Intake intake = new Intake(new IntakeIOReal());
+    Intake intake = harness.getRobotContainer().intake;
     Command command = intake.intakeUntilInterruptedCommand(1);
 
     harness.enableTeleop();
     CommandScheduler.getInstance().cancelAll();
-    intake.setDutyCycle(0);
-
-    harness.step(5);
-
-    System.out.println(
-        fixture.motors().toArray(new TalonFX[2])[0].getDutyCycle().getValueAsDouble());
 
     for (TalonFX motor : fixture.motors()) {
       assertTrue(
@@ -113,39 +107,34 @@ public class IntakeCommandsIntegrationTest {
 
     CommandScheduler.getInstance().schedule(command);
 
-    harness.stepUntilOrFail(
-        "all four intake motors commanded to spin",
-        () -> {
-          for (TalonFX motor : fixture.motors()) {
-            if (Math.abs(fixture.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS) return false;
-          }
-          return true;
-        },
-        MAX_LOOPS);
-
-    for (TalonFX motor : fixture.motors()) {
-      assertTrue(
-          Math.abs(fixture.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
-          () -> "motor was not commanded: " + fixture.describe(motor));
-    }
+    assertDoesNotThrow(
+        () ->
+            harness.stepUntilOrFail(
+                "all four intake motors commanded to spin",
+                () -> {
+                  for (TalonFX motor : fixture.motors()) {
+                    if (Math.abs(fixture.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS)
+                      return false;
+                  }
+                  return true;
+                },
+                MAX_LOOPS),
+        "Expected all motors to be running");
 
     CommandScheduler.getInstance().cancel(command);
 
-    harness.stepUntilOrFail(
-        "all four intake motors commanded to stop",
-        () -> {
-          for (TalonFX motor : fixture.motors()) {
-            if (Math.abs(fixture.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS) return false;
-          }
-          return true;
-        },
-        MAX_LOOPS);
-
-    for (TalonFX motor : fixture.motors()) {
-      assertTrue(
-          Math.abs(fixture.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS,
-          () -> "expected motor to stop after command cancelled: " + fixture.describe(motor));
-    }
+    assertDoesNotThrow(
+        () ->
+            harness.stepUntilOrFail(
+                "all four intake motors commanded to stop",
+                () -> {
+                  for (TalonFX motor : fixture.motors()) {
+                    if (Math.abs(fixture.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS) return false;
+                  }
+                  return true;
+                },
+                MAX_LOOPS),
+        "Expected All Motors to be stopped");
 
     CommandScheduler.getInstance().unregisterSubsystem(intake);
   }

@@ -46,16 +46,16 @@ import frc.robot.subsystems.vision.VisionIOPhotonVision;
  */
 public class RobotContainer {
   // Subsystems
-  private final Drive drive;
+  public final Drive drive;
   private final Vision vision;
-  private final Intake intake;
-  private final Indexer indexer;
-  private final Shooter shooter;
-  private final Booster booster;
-  private final Hood hood;
+  public final Intake intake;
+  public final Indexer indexer;
+  public final Shooter shooter;
+  public final Booster booster;
+  public final Hood hood;
   private final FuelDetection fuelDetection;
   private final Leds leds;
-  private final Deploy deploy;
+  public final Deploy deploy;
 
   private final Controls controls;
   private final Autos autos;

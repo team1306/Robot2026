@@ -199,6 +199,10 @@ public final class RobotSimHarness {
     DriverStationSim.notifyNewData();
   }
 
+  public RobotContainer getRobotContainer() {
+    return robot.getRobotContainer();
+  }
+
   /**
    * Registers a callback run before each loop, used by fixtures to feed simulated device inputs
    * (supply voltage, sensor readings) the way a physical robot would.

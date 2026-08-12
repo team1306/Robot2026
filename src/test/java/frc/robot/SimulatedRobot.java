@@ -19,4 +19,8 @@ public class SimulatedRobot extends Robot {
   public void runLoopOnce() {
     loopFunc();
   }
+
+  public RobotContainer getRobotContainer() {
+    return robotContainer;
+  }
 }
