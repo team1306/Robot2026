@@ -50,6 +50,8 @@ public class IntakeCommandsIntegrationTest {
           Math.abs(fixture.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
           () -> "motor was not commanded: " + fixture.describe(motor));
     }
+
+    CommandScheduler.getInstance().unregisterSubsystem(intake);
   }
 
   @Test
@@ -95,6 +97,13 @@ public class IntakeCommandsIntegrationTest {
     Command command = intake.intakeUntilInterruptedCommand(1);
 
     harness.enableTeleop();
+    CommandScheduler.getInstance().cancelAll();
+    intake.setDutyCycle(0);
+
+    harness.step(5);
+
+    System.out.println(
+        fixture.motors().toArray(new TalonFX[2])[0].getDutyCycle().getValueAsDouble());
 
     for (TalonFX motor : fixture.motors()) {
       assertTrue(
@@ -137,5 +146,7 @@ public class IntakeCommandsIntegrationTest {
           Math.abs(fixture.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS,
           () -> "expected motor to stop after command cancelled: " + fixture.describe(motor));
     }
+
+    CommandScheduler.getInstance().unregisterSubsystem(intake);
   }
 }
