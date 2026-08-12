@@ -95,7 +95,7 @@ public class RobotContainer {
                     VisionConstants.RIGHT_SIDE_CAMERA_POSITION));
         fuelDetection = new FuelDetection(new FuelDetectionIO() {});
         leds = new Leds(new LedsReal());
-        deploy = new Deploy(new DeployIO() {});
+        deploy = new Deploy(new DeployIOReal());
         hood = new Hood(new HoodIOReal());
         break;
 
