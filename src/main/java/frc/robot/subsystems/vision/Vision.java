@@ -7,6 +7,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
@@ -40,9 +41,30 @@ public class Vision extends SubsystemBase {
               "Vision camera " + inputs[i].cameraName + " is disconnected.", AlertType.kWarning);
     }
   }
-  public Pose3d getPose3d(int cameraIndex, int tagId){
+
+  public Pose3d getPose3d(int cameraIndex, int tagId) {
     for (int i = 0; i < (inputs[cameraIndex].tagPoses).length; i++) {
-      if (inputs[cameraIndex].tagPoses[i].tag() == tagId){return inputs[cameraIndex].tagPoses[i].pose();};
+      if (inputs[cameraIndex].tagPoses[i].tag() == tagId) {
+        return inputs[cameraIndex].tagPoses[i].pose();
+      }
+      ;
+    }
+    return null;
+  }
+
+  /**
+   * Returns the position of the given tag relative to the given camera, i.e. the transform from the
+   * camera's frame to the tag's frame, as reported by the most recent PhotonVision result. Returns
+   * null if that camera does not currently see the tag.
+   *
+   * @param cameraIndex The index of the camera to use.
+   * @param tagId The fiducial ID of the tag to look up.
+   */
+  public Transform3d getCameraToTag(int cameraIndex, int tagId) {
+    for (var obs : inputs[cameraIndex].tagObservations) {
+      if (obs.tagId() == tagId) {
+        return obs.cameraToTag();
+      }
     }
     return null;
   }
@@ -135,6 +157,7 @@ public class Vision extends SubsystemBase {
       }
 
       // Log camera metadata
+
       Logger.recordOutput(
           "Vision/" + inputs[cameraIndex].cameraName + "/TagPoses",
           tagPoses.toArray(new Pose3d[0]));
@@ -151,8 +174,8 @@ public class Vision extends SubsystemBase {
       allRobotPoses.addAll(robotPoses);
       allRobotPosesAccepted.addAll(robotPosesAccepted);
       allRobotPosesRejected.addAll(robotPosesRejected);
-    }
 
+   
     // Log summary data
     Logger.recordOutput("Vision/Summary/TagPoses", allTagPoses.toArray(new Pose3d[0]));
     Logger.recordOutput("Vision/Summary/RobotPoses", allRobotPoses.toArray(new Pose3d[0]));

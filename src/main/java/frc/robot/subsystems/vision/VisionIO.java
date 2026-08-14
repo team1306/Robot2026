@@ -2,6 +2,7 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface VisionIO {
@@ -14,6 +15,7 @@ public interface VisionIO {
     public PoseObservation[] poseObservations = new PoseObservation[0];
     public int[] tagIds = new int[0];
     public TagPose[] tagPoses = new TagPose[0];
+    public TagObservation[] tagObservations = new TagObservation[0];
   }
 
   /** Represents the angle to a simple target, not used for pose estimation. */
@@ -24,6 +26,9 @@ public interface VisionIO {
       double timestamp, Pose3d pose, double ambiguity, int tagCount, double averageTagDistance) {}
 
   public static record TagPose(int tag, Pose3d pose) {}
+
+  /** Represents a tag's position relative to the camera, i.e. camera frame -> tag frame. */
+  public static record TagObservation(int tagId, Transform3d cameraToTag) {}
 
   public default void updateInputs(VisionIOInputs inputs) {}
 }

@@ -36,6 +36,7 @@ public class VisionIOPhotonVision implements VisionIO {
     Set<Short> tagIds = new HashSet<>();
     List<PoseObservation> poseObservations = new LinkedList<>();
     List<TagPose> tagPoses = new LinkedList<>();
+    List<TagObservation> tagObservations = new LinkedList<>();
     Set<Integer> tagPoseIdsAdded = new HashSet<>();
     for (var result : camera.getAllUnreadResults()) {
       // Update latest target observation
@@ -62,6 +63,9 @@ public class VisionIOPhotonVision implements VisionIO {
         for (var target : result.targets) {
           totalTagDistance += target.bestCameraToTarget.getTranslation().getNorm();
 
+          // Record this tag's position relative to the camera
+          tagObservations.add(new TagObservation(target.fiducialId, target.bestCameraToTarget));
+
           // Add tag pose for logging / getPose3d lookups (once per tag ID)
           if (tagPoseIdsAdded.add(target.fiducialId)) {
             var tagPose = APRIL_TAG_LAYOUT.getTagPose(target.fiducialId);
@@ -84,6 +88,9 @@ public class VisionIOPhotonVision implements VisionIO {
 
       } else if (!result.targets.isEmpty()) { // Single tag result
         var target = result.targets.get(0);
+
+        // Record this tag's position relative to the camera
+        tagObservations.add(new TagObservation(target.fiducialId, target.bestCameraToTarget));
 
         // Calculate robot pose
         var tagPose = APRIL_TAG_LAYOUT.getTagPose(target.fiducialId);
@@ -120,6 +127,12 @@ public class VisionIOPhotonVision implements VisionIO {
     inputs.tagPoses = new TagPose[tagPoses.size()];
     for (int i = 0; i < tagPoses.size(); i++) {
       inputs.tagPoses[i] = tagPoses.get(i);
+    }
+
+    // Save camera-relative tag observations to inputs object
+    inputs.tagObservations = new TagObservation[tagObservations.size()];
+    for (int i = 0; i < tagObservations.size(); i++) {
+      inputs.tagObservations[i] = tagObservations.get(i);
     }
 
     inputs.poseObservations = new PoseObservation[poseObservations.size()];
