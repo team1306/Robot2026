@@ -48,14 +48,14 @@ public class RobotContainer {
   // Subsystems
   public final Drive drive;
   private final Vision vision;
-  public final Intake intake;
-  public final Indexer indexer;
-  public final Shooter shooter;
-  public final Booster booster;
-  public final Hood hood;
+  private final Intake intake;
+  private final Indexer indexer;
+  private final Shooter shooter;
+  private final Booster booster;
+  private final Hood hood;
   private final FuelDetection fuelDetection;
   private final Leds leds;
-  public final Deploy deploy;
+  private final Deploy deploy;
 
   private final Controls controls;
   private final Autos autos;
@@ -160,5 +160,9 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return autos.createCommandFromSelectedAuto();
+  }
+
+  public Intake TESTONLY_getIntake() {
+    return intake;
   }
 }

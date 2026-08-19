@@ -23,14 +23,22 @@ public class IntakeCommandsIntegrationTest {
 
   private static final int MAX_LOOPS = 25;
 
+  private final RobotSimHarness harness;
+  private final SimFixture fixture;
+  private final Intake intake;
+
+  public IntakeCommandsIntegrationTest() {
+    // Common test startup
+    harness = RobotSimHarness.getInstance();
+    fixture = SimFixtures.createIntakeSimFixture(harness);
+    intake = harness.robotContainer().TESTONLY_getIntake();
+
+    harness.enableTeleop();
+  }
+
   @Test
   @Timeout(value = 120, unit = TimeUnit.SECONDS)
   void intakeAtDutyCycleControlsAllMotors() {
-    RobotSimHarness harness = RobotSimHarness.getInstance();
-    SimFixture fixture = SimFixtures.createIntakeSimFixture(harness);
-    Intake intake = harness.robotContainer().intake;
-
-    harness.enableTeleop();
 
     CommandScheduler.getInstance().schedule(intake.intakeAtDutyCycleCommand(1));
 
@@ -56,15 +64,10 @@ public class IntakeCommandsIntegrationTest {
   @Test
   @Timeout(value = 120, unit = TimeUnit.SECONDS)
   void leftTriggerRunsIntake() {
-    RobotSimHarness harness = RobotSimHarness.getInstance();
-    SimFixture intake = SimFixtures.createIntakeSimFixture(harness);
-
-    harness.enableTeleop();
-
-    for (TalonFX motor : intake.motors()) {
+    for (TalonFX motor : fixture.motors()) {
       assertTrue(
-          Math.abs(intake.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS,
-          () -> "expected idle before the trigger was pressed: " + intake.describe(motor));
+          Math.abs(fixture.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS,
+          () -> "expected idle before the trigger was pressed: " + fixture.describe(motor));
     }
 
     harness.driver().setLeftTriggerAxis(1);
@@ -73,29 +76,25 @@ public class IntakeCommandsIntegrationTest {
     harness.stepUntilOrFail(
         "all four intake motors commanded to spin",
         () -> {
-          for (TalonFX motor : intake.motors()) {
-            if (Math.abs(intake.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS) return false;
+          for (TalonFX motor : fixture.motors()) {
+            if (Math.abs(fixture.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS) return false;
           }
           return true;
         },
         MAX_LOOPS);
 
-    for (TalonFX motor : intake.motors()) {
+    for (TalonFX motor : fixture.motors()) {
       assertTrue(
-          Math.abs(intake.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
-          () -> "motor was not commanded: " + intake.describe(motor));
+          Math.abs(fixture.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
+          () -> "motor was not commanded: " + fixture.describe(motor));
     }
   }
 
   @Test
   @Timeout(value = 120, unit = TimeUnit.SECONDS)
   void intakeUntilInterruptedCommandControlsAllMotors() {
-    RobotSimHarness harness = RobotSimHarness.getInstance();
-    SimFixture fixture = SimFixtures.createIntakeSimFixture(harness);
-    Intake intake = harness.robotContainer().intake;
     Command command = intake.intakeUntilInterruptedCommand(1);
 
-    harness.enableTeleop();
     CommandScheduler.getInstance().cancelAll();
 
     for (TalonFX motor : fixture.motors()) {
