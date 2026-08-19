@@ -161,4 +161,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return autos.createCommandFromSelectedAuto();
   }
+
+  public Intake TESTONLY_getIntake() {
+    return intake;
+  }
 }
