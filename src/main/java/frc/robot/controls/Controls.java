@@ -29,7 +29,7 @@ public class Controls {
   private final EnumMap<ControlStates, ControllerMapping> mappings =
       new EnumMap<>(ControlStates.class);
 
-  private ControlStates currentState = ControlStates.COMPETITION;
+  private ControlStates currentState = ControlStates.OUTREACH;
 
   private static final Set<Supplier<Trigger>> persistentTriggers = new HashSet<>();
 
@@ -110,7 +110,7 @@ public class Controls {
         };
 
     LoggedNetworkTablesBuilder.createSelectorFromEnum(
-        "Controls/Controller Mode", ControlStates.class, ControlStates.COMPETITION, onChange);
+        "Controls/Controller Mode", ControlStates.class, ControlStates.OUTREACH, onChange);
   }
 
   public static void addPersistentTrigger(Supplier<Trigger> triggerSupplier) {
