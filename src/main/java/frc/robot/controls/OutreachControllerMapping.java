@@ -4,10 +4,12 @@ import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import badgerutils.commands.CommandUtils;
+import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -25,6 +27,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.LocationUtils;
+import frc.robot.util.LoggedNetworkBooleanPlus;
 import frc.robot.util.LoggedNetworkNumberPlus;
 import frc.robot.util.RebuiltUtils;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -43,23 +46,35 @@ public class OutreachControllerMapping extends ControllerMapping {
 
   @AutoLogOutput
   private final LoggedNetworkNumberPlus shooterRPS =
-      new LoggedNetworkNumberPlus("/Tuning/Outreach/Shooter RPS", 16);
+      new LoggedNetworkNumberPlus("/Outreach/Shooter RPS", 16);
 
   @AutoLogOutput
   private final LoggedNetworkNumberPlus hoodAngle =
-      new LoggedNetworkNumberPlus("/Tuning/Outreach/Hood Angle (0-0.9)", 0.2);
+      new LoggedNetworkNumberPlus("/Outreach/Hood Angle (0-0.9)", 0.2);
 
   @AutoLogOutput
   private final LoggedNetworkNumberPlus boosterDutyCycle =
-      new LoggedNetworkNumberPlus("/Tuning/Outreach/Booster Duty Cycle", 0.5);
+      new LoggedNetworkNumberPlus("/Outreach/Booster Speed (0-1)", 0.5);
 
   @AutoLogOutput
   private final LoggedNetworkNumberPlus driveSpeedMultiplier =
-      new LoggedNetworkNumberPlus("/Tuning/Outreach/Drive Speed Multiplier", 0.3);
+      new LoggedNetworkNumberPlus("/Outreach/Drive Speed Multiplier", 0.3);
 
   @AutoLogOutput
   private final LoggedNetworkNumberPlus turnSpeedMultiplier =
-      new LoggedNetworkNumberPlus("/Tuning/Outreach/Turning Speed Multiplier", 0.3);
+      new LoggedNetworkNumberPlus("/Outreach/Turning Speed Multiplier", 0.3);
+
+    @AutoLogOutput
+    private final LoggedNetworkNumberPlus indexerDutyCycle =
+        new LoggedNetworkNumberPlus("/Outreach/Indexer Speed (0-1)", 1);
+
+        @AutoLogOutput
+        private final LoggedNetworkBooleanPlus enableCrunch =
+        new LoggedNetworkBooleanPlus("/Outreach/Enable Crunch", false);
+
+        @AutoLogOutput
+        private final LoggedNetworkNumberPlus intakeDutyCycle = 
+        new LoggedNetworkNumberPlus("/Outreach/Intake Speed (0-1)", 1);
 
   public OutreachControllerMapping(
       CommandXboxController driverController,
@@ -127,28 +142,18 @@ public class OutreachControllerMapping extends ControllerMapping {
         .leftTrigger(0.5)
         .whileTrue(
             intake
-                .intakeUntilInterruptedCommand(1)
+                .intakeUntilInterruptedCommand(intakeDutyCycle)
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
-
-    // Spool
-    driverController
-        .rightBumper()
-        .whileTrue(
-            new DriveAtAngleCommand(
-                drive,
-                () -> -driverController.getLeftY(),
-                () -> -driverController.getLeftX(),
-                () -> vision.getTargetX(0)));
 
     // Shoot
     driverController
         .rightTrigger()
         .whileTrue(
             new ParallelCommandGroup(
-                    indexer.indexUntilCancelledCommand(1),
+                    indexer.indexUntilCancelledCommand(indexerDutyCycle),
                     ShooterCommands.shootAtSpeedCommand(
                         shooter, () -> RotationsPerSecond.of(shooterRPS.get())),
-                    deploy.crunchCommand())
+                    new ConditionalCommand(deploy.crunchCommand(), Commands.none(), enableCrunch))
                 .alongWith(booster.boostCommand(boosterDutyCycle)));
 
     // Aim locked
