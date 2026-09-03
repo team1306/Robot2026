@@ -1,13 +1,9 @@
 package frc.robot.util;
 
+import edu.wpi.first.util.function.BooleanConsumer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.DoubleConsumer;
-
 import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
-import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
-
-import edu.wpi.first.util.function.BooleanConsumer;
 
 public class LoggedNetworkBooleanPlus extends LoggedNetworkBoolean {
   private boolean lastValue = get();

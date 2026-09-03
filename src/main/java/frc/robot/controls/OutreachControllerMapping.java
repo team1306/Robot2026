@@ -4,7 +4,6 @@ import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import badgerutils.commands.CommandUtils;
-import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
@@ -15,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.commands.DriveAimLockedCommand;
-import frc.robot.commands.DriveAtAngleCommand;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ShooterCommands;
 import frc.robot.subsystems.booster.Booster;
@@ -64,17 +62,17 @@ public class OutreachControllerMapping extends ControllerMapping {
   private final LoggedNetworkNumberPlus turnSpeedMultiplier =
       new LoggedNetworkNumberPlus("/Outreach/Turning Speed Multiplier", 0.3);
 
-    @AutoLogOutput
-    private final LoggedNetworkNumberPlus indexerDutyCycle =
-        new LoggedNetworkNumberPlus("/Outreach/Indexer Speed (0-1)", 1);
+  @AutoLogOutput
+  private final LoggedNetworkNumberPlus indexerDutyCycle =
+      new LoggedNetworkNumberPlus("/Outreach/Indexer Speed (0-1)", 1);
 
-        @AutoLogOutput
-        private final LoggedNetworkBooleanPlus enableCrunch =
-        new LoggedNetworkBooleanPlus("/Outreach/Enable Crunch", false);
+  @AutoLogOutput
+  private final LoggedNetworkBooleanPlus enableCrunch =
+      new LoggedNetworkBooleanPlus("/Outreach/Enable Crunch", false);
 
-        @AutoLogOutput
-        private final LoggedNetworkNumberPlus intakeDutyCycle = 
-        new LoggedNetworkNumberPlus("/Outreach/Intake Speed (0-1)", 1);
+  @AutoLogOutput
+  private final LoggedNetworkNumberPlus intakeDutyCycle =
+      new LoggedNetworkNumberPlus("/Outreach/Intake Speed (0-1)", 1);
 
   public OutreachControllerMapping(
       CommandXboxController driverController,
