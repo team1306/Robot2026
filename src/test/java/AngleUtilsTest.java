@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 public class AngleUtilsTest {
   @Test
-  private void testGetDistanceToPosition() {
+  public void testGetDistanceToPosition() {
     // testing linear
     Translation2d p1 = new Translation2d(0, 0);
     Translation2d p2 = new Translation2d(0, 1);
