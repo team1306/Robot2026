@@ -25,4 +25,14 @@ public class SimFixtures {
         },
         new CANcoder[] {});
   }
+
+  public static SimFixture createIndexerSimFixture(RobotSimHarness harness) {
+    return new SimFixture(
+        harness,
+        new TalonFX[] {
+          new TalonFX(Constants.CanIds.INDEXER_LEFT_MOTOR_ID),
+          new TalonFX(Constants.CanIds.INDEXER_RIGHT_MOTOR_ID)
+        },
+        new CANcoder[] {});
+  }
 }

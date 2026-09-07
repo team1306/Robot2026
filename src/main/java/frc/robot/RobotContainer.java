@@ -165,4 +165,8 @@ public class RobotContainer {
   public Intake TESTONLY_getIntake() {
     return intake;
   }
+
+  public Indexer TESTONLY_getIndexer() {
+    return indexer;
+  }
 }
