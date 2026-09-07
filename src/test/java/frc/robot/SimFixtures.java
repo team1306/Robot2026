@@ -35,4 +35,9 @@ public class SimFixtures {
         },
         new CANcoder[] {});
   }
+
+  public static SimFixture createBoosterSimFixture(RobotSimHarness harness) {
+    return new SimFixture(
+        harness, new TalonFX[] {new TalonFX(Constants.CanIds.BOOSTER_MOTOR_ID)}, new CANcoder[] {});
+  }
 }

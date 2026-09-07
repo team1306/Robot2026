@@ -169,4 +169,8 @@ public class RobotContainer {
   public Indexer TESTONLY_getIndexer() {
     return indexer;
   }
+
+  public Booster TESTONLY_getBooster() {
+    return booster;
+  }
 }
