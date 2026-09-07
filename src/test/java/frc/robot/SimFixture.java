@@ -7,6 +7,7 @@ import com.ctre.phoenix6.sim.TalonFXSimState;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * Observes the four shooter motors through Phoenix's simulation layer, and feeds them the inputs a
@@ -44,6 +45,22 @@ public class SimFixture {
 
     // Deliberately no getConfigurator().apply(...) anywhere in this class: these handles observe
     // the devices, they must not reconfigure what ShooterIOReal set up.
+  }
+
+  public void checkMotorCondition(
+      RobotSimHarness harness,
+      String failureMessage,
+      Function<TalonFX, Boolean> condition,
+      int maxLoops) {
+    harness.stepUntilOrFail(
+        failureMessage,
+        () -> {
+          for (TalonFX motor : motors()) {
+            if (!condition.apply(motor)) return false;
+          }
+          return true;
+        },
+        maxLoops);
   }
 
   /** Runs before every robot loop, standing in for the physical power and sensor wiring. */

@@ -1,8 +1,5 @@
 package frc.robot.tests;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import frc.robot.RobotSimHarness;
 import frc.robot.RobotSimulationExtension;
@@ -42,33 +39,26 @@ class ShooterSpoolIntegrationTest {
 
     harness.enableTeleop();
 
-    for (TalonFX motor : shooter.motors()) {
-      assertTrue(
-          Math.abs(shooter.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS,
-          () -> "expected idle before the trigger was pressed: " + shooter.describe(motor));
-    }
+    shooter.checkMotorCondition(
+        harness,
+        "all shooter motors idle before the trigger is pressed",
+        motor -> Math.abs(shooter.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS,
+        MAX_LOOPS);
 
     harness.operator().setRightTriggerAxis(1.0);
     DriverStationSim.notifyNewData();
 
-    harness.stepUntilOrFail(
-        "all four shooter motors commanded to spin",
-        () -> {
-          for (TalonFX motor : shooter.motors()) {
-            if (Math.abs(shooter.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS) return false;
-          }
-          return true;
-        },
+    shooter.checkMotorCondition(
+        harness,
+        "all shooter motors commanded to spin",
+        motor -> Math.abs(shooter.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
         MAX_LOOPS);
 
-    for (TalonFX motor : shooter.motors()) {
-      assertTrue(
-          Math.abs(shooter.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
-          () -> "motor was not commanded: " + shooter.describe(motor));
-      assertTrue(
-          Math.abs(shooter.closedLoopReferenceRps(motor)) > 0.0,
-          () -> "motor had a zero velocity setpoint: " + shooter.describe(motor));
-    }
+    shooter.checkMotorCondition(
+        harness,
+        "all shooter motors have a nonzero velocity setpoint",
+        motor -> Math.abs(shooter.closedLoopReferenceRps(motor)) > 0.0,
+        MAX_LOOPS);
   }
 
   @Test
@@ -81,27 +71,19 @@ class ShooterSpoolIntegrationTest {
     harness.operator().setRightTriggerAxis(1.0);
     DriverStationSim.notifyNewData();
 
-    harness.stepUntilOrFail(
-        "shooter spooling",
-        () -> {
-          for (TalonFX motor : shooter.motors()) {
-            if (Math.abs(shooter.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS) return false;
-          }
-          return true;
-        },
+    shooter.checkMotorCondition(
+        harness,
+        "all shooter motors commanded to spin",
+        motor -> Math.abs(shooter.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
         MAX_LOOPS);
 
     harness.operator().setRightTriggerAxis(0.0);
     DriverStationSim.notifyNewData();
 
-    harness.stepUntilOrFail(
-        "all four shooter motors released to neutral",
-        () -> {
-          for (TalonFX motor : shooter.motors()) {
-            if (Math.abs(shooter.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS) return false;
-          }
-          return true;
-        },
+    shooter.checkMotorCondition(
+        harness,
+        "all shooter motors released to neutral",
+        motor -> Math.abs(shooter.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS,
         MAX_LOOPS);
   }
 }
