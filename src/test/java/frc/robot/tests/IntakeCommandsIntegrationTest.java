@@ -15,9 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(RobotSimulationExtension.class)
 public class IntakeCommandsIntegrationTest {
-  /** Comfortably above sensor noise, far below the ~170 A the spool command actually produces. */
-  private static final double MIN_COMMAND_AMPS = 1.0;
-
   private static final int MAX_LOOPS = 25;
 
   private final RobotSimHarness harness;
@@ -34,16 +31,9 @@ public class IntakeCommandsIntegrationTest {
   @Test
   @Timeout(value = 120, unit = TimeUnit.SECONDS)
   void intakeAtDutyCycleControlsAllMotors() {
-    CommandScheduler.getInstance().cancelAll();
-    harness.enableTeleop();
+    fixture.startCommand(harness, intake.intakeAtDutyCycleCommand(1));
 
-    CommandScheduler.getInstance().schedule(intake.intakeAtDutyCycleCommand(1));
-
-    fixture.checkMotorCondition(
-        harness,
-        "all intake motors commanded to spin",
-        motor -> Math.abs(fixture.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
-        MAX_LOOPS);
+    fixture.assertMotorsRunning(harness, "all intake motors commanded to spin", MAX_LOOPS);
 
     intake.setDutyCycle(0);
   }
@@ -54,20 +44,14 @@ public class IntakeCommandsIntegrationTest {
     CommandScheduler.getInstance().cancelAll();
     harness.enableTeleop();
 
-    fixture.checkMotorCondition(
-        harness,
-        "all intake motors idle before the trigger is pressed",
-        motor -> Math.abs(fixture.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS,
-        MAX_LOOPS);
+    fixture.assertMotorsStopped(
+        harness, "all intake motors idle before the trigger is pressed", MAX_LOOPS);
 
     harness.driver().setLeftTriggerAxis(1);
     DriverStationSim.notifyNewData();
 
-    fixture.checkMotorCondition(
-        harness,
-        "all intake motors commanded to spin from the left trigger",
-        motor -> Math.abs(fixture.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
-        MAX_LOOPS);
+    fixture.assertMotorsRunning(
+        harness, "all intake motors commanded to spin from the left trigger", MAX_LOOPS);
   }
 
   @Test
@@ -78,26 +62,15 @@ public class IntakeCommandsIntegrationTest {
     CommandScheduler.getInstance().cancelAll();
     harness.enableTeleop();
 
-    fixture.checkMotorCondition(
-        harness,
-        "all intake motors idle before command starts",
-        motor -> Math.abs(fixture.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS,
-        MAX_LOOPS);
+    fixture.assertMotorsStopped(harness, "all intake motors idle before command starts", MAX_LOOPS);
 
-    CommandScheduler.getInstance().schedule(command);
+    fixture.startCommand(harness, command);
 
-    fixture.checkMotorCondition(
-        harness,
-        "all intake motors commanded to spin",
-        motor -> Math.abs(fixture.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
-        MAX_LOOPS);
+    fixture.assertMotorsRunning(harness, "all intake motors commanded to spin", MAX_LOOPS);
 
     CommandScheduler.getInstance().cancel(command);
 
-    fixture.checkMotorCondition(
-        harness,
-        "all intake motors stopped after command cancellation",
-        motor -> Math.abs(fixture.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS,
-        MAX_LOOPS);
+    fixture.assertMotorsStopped(
+        harness, "all intake motors stopped after command cancellation", MAX_LOOPS);
   }
 }

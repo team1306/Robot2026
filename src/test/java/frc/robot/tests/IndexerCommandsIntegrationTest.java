@@ -2,6 +2,7 @@ package frc.robot.tests;
 
 import static edu.wpi.first.units.Units.Seconds;
 
+import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotSimHarness;
@@ -16,9 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(RobotSimulationExtension.class)
 class IndexerCommandsIntegrationTest {
-  /** Comfortably above sensor noise, far below the current from a full-duty-cycle command. */
-  private static final double MIN_COMMAND_AMPS = 1.0;
-
   private static final int MAX_LOOPS = 25;
 
   private final RobotSimHarness harness;
@@ -36,11 +34,13 @@ class IndexerCommandsIntegrationTest {
   void indexUntilCancelledWithConstantSpeedControlsAllMotors() {
     Command command = indexer.indexUntilCancelledCommand(1.0);
 
-    startCommand(command);
-    assertMotorsRunning("all indexer motors commanded to run at a constant speed");
+    fixture.startCommand(harness, command);
+    fixture.assertMotorsRunning(
+        harness, "all indexer motors commanded to run at a constant speed", MAX_LOOPS);
 
     CommandScheduler.getInstance().cancel(command);
-    assertMotorsStopped("all indexer motors stopped after constant-speed command cancellation");
+    fixture.assertMotorsStopped(
+        harness, "all indexer motors stopped after constant-speed command cancellation", MAX_LOOPS);
   }
 
   @Test
@@ -48,54 +48,63 @@ class IndexerCommandsIntegrationTest {
   void indexUntilCancelledWithSupplierControlsAllMotors() {
     Command command = indexer.indexUntilCancelledCommand(() -> 1.0);
 
-    startCommand(command);
-    assertMotorsRunning("all indexer motors commanded to run from a speed supplier");
+    fixture.startCommand(harness, command);
+    fixture.assertMotorsRunning(
+        harness, "all indexer motors commanded to run from a speed supplier", MAX_LOOPS);
 
     CommandScheduler.getInstance().cancel(command);
-    assertMotorsStopped("all indexer motors stopped after supplier command cancellation");
+    fixture.assertMotorsStopped(
+        harness, "all indexer motors stopped after supplier command cancellation", MAX_LOOPS);
   }
 
   @Test
   @Timeout(value = 120, unit = TimeUnit.SECONDS)
   void jumbleIndexerControlsAllMotors() {
-    // NOTE: The way jumble indexer is currently written would make it very jank to properly test the fluctuating nature of it.
+    // NOTE: The way jumble indexer is currently written would make it very jank to properly test
+    // the fluctuating nature of it.
     Command command = indexer.jumbleIndexer(() -> 1.0);
 
-    startCommand(command);
-    assertMotorsRunning("all indexer motors commanded to run by jumbleIndexer");
+    fixture.startCommand(harness, command);
+    fixture.assertMotorsRunning(
+        harness, "all indexer motors commanded to run by jumbleIndexer", MAX_LOOPS);
 
     CommandScheduler.getInstance().cancel(command);
-    assertMotorsStopped("all indexer motors stopped after jumbleIndexer cancellation");
+    fixture.assertMotorsStopped(
+        harness, "all indexer motors stopped after jumbleIndexer cancellation", MAX_LOOPS);
   }
 
   @Test
   @Timeout(value = 120, unit = TimeUnit.SECONDS)
   void indexForTimeControlsAndStopsAllMotors() {
-    startCommand(indexer.indexForTime(Seconds.of(0.1), 1.0));
+    fixture.startCommand(harness, indexer.indexForTime(Seconds.of(0.1), 1.0));
 
-    assertMotorsRunning("all indexer motors commanded to run by indexForTime");
-    assertMotorsStopped("all indexer motors stopped when indexForTime expires");
+    fixture.assertMotorsRunning(
+        harness, "all indexer motors commanded to run by indexForTime", MAX_LOOPS);
+    fixture.assertMotorsStopped(
+        harness, "all indexer motors stopped when indexForTime expires", MAX_LOOPS);
   }
 
-  private void startCommand(Command command) {
+  @Test
+  @Timeout(value = 120, unit = TimeUnit.SECONDS)
+  void operatorRightBumperRunsTheIndexer() {
     CommandScheduler.getInstance().cancelAll();
     harness.enableTeleop();
-    CommandScheduler.getInstance().schedule(command);
-  }
 
-  private void assertMotorsRunning(String failureMessage) {
-    fixture.checkMotorCondition(
-        harness,
-        failureMessage,
-        motor -> Math.abs(fixture.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
-        MAX_LOOPS);
-  }
+    fixture.assertMotorsStopped(
+        harness, "all indexer motors idle before the operator right bumper is pressed", MAX_LOOPS);
 
-  private void assertMotorsStopped(String failureMessage) {
-    fixture.checkMotorCondition(
+    harness.operator().setRightBumperButton(true);
+    DriverStationSim.notifyNewData();
+
+    fixture.assertMotorsRunning(
+        harness, "all indexer motors commanded by the operator right bumper", MAX_LOOPS);
+
+    harness.operator().setRightBumperButton(false);
+    DriverStationSim.notifyNewData();
+
+    fixture.assertMotorsStopped(
         harness,
-        failureMessage,
-        motor -> Math.abs(fixture.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS,
+        "all indexer motors stopped after the operator right bumper is released",
         MAX_LOOPS);
   }
 }

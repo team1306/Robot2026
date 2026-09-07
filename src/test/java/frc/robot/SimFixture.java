@@ -4,6 +4,8 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.CANcoderSimState;
 import com.ctre.phoenix6.sim.TalonFXSimState;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +28,8 @@ import java.util.function.Function;
 public class SimFixture {
 
   public static final double SUPPLY_VOLTAGE = 12.0;
+  /** Comfortably above sensor noise, far below the current from a full-duty-cycle command. */
+  public static final double MIN_COMMAND_AMPS = 1.0;
 
   private final Map<TalonFX, TalonFXSimState> motorSims;
   private final Map<CANcoder, CANcoderSimState> encoders;
@@ -60,6 +64,28 @@ public class SimFixture {
           }
           return true;
         },
+        maxLoops);
+  }
+
+  public void startCommand(RobotSimHarness harness, Command command) {
+    CommandScheduler.getInstance().cancelAll();
+    harness.enableTeleop();
+    CommandScheduler.getInstance().schedule(command);
+  }
+
+  public void assertMotorsRunning(RobotSimHarness harness, String failureMessage, int maxLoops) {
+    checkMotorCondition(
+        harness,
+        failureMessage,
+        motor -> Math.abs(torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
+        maxLoops);
+  }
+
+  public void assertMotorsStopped(RobotSimHarness harness, String failureMessage, int maxLoops) {
+    checkMotorCondition(
+        harness,
+        failureMessage,
+        motor -> Math.abs(torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS,
         maxLoops);
   }
 

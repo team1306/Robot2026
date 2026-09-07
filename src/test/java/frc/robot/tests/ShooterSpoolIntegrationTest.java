@@ -26,9 +26,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith(RobotSimulationExtension.class)
 class ShooterSpoolIntegrationTest {
 
-  /** Comfortably above sensor noise, far below the ~170 A the spool command actually produces. */
-  private static final double MIN_COMMAND_AMPS = 1.0;
-
   private static final int MAX_LOOPS = 25;
 
   @Test
@@ -39,20 +36,13 @@ class ShooterSpoolIntegrationTest {
 
     harness.enableTeleop();
 
-    shooter.checkMotorCondition(
-        harness,
-        "all shooter motors idle before the trigger is pressed",
-        motor -> Math.abs(shooter.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS,
-        MAX_LOOPS);
+    shooter.assertMotorsStopped(
+        harness, "all shooter motors idle before the trigger is pressed", MAX_LOOPS);
 
     harness.operator().setRightTriggerAxis(1.0);
     DriverStationSim.notifyNewData();
 
-    shooter.checkMotorCondition(
-        harness,
-        "all shooter motors commanded to spin",
-        motor -> Math.abs(shooter.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
-        MAX_LOOPS);
+    shooter.assertMotorsRunning(harness, "all shooter motors commanded to spin", MAX_LOOPS);
 
     shooter.checkMotorCondition(
         harness,
@@ -71,19 +61,11 @@ class ShooterSpoolIntegrationTest {
     harness.operator().setRightTriggerAxis(1.0);
     DriverStationSim.notifyNewData();
 
-    shooter.checkMotorCondition(
-        harness,
-        "all shooter motors commanded to spin",
-        motor -> Math.abs(shooter.torqueCurrentAmps(motor)) > MIN_COMMAND_AMPS,
-        MAX_LOOPS);
+    shooter.assertMotorsRunning(harness, "all shooter motors commanded to spin", MAX_LOOPS);
 
     harness.operator().setRightTriggerAxis(0.0);
     DriverStationSim.notifyNewData();
 
-    shooter.checkMotorCondition(
-        harness,
-        "all shooter motors released to neutral",
-        motor -> Math.abs(shooter.torqueCurrentAmps(motor)) <= MIN_COMMAND_AMPS,
-        MAX_LOOPS);
+    shooter.assertMotorsStopped(harness, "all shooter motors released to neutral", MAX_LOOPS);
   }
 }
