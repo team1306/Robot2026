@@ -50,22 +50,19 @@ public class ShooterCommands {
                     RotationsPerSecond.of(24.5),
                     Seconds.of(1.016)),
                 new ShooterSetpoint(
-                    Meters.of(3.82),
-                    Rotations.of(0),
-                    RotationsPerSecond.of(25),
-                    Seconds.of(1.016)),
+                    Meters.of(3.82), Rotations.of(0), RotationsPerSecond.of(25), Seconds.of(1.016)),
                 new ShooterSetpoint(
                     Meters.of(4.23),
                     Rotations.of(0),
                     RotationsPerSecond.of(26.5),
                     Seconds.of(1.0426)),
                 new ShooterSetpoint(
-                    Meters.of(4.69), Rotations.of(0), RotationsPerSecond.of(27.5), Seconds.of(1.096)),
-                new ShooterSetpoint(
-                    Meters.of(5),
+                    Meters.of(4.69),
                     Rotations.of(0),
-                    RotationsPerSecond.of(28),
-                    Seconds.of(1.1946)),
+                    RotationsPerSecond.of(27.5),
+                    Seconds.of(1.096)),
+                new ShooterSetpoint(
+                    Meters.of(5), Rotations.of(0), RotationsPerSecond.of(28), Seconds.of(1.1946)),
                 new ShooterSetpoint(
                     Meters.of(5.42),
                     Rotations.of(0),
