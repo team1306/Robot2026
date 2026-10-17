@@ -29,7 +29,7 @@ public class SafeShootCommand extends ParallelCommandGroup {
   private static double INDEXER_SPEED = 1;
   private static Time RETRACT_DELAY = Seconds.of(1);
   private static Time LIFT_TIME = Seconds.of(0.5);
-  private static final double BOOSTER_SPEED = 1;
+  private static final double BOOSTER_SPEED = 0.5;
   private static final Distance MINIMUM_SHOT_DISTANCE = Meters.of(2.2);
 
   private boolean isActive;

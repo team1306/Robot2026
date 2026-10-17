@@ -161,7 +161,7 @@ public class ShooterTestingControllerMapping extends ControllerMapping {
                     new GuardedCommand(
                             indexer.indexUntilCancelledCommand(1),
                             shooter.isAtRequestedSpeed(Constants.Tolerances.NORMAL_SPEED_TOLERANCE))
-                        .alongWith(booster.boostCommand(0.8))
+                        .alongWith(booster.boostCommand(0.5))
                         .alongWith(
                             new DriveAimLockedCommand(
                                 drive,
