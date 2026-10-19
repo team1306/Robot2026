@@ -55,7 +55,7 @@ public class Shooter extends SubsystemBase {
 
   public void resetVelocityOverride() {
     speedOverride = RotationsPerSecond.of(0);
-    Logger.recordOutput("Shooter/Velocity Override", 0);
+    Logger.recordOutput("Shooter/Velocity Override", speedOverride);
   }
 
   public void setIdle() {

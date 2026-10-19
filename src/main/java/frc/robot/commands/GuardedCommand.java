@@ -44,14 +44,13 @@ public class GuardedCommand extends Command {
 
   @Override
   public void execute() {
-    if (!initialized) {
-      command.initialize();
-      initialized = true;
-    }
-
     if (condition.getAsBoolean()) {
+      if (!initialized) {
+        command.initialize();
+        initialized = true;
+      }
       command.execute();
-    } else {
+    } else if (initialized) {
       initialized = false;
       command.end(true);
     }
@@ -59,7 +58,9 @@ public class GuardedCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    initialized = false;
-    command.end(interrupted);
+    if (initialized) {
+      initialized = false;
+      command.end(interrupted);
+    }
   }
 }
