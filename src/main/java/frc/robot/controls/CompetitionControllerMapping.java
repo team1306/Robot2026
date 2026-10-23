@@ -168,6 +168,15 @@ public class CompetitionControllerMapping extends ControllerMapping {
                     drive, () -> -driverController.getLeftY(), () -> -driverController.getLeftX())
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
+    // Crunch intake
+    driverController.leftBumper().whileTrue(deploy.crunchCommand());
+
+    // Reverse Intake
+    driverController
+        .y()
+        .onTrue(new InstantCommand(() -> intake.setDutyCycle(-0.5)))
+        .onFalse(new InstantCommand(() -> intake.setDutyCycle(0)));
+
     // Shoot to Hub or Corner Depending on Location
     driverController
         .rightBumper()
@@ -203,7 +212,7 @@ public class CompetitionControllerMapping extends ControllerMapping {
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
     /* ---P2--- */
 
-    // Force through defence?
+    // Force through defence
     operatorController
         .leftStick()
         .whileTrue(
@@ -238,7 +247,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
 
     // DEPLOY
     operatorController.x().onTrue(deploy.deployCommand());
-    operatorController.leftTrigger(0.5).whileTrue(deploy.crunchCommand());
     operatorController.povLeft().whileTrue(deploy.deployManuallyCommand(0.2));
     operatorController.povRight().whileTrue(deploy.deployManuallyCommand(-0.2));
 
@@ -272,12 +280,6 @@ public class CompetitionControllerMapping extends ControllerMapping {
         .b()
         .onTrue(new InstantCommand(() -> indexer.setDutyCycle(-0.25)))
         .onFalse(new InstantCommand(() -> indexer.setDutyCycle(0)));
-
-    // Reverse Intake
-    operatorController
-        .a()
-        .onTrue(new InstantCommand(() -> intake.setDutyCycle(-0.5)))
-        .onFalse(new InstantCommand(() -> intake.setDutyCycle(0)));
 
     Command rumblePulse =
         Commands.sequence(
