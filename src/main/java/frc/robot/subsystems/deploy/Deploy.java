@@ -40,19 +40,20 @@ public class Deploy extends SubsystemBase {
     return Commands.runOnce(() -> setDeployerPosition(DeployerPosition.EXTENDED), this);
   }
 
-  public Command crunchCommand() {
-    // return Commands.startEnd(
-    //     () -> setDeployerPosition(DeployerPosition.DUMP),
-    //     () -> setDeployerPosition(DeployerPosition.EXTENDED),
-    //     this);
+  public Command deployToPositionCommand(DeployerPosition position) {
+    return Commands.startEnd(
+        () -> {
+          setDeployerPosition(position);
+        },
+        () -> setDeployerPosition(DeployerPosition.EXTENDED),
+        this);
+  }
 
-    return (Commands.runOnce(() -> setDutyCycle(0.2), this)
-            .andThen(Commands.waitSeconds(.5))
-            .andThen(
-                Commands.runEnd(
-                    () -> setDeployerPosition(DeployerPosition.DUMP),
-                    () -> setDeployerPosition(DeployerPosition.EXTENDED),
-                    this)))
-        .finallyDo(() -> setDeployerPosition(DeployerPosition.EXTENDED));
+  public Command crunchCommand() {
+    return deployToPositionCommand(DeployerPosition.DUMP);
+  }
+
+  public boolean isPastOrAtSetpoint() {
+    return deployIO.isAtSetpoint();
   }
 }

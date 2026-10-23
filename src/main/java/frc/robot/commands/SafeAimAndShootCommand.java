@@ -33,7 +33,8 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
       BooleanSupplier overrideAngleSafeguard,
       BooleanSupplier overrideVelocitySafeguard,
       BooleanSupplier overrideHubActive,
-      BooleanSupplier overrideAutoRanging) {
+      BooleanSupplier overrideAutoRanging,
+      BooleanSupplier additionalDeployCondition) {
 
     Command safeShootCommand =
         new SafeShootCommand(
@@ -49,7 +50,8 @@ public class SafeAimAndShootCommand extends ParallelCommandGroup {
             overrideAngleSafeguard,
             overrideVelocitySafeguard,
             overrideHubActive,
-            overrideAutoRanging);
+            overrideAutoRanging,
+            additionalDeployCondition);
 
     driveCommand = new DriveAimLockedCommand(drive, xSupplier, ySupplier, positionSupplier, true);
 

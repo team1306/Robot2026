@@ -155,8 +155,22 @@ public class RebuiltUtils {
     return rightIsCloser ? rightCorner : leftCorner;
   }
 
+  public static boolean isLeftSide(Translation2d position) {
+    return AllianceTriggers.isBlueAlliance() == position.getY() > 4.05;
+  }
+
+  public static boolean isOurHalf(Translation2d position) {
+    return AllianceTriggers.isBlueAlliance() == position.getX() < 8.25;
+  }
+
   public static boolean isInAllianceZone(Translation2d position) {
     return AllianceTriggers.isBlueAlliance()
+        ? position.getX() <= 4.5
+        : position.getX() >= 16.540988 - 4.5;
+  }
+
+  public static boolean isInOpponentAllianceZone(Translation2d position) {
+    return AllianceTriggers.isRedAlliance()
         ? position.getX() <= 4.5
         : position.getX() >= 16.540988 - 4.5;
   }

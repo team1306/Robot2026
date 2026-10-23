@@ -29,4 +29,8 @@ public interface DeployIO {
   public default void setDutyCycle(double dutyCycle) {}
 
   public default void adjustTarget(Angle angle) {}
+
+  public default boolean isAtSetpoint() {
+    return true;
+  }
 }

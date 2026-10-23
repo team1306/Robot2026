@@ -7,7 +7,7 @@
 
 package frc.robot.subsystems.drive;
 
-import static frc.robot.util.PhoenixUtil.*;
+import static frc.robot.util.PhoenixUtil.tryUntilOk;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
@@ -34,6 +34,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
+import frc.robot.Constants;
 import frc.robot.generated.TunerConstants;
 import java.util.Queue;
 
@@ -292,5 +293,29 @@ public class ModuleIOTalonFX implements ModuleIO {
                     constants.DriveMotorInverted
                         ? InvertedValue.Clockwise_Positive
                         : InvertedValue.CounterClockwise_Positive));
+  }
+
+  @Override
+  public void setHighCurrentLimits() {
+    driveTalon
+        .getConfigurator()
+        .apply(
+            driveConfig
+                .clone()
+                .CurrentLimits
+                .withStatorCurrentLimit(Constants.CurrentLimits.HIGH_DRIVE_STATOR)
+                .withSupplyCurrentLimit(Constants.CurrentLimits.HIGH_DRIVE_SUPPLY));
+  }
+
+  @Override
+  public void setLowCurrentLimits() {
+    driveTalon
+        .getConfigurator()
+        .apply(
+            driveConfig
+                .clone()
+                .CurrentLimits
+                .withStatorCurrentLimit(Constants.CurrentLimits.LOW_DRIVE_STATOR)
+                .withSupplyCurrentLimit(Constants.CurrentLimits.LOW_DRIVE_SUPPLY));
   }
 }

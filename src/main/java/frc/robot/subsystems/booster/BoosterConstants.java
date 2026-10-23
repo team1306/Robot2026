@@ -1,12 +1,11 @@
 package frc.robot.subsystems.booster;
 
-import static edu.wpi.first.units.Units.Amps;
-
 import badgerutils.motor.MotorConfigUtils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import frc.robot.Constants;
 
 public class BoosterConstants {
   // CONFIGS
@@ -16,7 +15,7 @@ public class BoosterConstants {
               new CurrentLimitsConfigs()
                   .withStatorCurrentLimitEnable(false)
                   .withSupplyCurrentLimitEnable(true)
-                  .withSupplyCurrentLimit(Amps.of(60)))
+                  .withSupplyCurrentLimit(Constants.CurrentLimits.BOOSTER_SUPPLY))
           .withMotorOutput(
               MotorConfigUtils.createMotorOutputConfig(
                   InvertedValue.Clockwise_Positive, NeutralModeValue.Coast));

@@ -14,11 +14,11 @@ import edu.wpi.first.units.measure.Angle;
 import frc.robot.Constants;
 
 public class HoodConstants {
-  public static final double KP = 40;
-  public static final double KD = 1.5;
+  public static final double KP = 200;
+  public static final double KD = 3;
 
-  public static final double KS = 0;
-  public static final double KG = 0;
+  public static final double KS = 3;
+  public static final double KG = 3;
 
   public static final Angle ZERO_POSITION = Rotations.of(0.02);
   public static final Angle MAX_ANGLE = Rotations.of(.88);
@@ -36,7 +36,7 @@ public class HoodConstants {
                   InvertedValue.CounterClockwise_Positive, NeutralModeValue.Brake))
           .withSlot0(
               MotorConfigUtils.createPidConfig(
-                  KP, 0, KD, KS, 0, KG, 0, GravityTypeValue.Arm_Cosine))
+                  KP, 0, KD, KS, 0, KG, 0, GravityTypeValue.Elevator_Static))
           .withFeedback(
               new FeedbackConfigs()
                   .withFeedbackRemoteSensorID(Constants.CanIds.HOOD_ENCODER_ID)

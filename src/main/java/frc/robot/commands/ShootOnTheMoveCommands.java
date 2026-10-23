@@ -66,7 +66,8 @@ public class ShootOnTheMoveCommands {
             overrideAngleSafeguard,
             overrideVelocitySafeguard,
             overrideHubActive,
-            overrideAutoRanging);
+            overrideAutoRanging,
+            () -> false);
 
     DriveAimLockedCommand driveCommand =
         new DriveAimLockedCommand(drive, () -> 0, () -> 0, leadTarget, true);
@@ -119,7 +120,8 @@ public class ShootOnTheMoveCommands {
         overrideAngleSafeguard,
         overrideVelocitySafeguard,
         overrideHubActive,
-        overrideAutoRanging);
+        overrideAutoRanging,
+        () -> Math.abs(xSupplier.getAsDouble()) < 0.05 && Math.abs(ySupplier.getAsDouble()) < 0.05);
   }
 
   private static Translation2d calculateLeadTarget(

@@ -25,19 +25,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shoot-small-hopper"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "coast"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "left-bump-collect"
+            "name": "shoot-until-done"
           }
         }
       ]
