@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Q4 left-bump-far"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot-small-hopper"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SHOP left-bump-bump-hub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot-until-done"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "New Autos",
+  "choreoAuto": false
+}
