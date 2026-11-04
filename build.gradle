@@ -101,6 +101,16 @@ dependencies {
 test {
     useJUnitPlatform()
     systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+
+    // Simulation integration tests boot the real Robot once per JVM, so the test JVM must not be
+    // forked per class (forkEvery defaults to 0) and must not run classes in parallel.
+    // Filesystem.getDeployDirectory() resolves against the working directory; Autos reads it.
+    workingDir = projectDir
+    maxHeapSize = '2g'
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
 }
 
 // Simulation configuration (e.g. environment variables).

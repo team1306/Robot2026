@@ -20,7 +20,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
-  private final RobotContainer robotContainer;
+  protected final RobotContainer robotContainer;
 
   public Robot() {
     SignalLogger.enableAutoLogging(false);
