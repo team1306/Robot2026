@@ -17,27 +17,47 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot-small-hopper"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "crunch"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "SHOP left-bump-bump-hub"
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "shoot-small-hopper"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "coast"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "left-bump-collect"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot-until-done"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "crunch"
+                }
+              }
+            ]
           }
         }
       ]

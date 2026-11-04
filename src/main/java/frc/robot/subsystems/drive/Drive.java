@@ -7,6 +7,7 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
@@ -33,6 +34,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
@@ -82,6 +84,15 @@ public class Drive extends SubsystemBase {
   private final SysIdRoutine sysId;
   private final Alert gyroDisconnectedAlert =
       new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
+
+  public Command leftToRightAllianceCloseHubSweep = Commands.print("Path failed to load");
+  public Command rightToLeftAllianceCloseHubSweep = Commands.print("Path failed to load");
+  public Command leftToRightMidCloseHubSweep = Commands.print("Path failed to load");
+  public Command rightToLeftMidCloseHubSweep = Commands.print("Path failed to load");
+  public Command leftToRightMidFarHubSweep = Commands.print("Path failed to load");
+  public Command rightToLeftMidFarHubSweep = Commands.print("Path failed to load");
+  public Command leftToRightAllianceFarHubSweep = Commands.print("Path failed to load");
+  public Command rightToLeftAllianceFarHubSweep = Commands.print("Path failed to load");
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private Rotation2d rawGyroRotation = Rotation2d.kZero;
@@ -143,6 +154,27 @@ public class Drive extends SubsystemBase {
                 (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism(
                 (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
+
+    try {
+      leftToRightAllianceCloseHubSweep =
+          AutoBuilder.followPath(PathPlannerPath.fromPathFile("left-right-alliance-close-hub"));
+      rightToLeftAllianceCloseHubSweep =
+          AutoBuilder.followPath(PathPlannerPath.fromPathFile("right-left-alliance-close-hub"));
+      leftToRightMidCloseHubSweep =
+          AutoBuilder.followPath(PathPlannerPath.fromPathFile("left-right-mid-close-hub"));
+      rightToLeftMidCloseHubSweep =
+          AutoBuilder.followPath(PathPlannerPath.fromPathFile("right-left-mid-close-hub"));
+      leftToRightMidFarHubSweep =
+          AutoBuilder.followPath(PathPlannerPath.fromPathFile("left-right-mid-far-hub"));
+      rightToLeftMidFarHubSweep =
+          AutoBuilder.followPath(PathPlannerPath.fromPathFile("right-left-mid-far-hub"));
+      leftToRightAllianceFarHubSweep =
+          AutoBuilder.followPath(PathPlannerPath.fromPathFile("left-right-alliance-far-hub"));
+      rightToLeftAllianceFarHubSweep =
+          AutoBuilder.followPath(PathPlannerPath.fromPathFile("right-left-alliance-far-hub"));
+    } catch (Exception e) {
+      System.out.println("Error loading paths: " + e.getMessage());
+    }
   }
 
   @Override
@@ -216,6 +248,18 @@ public class Drive extends SubsystemBase {
   public void setCoastMode() {
     for (Module module : modules) {
       module.setCoastMode();
+    }
+  }
+
+  public void setHighCurrentLimits() {
+    for (Module module : modules) {
+      module.setHighCurrentLimits();
+    }
+  }
+
+  public void setLowCurrentLimits() {
+    for (Module module : modules) {
+      module.setLowCurrentLimits();
     }
   }
 

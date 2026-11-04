@@ -11,7 +11,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 public class VisionConstants {
   // AprilTag layout
   public static final AprilTagFieldLayout APRIL_TAG_LAYOUT =
-      AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
+      AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
   // Camera names, must match names configured on coprocessor
   public static final String LEFT_BACK_CAMERA_NAME = "leftBack";

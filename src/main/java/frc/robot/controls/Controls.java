@@ -66,7 +66,7 @@ public class Controls {
     mappings.put(
         ControlStates.CLEANING,
         new CleaningControllerMapping(
-            driverController, operatorController, intake, indexer, shooter));
+            driverController, operatorController, intake, indexer, shooter, booster));
 
     mappings.put(
         ControlStates.SHOOTER_TESTING,
@@ -77,6 +77,7 @@ public class Controls {
             intake,
             shooter,
             indexer,
+            deploy,
             booster,
             hood));
 

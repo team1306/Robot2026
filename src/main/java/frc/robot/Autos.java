@@ -54,11 +54,13 @@ public class Autos {
   private final Deploy deploy;
 
   private final Command sotmSmallHopperCommand;
+  private final Command sotmUntilDoneCommand;
   private final Command shootSmallHopperCommand;
   private final Command shootUntilDoneCommand;
   private final Command spoolShooterCommand;
   private final Command intakeCommand;
   private final Command deployCommand;
+  private final Command crunchCommand;
 
   // Prefer to construct autos lazily to save limited memory. Required with many auto files
   private final LoggedDashboardChooser<Auto> autoChooser;
@@ -90,6 +92,14 @@ public class Autos {
 
     deployCommand = deploy.deployCommand().asProxy();
 
+    crunchCommand =
+        deploy
+            .crunchCommand()
+            .withTimeout(1)
+            .andThen(Commands.waitSeconds(1))
+            .andThen(deploy.crunchCommand().withTimeout(1))
+            .asProxy();
+
     sotmSmallHopperCommand =
         new ConditionalCommand(
             ShootOnTheMoveCommands.shootOnTheMoveAutoCommand(
@@ -108,6 +118,26 @@ public class Autos {
                     () -> false)
                 .alongWith(intake.intakeUntilInterruptedCommand(1).asProxy())
                 .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION)),
+            Commands.none(),
+            inAllianceZoneSupplier);
+
+    sotmUntilDoneCommand =
+        new ConditionalCommand(
+            ShootOnTheMoveCommands.shootOnTheMoveAutoCommand(
+                    drive,
+                    shooter,
+                    indexer,
+                    deploy,
+                    booster,
+                    hood,
+                    leds,
+                    () -> RebuiltUtils.getCurrentHubLocation().toTranslation2d(),
+                    inAllianceZoneSupplier,
+                    () -> false,
+                    () -> false,
+                    () -> true,
+                    () -> false)
+                .alongWith(intake.intakeUntilInterruptedCommand(1).asProxy()),
             Commands.none(),
             inAllianceZoneSupplier);
 
@@ -145,7 +175,8 @@ public class Autos {
                 () -> false,
                 () -> false,
                 () -> true,
-                () -> false),
+                () -> false,
+                () -> true),
             Commands.none(),
             inAllianceZoneSupplier);
 
@@ -166,7 +197,8 @@ public class Autos {
                     () -> false,
                     () -> false,
                     () -> true,
-                    () -> false),
+                    () -> false,
+                    () -> true),
                 Commands.none(),
                 inAllianceZoneSupplier)
             .withDeadline(Commands.waitTime(SMALL_HOPPER_SHOOT_DURATION));
@@ -193,7 +225,11 @@ public class Autos {
   public Command createCommandFromSelectedAuto() {
     Auto auto = autoChooser.get();
     return new WaitCommand(autoWaitTime.get())
-        .andThen(auto.getCommand())
+        .andThen(
+            auto.getCommand()
+                .alongWith(
+                    Commands.waitTime(Seconds.of(3))
+                        .andThen(Commands.runOnce(() -> drive.setLowCurrentLimits()))))
         .andThen(Commands.print("Auto Complete"))
         .withName(auto.getName());
   }
@@ -224,6 +260,10 @@ public class Autos {
 
     NamedCommands.registerCommand("sotm-small-hopper", sotmSmallHopperCommand);
 
+    NamedCommands.registerCommand("sotm-until-done", sotmUntilDoneCommand);
+
+    NamedCommands.registerCommand("crunch", crunchCommand);
+
     NamedCommands.registerCommand("coast", Commands.runOnce(() -> drive.setCoastMode()));
 
     RobotModeTriggers.teleop().onTrue(Commands.runOnce(() -> drive.setBrakeMode()));
@@ -240,6 +280,9 @@ public class Autos {
 
     new EventTrigger("sotm-small-hopper")
         .onFalse(Commands.runOnce(() -> sotmSmallHopperCommand.cancel()));
+
+    new EventTrigger("sotm-until-done")
+        .onFalse(Commands.runOnce(() -> sotmUntilDoneCommand.cancel()));
   }
 
   public static final class Auto {

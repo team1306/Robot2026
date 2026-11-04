@@ -11,9 +11,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "shoot-small-hopper"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot-small-hopper"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "crunch"
+                }
+              }
+            ]
           }
         },
         {
@@ -23,21 +36,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "shoot-small-hopper"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "coast"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "right-bump-collect"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot-until-done"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "crunch"
+                }
+              }
+            ]
           }
         }
       ]

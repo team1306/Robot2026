@@ -7,23 +7,11 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left-trench-far"
+            "pathName": "Q4 right-bump-far"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "shoot-small-hopper"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "left-trench-depot-hub"
-          }
-        },
-        {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -33,9 +21,9 @@
                 }
               },
               {
-                "type": "wait",
+                "type": "named",
                 "data": {
-                  "waitTime": 1.0
+                  "name": "crunch"
                 }
               }
             ]
@@ -44,7 +32,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "depot-coast-to-mid"
+            "pathName": "SHOP right-bump-bump-hub"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot-until-done"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "crunch"
+                }
+              }
+            ]
           }
         }
       ]

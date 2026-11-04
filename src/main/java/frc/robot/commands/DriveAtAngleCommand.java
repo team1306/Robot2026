@@ -15,9 +15,11 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class DriveAtAngleCommand extends Command {
-  private static double ANGLE_KP = 12;
+  private static double ANGLE_KP = 5.8;
   private static double ANGLE_KI = 0.00;
-  private static double ANGLE_KD = 0.15;
+  private static double ANGLE_KD = 0.16;
+  private static final double ANGLE_MAX_VELOCITY = 1000;
+  private static final double ANGLE_MAX_ACCELERATION = 1000;
 
   @AutoLogOutput
   private static final LoggedNetworkNumberPlus KP_SUPPLIER =
@@ -27,8 +29,14 @@ public class DriveAtAngleCommand extends Command {
   private static final LoggedNetworkNumberPlus KD_SUPPLIER =
       new LoggedNetworkNumberPlus("/Tuning/Angle KD", ANGLE_KD);
 
-  private static final double ANGLE_MAX_VELOCITY = 8.0;
-  private static final double ANGLE_MAX_ACCELERATION = 20.0;
+  @AutoLogOutput
+  private static final LoggedNetworkNumberPlus MAX_VELOCITY_SUPPLIER =
+      new LoggedNetworkNumberPlus("/Tuning/Angle Max Velocity", ANGLE_MAX_VELOCITY);
+
+  @AutoLogOutput
+  private static final LoggedNetworkNumberPlus MAX_ACCELERATION_SUPPLIER =
+      new LoggedNetworkNumberPlus("/Tuning/Angle Max Acceleration", ANGLE_MAX_ACCELERATION);
+
   private static final Rotation2d INITIAL_TOLERANCE = Rotation2d.fromDegrees(1);
   public static final Rotation2d ADJUSTMENT_TOLERANCE = Rotation2d.fromDegrees(2);
 
@@ -65,6 +73,16 @@ public class DriveAtAngleCommand extends Command {
 
     KP_SUPPLIER.addSubscriber(value -> angleController.setP(value));
     KD_SUPPLIER.addSubscriber(value -> angleController.setD(value));
+    MAX_VELOCITY_SUPPLIER.addSubscriber(
+        value ->
+            angleController.setConstraints(
+                new TrapezoidProfile.Constraints(
+                    MAX_VELOCITY_SUPPLIER.get(), MAX_ACCELERATION_SUPPLIER.get())));
+    MAX_ACCELERATION_SUPPLIER.addSubscriber(
+        value ->
+            angleController.setConstraints(
+                new TrapezoidProfile.Constraints(
+                    MAX_VELOCITY_SUPPLIER.get(), MAX_ACCELERATION_SUPPLIER.get())));
   }
 
   @Override
@@ -112,10 +130,15 @@ public class DriveAtAngleCommand extends Command {
   public double getPIDOutput(boolean flipped) {
     Logger.recordOutput("Drive/Angle Setpoint Error", angleController.getPositionError());
 
-    return angleController.calculate(
-        drive.getRotation().getRadians(),
-        flipped
-            ? rotationSupplier.get().getRadians() + Math.PI
-            : rotationSupplier.get().getRadians());
+    double output =
+        angleController.calculate(
+            drive.getRotation().getRadians(),
+            flipped
+                ? rotationSupplier.get().getRadians() + Math.PI
+                : rotationSupplier.get().getRadians());
+
+    Logger.recordOutput("Drive/PID Output", output);
+
+    return output;
   }
 }
