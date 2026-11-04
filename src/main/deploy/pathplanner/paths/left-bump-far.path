@@ -16,31 +16,31 @@
     },
     {
       "anchor": {
-        "x": 8.4,
-        "y": 6.5
+        "x": 8.576,
+        "y": 6.144048192771083
       },
       "prevControl": {
-        "x": 8.4,
-        "y": 7.6
+        "x": 8.576,
+        "y": 6.644048192771083
       },
       "nextControl": {
-        "x": 8.4,
-        "y": 5.5
+        "x": 8.576,
+        "y": 5.144048192771083
       },
       "isLocked": false,
       "linkedName": "fuel-far-left-entrance"
     },
     {
       "anchor": {
-        "x": 8.4,
+        "x": 8.575975903614458,
         "y": 5.0
       },
       "prevControl": {
-        "x": 8.4,
+        "x": 8.575975903614458,
         "y": 5.5
       },
       "nextControl": {
-        "x": 8.4,
+        "x": 8.575975903614458,
         "y": 4.0
       },
       "isLocked": false,
@@ -94,8 +94,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.95,
-      "rotationDegrees": -100.0
+      "waypointRelativePos": 0.8,
+      "rotationDegrees": -135.0
     },
     {
       "waypointRelativePos": 2.0,

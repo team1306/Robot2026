@@ -16,31 +16,31 @@
     },
     {
       "anchor": {
-        "x": 8.4,
-        "y": 1.55
+        "x": 8.576,
+        "y": 1.9
       },
       "prevControl": {
-        "x": 8.4,
-        "y": 0.5500000000000005
+        "x": 8.576,
+        "y": 0.9000000000000004
       },
       "nextControl": {
-        "x": 8.4,
-        "y": 2.549999999999997
+        "x": 8.576,
+        "y": 2.8999999999999972
       },
       "isLocked": false,
       "linkedName": "fuel-far-right-entrance"
     },
     {
       "anchor": {
-        "x": 8.4,
+        "x": 8.576,
         "y": 3.05
       },
       "prevControl": {
-        "x": 8.4,
+        "x": 8.576,
         "y": 2.55
       },
       "nextControl": {
-        "x": 8.4,
+        "x": 8.576,
         "y": 4.05
       },
       "isLocked": false,

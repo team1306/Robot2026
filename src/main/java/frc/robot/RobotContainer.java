@@ -84,12 +84,14 @@ public class RobotContainer {
                 new VisionIOPhotonVision(
                     VisionConstants.LEFT_BACK_CAMERA_NAME,
                     VisionConstants.LEFT_BACK_CAMERA_POSITION),
-                new VisionIOPhotonVision(
-                    VisionConstants.LEFT_SIDE_CAMERA_NAME,
-                    VisionConstants.LEFT_SIDE_CAMERA_POSITION),
-                new VisionIOPhotonVision(
-                    VisionConstants.RIGHT_BACK_CAMERA_NAME,
-                    VisionConstants.RIGHT_BACK_CAMERA_POSITION),
+                new VisionIO() {},
+                // new VisionIOPhotonVision(
+                //     VisionConstants.LEFT_SIDE_CAMERA_NAME,
+                //     VisionConstants.LEFT_SIDE_CAMERA_POSITION),
+                new VisionIO() {},
+                // new VisionIOPhotonVision(
+                //     VisionConstants.RIGHT_BACK_CAMERA_NAME,
+                //     VisionConstants.RIGHT_BACK_CAMERA_POSITION),
                 new VisionIOPhotonVision(
                     VisionConstants.RIGHT_SIDE_CAMERA_NAME,
                     VisionConstants.RIGHT_SIDE_CAMERA_POSITION));

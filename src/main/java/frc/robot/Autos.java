@@ -60,6 +60,7 @@ public class Autos {
   private final Command spoolShooterCommand;
   private final Command intakeCommand;
   private final Command deployCommand;
+  private final Command crunchCommand;
 
   // Prefer to construct autos lazily to save limited memory. Required with many auto files
   private final LoggedDashboardChooser<Auto> autoChooser;
@@ -90,6 +91,14 @@ public class Autos {
     inAllianceZoneSupplier = () -> RebuiltUtils.isInAllianceZone(drive.getPose().getTranslation());
 
     deployCommand = deploy.deployCommand().asProxy();
+
+    crunchCommand =
+        deploy
+            .crunchCommand()
+            .withTimeout(1)
+            .andThen(Commands.waitSeconds(1))
+            .andThen(deploy.crunchCommand().withTimeout(1))
+            .asProxy();
 
     sotmSmallHopperCommand =
         new ConditionalCommand(
@@ -252,6 +261,8 @@ public class Autos {
     NamedCommands.registerCommand("sotm-small-hopper", sotmSmallHopperCommand);
 
     NamedCommands.registerCommand("sotm-until-done", sotmUntilDoneCommand);
+
+    NamedCommands.registerCommand("crunch", crunchCommand);
 
     NamedCommands.registerCommand("coast", Commands.runOnce(() -> drive.setCoastMode()));
 
